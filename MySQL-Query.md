@@ -1,5 +1,3 @@
-
-
 # MYSQL database
 ---
 ## SQL COMMANDS
