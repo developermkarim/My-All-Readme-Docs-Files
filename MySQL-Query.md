@@ -92,8 +92,51 @@ the *GRANT* and *REVOKE* statements are used to manage permissions and privilege
     GRANT SELECT, INSERT, UPDATE ON orders TO sales_role;
     REVOKE DELETE ON products FROM bob;
     ```
-  **Note** :**GRANT** This grants the sales_role the permissions to perform SELECT, INSERT, and UPDATE operations on the orders table.
-  **Revoke** This revokes Bob's permission to perform DELETE operations on the products table.
+In MySQL, the `GRANT` and `REVOKE` statements are used to control user privileges and permissions on database objects, such as tables, views, and stored procedures. These statements are essential for managing the security and access control of your MySQL database.
+
+Here's how to use the `GRANT` and `REVOKE` statements with examples:
+
+**GRANT Statement:**
+
+The `GRANT` statement is used to give specific privileges to a MySQL user or role. It can be used to grant privileges at different levels, including global, database, table, and column levels. The basic syntax is as follows:
+
+```sql
+GRANT privilege(s)
+ON database_name.table_name
+TO 'username'@'hostname';
+```
+
+- `privilege(s)`: The specific privilege(s) you want to grant, such as SELECT, INSERT, UPDATE, DELETE, etc.
+- `database_name.table_name`: The database object (e.g., table) on which you want to grant the privilege(s).
+- `'username'@'hostname'`: The MySQL user account and host to which you want to grant the privilege(s).
+
+**Example:**
+Grant SELECT and INSERT privileges on the `employees` table in the `company` database to a user named 'john' from localhost:
+
+```sql
+GRANT SELECT, INSERT ON company.employees TO 'john'@'localhost';
+```
+
+**REVOKE Statement:**
+
+The `REVOKE` statement is used to revoke previously granted privileges from a user or role. The basic syntax is as follows:
+
+```sql
+REVOKE privilege(s)
+ON database_name.table_name
+FROM 'username'@'hostname';
+```
+
+- `privilege(s)`: The specific privilege(s) you want to revoke.
+- `database_name.table_name`: The database object from which you want to revoke the privilege(s).
+- `'username'@'hostname'`: The MySQL user account and host from which you want to revoke the privilege(s).
+
+**Example:**
+Revoke the SELECT privilege on the `employees` table in the `company` database from the user 'john' from localhost:
+
+```sql
+REVOKE SELECT ON company.employees FROM 'john'@'localhost';
+```
 
 12. **COMMIT and ROLLBACK**: Used in transactions to either save changes (COMMIT) or discard them (ROLLBACK).
 
@@ -459,24 +502,57 @@ RIGHT JOIN customers ON orders.customer_id = customers.customer_id;
 | NULL     | Bob           |
 
 **4. FULL JOIN (FULL OUTER JOIN):**
-A FULL JOIN returns all rows when there is a match in either the left or right table. If there's no match, NULL values are displayed for missing values on the corresponding side.
+
+MySQL does not support FULL OUTER JOIN directly. However, you can emulate a FULL OUTER JOIN by combining a LEFT JOIN and a RIGHT JOIN and using the UNION operator to merge the results. Here's an example:
+
+Suppose you have two tables, `employees` and `departments`, and you want to perform a FULL OUTER JOIN to retrieve a list of all employees and their corresponding department names. Here's how you can do it:
 
 ```sql
-SELECT orders.order_id, customers.customer_name
-FROM orders
-FULL JOIN customers ON orders.customer_id = customers.customer_id;
+-- Create sample tables
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(255),
+    dept_id INT
+);
+
+CREATE TABLE departments (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(255)
+);
+
+-- Insert sample data
+INSERT INTO employees (emp_id, emp_name, dept_id) VALUES
+(1, 'John', 101),
+(2, 'Alice', 102),
+(3, 'Bob', NULL);
+
+INSERT INTO departments (dept_id, dept_name) VALUES
+(101, 'HR'),
+(102, 'Finance'),
+(103, 'Marketing');
+
+-- Perform a FULL OUTER JOIN using UNION
+SELECT e.emp_name, d.dept_name
+FROM employees e
+LEFT JOIN departments d ON e.dept_id = d.dept_id
+UNION
+SELECT e.emp_name, d.dept_name
+FROM employees e
+RIGHT JOIN departments d ON e.dept_id = d.dept_id;
 ```
 
-**Result:**
+This query combines the results of a LEFT JOIN (employees on departments) and a RIGHT JOIN (departments on employees) using the UNION operator. It retrieves a list of all employees and their corresponding department names, including cases where there might be no matching department or employee.
 
-| order_id | customer_name |
-|----------|---------------|
-| 1        | John          |
-| 2        | Alice         |
-| 3        | NULL          |
-| NULL     | Bob           |
+The result would look like this:
 
+| emp_name | dept_name |
+|----------|-----------|
+| John     | HR        |
+| Alice    | Finance   |
+| Bob      | NULL      |
+| NULL     | Marketing |
 
+In this result, John and Alice have corresponding departments (HR and Finance), Bob has no assigned department, and there's a department (Marketing) with no assigned employees. This simulates the effect of a FULL OUTER JOIN in MySQL.
 
 **5. CROSS JOIN:**
 A CROSS JOIN is a type of join that combines each row from one table with every row from another table. It results in a Cartesian product of the two tables, meaning all possible combinations of rows are included in the result set.
