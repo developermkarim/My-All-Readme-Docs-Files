@@ -7313,6 +7313,7 @@ public function testMiddleware()
 
 In this example, we test if the middleware restricts access to the `/admin/dashboard` route.
 
+
 ## Packages : Breeze, Cashier (Stripe and Paddle), Dusk, Envoy, Fortify, Folio, Homestead, Horizon, Jetstream, Mix, Passport, Sail, Sanctum, Scout, Socialite, Telescope, and Valet
 ---
 
@@ -7728,699 +7729,1028 @@ composer require laravel/socialite
 Then, set up the socialite configuration and implement social authentication.
 
 ## [LARAVEL API DOUCMNENTION](https://laravel.com/api/10.x/doc-index.html) : ILLUMINATE
+
+Certainly, I can provide you with a series of complex problems and solutions related to various components within Laravel's Illuminate namespace. Each problem will come with a brief definition of the component and a real-life code example to illustrate its usage.
+
+### Illuminate
+
+**Definition:** Illuminate is a namespace in Laravel that contains a wide range of classes and components used to build web applications. These components provide essential functionalities like handling HTTP requests, interacting with databases, managing authentication, and more.
+
+### Problem 1: Using the `App` Class
+**Definition:** The `App` class represents the Laravel application instance.
+
+**Problem:** Access the current application's name.
+
+**Solution:**
+```php
+$appName = app()->getName();
+```
+
+### Problem 2: Working with Artisan Commands
+**Definition:** Artisan is Laravel's command-line tool used to manage various aspects of your application.
+
+**Problem:** Create a custom Artisan command to generate a report.
+
+**Solution:**
+```php
+php artisan make:command GenerateReport
+```
+
+### Problem 3: Authenticating Users with `Auth`
+**Definition:** The `Auth` component provides authentication and authorization services for your application.
+
+**Problem:** Implement multi-factor authentication (MFA) for user login.
+
+**Solution:**
+```php
+// Implement MFA logic in the login controller
+```
+
+### Problem 4: Templating with `Blade`
+**Definition:** Blade is Laravel's templating engine for creating dynamic views.
+
+**Problem:** Create a Blade view that displays a list of products.
+
+**Solution:**
+```php
+<!-- products.blade.php -->
+@foreach($products as $product)
+    <p>{{ $product->name }}</p>
+@endforeach
+```
+
+### Problem 5: Broadcasting Real-Time Updates
+**Definition:** Broadcasting enables real-time event broadcasting and WebSocket support in Laravel.
+
+**Problem:** Broadcast a notification to all users when a new message is posted.
+
+**Solution:**
+```php
+// Broadcast new message event to WebSocket clients
+```
+
+### Problem 6: Working with the Event Bus
+**Definition:** The Event component in Laravel allows you to create and handle events in your application.
+
+**Problem:** Create an event that triggers when a user subscribes to a newsletter.
+
+**Solution:**
+```php
+// Define the SubscribeToNewsletter event
+```
+
+### Problem 7: Caching Data with `Cache`
+**Definition:** The `Cache` component allows you to store and retrieve data efficiently.
+
+**Problem:** Cache the result of a database query to improve performance.
+
+**Solution:**
+```php
+$users = Cache::remember('active_users', 60, function () {
+    return DB::table('users')->where('status', 'active')->get();
+});
+```
+
+### Problem 8: Managing Configuration Settings
+**Definition:** The `Config` component manages configuration settings for your application.
+
+**Problem:** Retrieve the application's default timezone from the configuration.
+
+**Solution:**
+```php
+$timezone = config('app.timezone');
+```
+
+### Problem 9: Handling Cookies with `Cookie`
+**Definition:** The `Cookie` component is used to set, retrieve, and manipulate cookies in your application.
+
+**Problem:** Set a cookie to remember the user's language preference.
+
+**Solution:**
+```php
+Cookie::queue('language', 'en', 60);
+```
+
+### Problem 10: Encrypting and Decrypting Data
+**Definition:** Crypt allows you to encrypt and decrypt data securely.
+
+**Problem:** Encrypt sensitive user data before storing it in the database.
+
+**Solution:**
+```php
+$encryptedData = Crypt::encrypt($data);
+```
+
+### Problem 11: Database Operations with `DB`
+**Definition:** The `DB` component provides tools for working with databases.
+
+**Problem:** Perform a complex database query to retrieve orders and related products.
+
+**Solution:**
+```php
+$orders = DB::table('orders')
+    ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+    ->select('orders.*', 'order_items.product_name')
+    ->get();
+```
+
+### Problem 12: Working with Dates
+**Definition:** The `Date` component helps you manipulate and format dates.
+
+**Problem:** Format a date to display in a user-friendly format.
+
+**Solution:**
+```php
+$formattedDate = Carbon::parse($date)->format('F d, Y');
+```
+
+### Problem 13: Creating Custom Events
+**Definition:** The Event component allows you to create custom events in your application.
+
+**Problem:** Create a custom event that triggers when a user completes a purchase.
+
+**Solution:**
+```php
+// Define the PurchaseCompleted event
+```
+
+### Problem 14: Using Facades
+**Definition:** Facades provide a static interface to classes bound in the service container.
+
+**Problem:** Use the `Storage` facade to store uploaded files.
+
+**Solution:**
+```php
+$path = Storage::putFile('uploads', $request->file('file'));
+```
+
+### Problem 15: File Operations with `File`
+**Definition:** The `File` component provides tools for working with files.
+
+**Problem:** Check if a file exists and delete it if it does.
+
+**Solution:**
+```php
+if (File::exists($filePath)) {
+    File::delete($filePath);
+}
+```
+
+### Problem 16: Implementing Authorization with `Gate`
+**Definition:** The `Gate` component is used to define and check authorization policies.
+
+**Problem:** Define a policy that allows only administrators to edit user profiles.
+
+**Solution:**
+```php
+Gate::define('edit-profile', function ($user) {
+    return $user->isAdmin();
+});
+```
+
+### Problem 17: Hashing Passwords with `Hash`
+**Definition:** The `Hash` component is used to securely hash and verify passwords.
+
+**Problem:** Hash a user's password before storing it in the database.
+
+**Solution:**
+```php
+$hashedPassword = Hash::make($password);
+```
+
+### Problem 18: Handling HTTP Requests with `Http`
+**Definition:** The `Http` component provides tools for handling HTTP requests and responses.
+
+**Problem:** Make an HTTP GET request to an external API and retrieve data.
+
+**Solution:**
+```php
+$response = Http::get('https://api.example.com/data');
+$data = $response->json();
+```
+
+### Problem 19: Localization with `Lang`
+**Definition:** The `Lang` component is used for localization and language translation.
+
+**Problem:** Translate a message to the user's preferred language.
+
+**Solution:**
+```php
+$message = Lang::get('messages.welcome');
+```
+
+### Problem 20: Logging with `Log`
+**Definition:** The `Log` component allows you to log messages for debugging and monitoring.
+
+**Problem:** Log an error message when an exception occurs.
+
+**Solution:**
+```php
+try {
+    // Code that may throw an exception
+} catch (\Exception $e) {
+    Log::error('An error occurred: ' . $e->getMessage());
+}
+```
+
+### Problem 21: Sending Email with `Mail`
+**Definition:** The `Mail` component is used to send email notifications.
+
+**Problem:** Send an email notification when a user makes a purchase.
+
+**Solution:**
+```php
+Mail::to($user)->send(new PurchaseConfirmation($order));
+```
+
+### Problem 22: Notifying Users with `Notification`
+**Definition:** The `Notification` component is used to send notifications via various channels.
+
+**Problem:** Send a push notification to a
+
+ user's mobile device when they receive a new message.
+
+**Solution:**
+```php
+$user->notify(new NewMessageNotification($message));
+```
+
+### Problem 23: Parallel Testing with `ParallelTesting`
+**Definition:** The `ParallelTesting` component configures Laravel for parallel testing with PHPUnit.
+
+**Problem:** Configure parallel testing to speed up test execution.
+
+**Solution:**
+```php
+ParallelTesting::configure(['processes' => 4]);
+```
+
+### Problem 24: Managing Passwords with `Password`
+**Definition:** The `Password` component handles password reset and validation.
+
+**Problem:** Implement password reset functionality for users who forget their passwords.
+
+**Solution:**
+```php
+Password::sendResetLink(['email' => $request->email]);
+```
+
+### Problem 25: Creating Data Pipelines with `Pipeline`
+**Definition:** The `Pipeline` component allows you to create data processing pipelines.
+
+**Problem:** Implement a data processing pipeline that transforms and filters incoming data.
+
+**Solution:**
+```php
+$processedData = app(Pipeline::class)
+    ->send($data)
+    ->through([
+        ValidateData::class,
+        TransformData::class,
+        FilterData::class,
+    ])
+    ->thenReturn();
+```
+
+### Problem 26: Managing Processes with `Process`
+**Definition:** The `Process` component allows you to run and manage external processes.
+
+**Problem:** Run an external script as a background process from your Laravel application.
+
+**Solution:**
+```php
+Process::run('php script.php &');
+```
+
+### Problem 27: Handling Queues with `Queue`
+**Definition:** The `Queue` component allows you to defer time-consuming tasks to be processed in the background.
+
+**Problem:** Queue a job to send email notifications to users.
+
+**Solution:**
+```php
+Queue::push(new SendEmailNotification($user));
+```
+
+### Problem 28: Rate Limiting with `RateLimiter`
+**Definition:** The `RateLimiter` component helps in rate limiting to restrict the number of requests a user can make within a specific timeframe.
+
+**Problem:** Implement rate limiting to allow only five API requests per minute for each user.
+
+**Solution:**
+```php
+RateLimiter::for('api', function ($request) {
+    return Limit::perMinute(5);
+});
+```
+
+### Problem 29: Redirecting with `Redirect`
+**Definition:** The `Redirect` component is used to redirect users to different pages.
+
+**Problem:** Redirect users to a thank-you page after they submit a contact form.
+
+**Solution:**
+```php
+return Redirect::to('/thank-you');
+```
+
+### Problem 30: Working with Redis using `Redis`
+**Definition:** The `Redis` component allows you to interact with a Redis database for caching and data storage.
+
+**Problem:** Cache frequently accessed data in Redis to improve application performance.
+
+**Solution:**
+```php
+Redis::set('key', 'value');
+```
+
+### Problem 31: Handling HTTP Requests with `Request`
+**Definition:** The `Request` component provides an interface for accessing and manipulating HTTP requests.
+
+**Problem:** Access request parameters and headers in a controller method.
+
+**Solution:**
+```php
+$name = $request->input('name');
+$userAgent = $request->header('User-Agent');
+```
+
+### Problem 32: Building Responses with `Response`
+**Definition:** The `Response` component is used to create HTTP responses.
+
+**Problem:** Send a JSON response with custom status and headers.
+
+**Solution:**
+```php
+return response()->json(['message' => 'Success'], 200, ['X-Custom-Header' => 'Value']);
+```
+
+### Problem 33: Managing Routes with `Route`
+**Definition:** The `Route` component is used to define and manage application routes.
+
+**Problem:** Define a named route for displaying user profiles.
+
+**Solution:**
+```php
+Route::get('/profile/{user}', 'ProfileController@show')->name('profile.show');
+```
+
+### Problem 34: Defining Database Schema with `Schema`
+**Definition:** The `Schema` component is used to define and manage database schemas.
+
+**Problem:** Create a new database table to store customer orders.
+
+**Solution:**
+```php
+Schema::create('orders', function ($table) {
+    $table->increments('id');
+    $table->string('order_number');
+    $table->timestamps();
+});
+```
+
+### Problem 35: Managing Sessions with `Session`
+**Definition:** The `Session` component is used to manage user sessions and session data.
+
+**Problem:** Store and retrieve user preferences in a session.
+
+**Solution:**
+```php
+Session::put('theme', 'dark');
+$theme = Session::get('theme');
+```
+
+### Problem 36: Working with File Storage using `Storage`
+**Definition:** The `Storage` component provides an abstraction layer for file storage.
+
+**Problem:** Upload a user's profile picture and store it in the "avatars" directory.
+
+**Solution:**
+```php
+$path = $request->file('avatar')->store('avatars');
+```
+
+### Problem 37: Generating URLs with `URL`
+**Definition:** The `URL` component is used to generate URLs for routes and assets.
+
+**Problem:** Generate a URL for a named route in your application.
+
+**Solution:**
+```php
+$url = URL::route('product.details', ['id' => 1]);
+```
+
+### Problem 38: Validating Data with `Validator`
+**Definition:** The `Validator` component is used for data validation in forms and requests.
+
+**Problem:** Validate user input from a registration form.
+
+**Solution:**
+```php
+$validator = Validator::make($request->all(), [
+    'name' => 'required|string|max:255',
+    'email' => 'required|email|unique:users',
+    'password' => 'required|min:8|confirmed',
+]);
+```
+
+### Problem 39: Rendering Views with `View`
+**Definition:** The `View` component is used to render views and templates.
+
+**Problem:** Render a Blade view to display a list of products.
+
+**Solution:**
+```php
+$products = Product::all();
+return view('products.index', ['products' => $products]);
+```
+
+### Problem 40: Asset Compilation with `Vite`
+**Definition:** The `Vite` component is used for asset compilation and module bundling.
+
+**Problem:** Configure Vite for compiling JavaScript assets in your Laravel project.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Vite;
+
+Vite::registerPreset('default', 'resources/js/app.js');
+```
+
+## Illuminate\Support\Facades
 ---
+Certainly, here are complex problems and solutions with definitions and code examples for each of the Laravel facades within `Illuminate\Support\Facades`:
 
-Laravel Illuminate is a set of components or packages that make up the foundational framework for the Laravel PHP framework. Laravel is a popular PHP framework used for web application development, and Illuminate provides various tools and libraries that simplify common tasks in web development.
+### Problem 1: Using the `Classes` Facade
+**Definition:** The `Classes` facade provides a way to interact with the Laravel's class loader. It is used to load classes dynamically and efficiently.
 
-Here's a brief description of some of the key Illuminate components and their typical use cases:
+**Problem:** Load a custom class dynamically and use it in your Laravel application.
 
-1. **Auth**: The Auth component provides authentication and authorization services for your application. It helps in managing user login, registration, and access control.
+**Solution:**
+```php
+use Illuminate\Support\Facades\Classes;
 
-2. **Broadcasting**: Broadcasting allows you to implement real-time event broadcasting and WebSocket support in your Laravel application using tools like Laravel Echo and Pusher.
+Classes::load('App\CustomClass');
+$instance = new CustomClass();
+```
 
-3. **Bus**: The Bus component provides a simple way to dispatch and handle commands and events within your application. It is often used for decoupling and organizing application logic.
+### Problem 2: Working with the `App` Facade
+**Definition:** The `App` facade provides access to the application instance, allowing you to retrieve application-specific data and settings.
 
-4. **Cache**: Cache allows you to store and retrieve data efficiently. Laravel supports various caching mechanisms like file-based, database, and in-memory caching.
+**Problem:** Retrieve the application environment and name.
 
-5. **Config**: The Config component manages configuration settings for your application, allowing you to define various settings and options in a structured way.
+**Solution:**
+```php
+use Illuminate\Support\Facades\App;
 
-6. **Console**: Console provides tools for creating Artisan commands, which are powerful CLI utilities for various tasks such as database migrations, seeding, and more.
+$environment = App::environment();
+$appName = App::name();
+```
 
-7. **Container**: The Container is Laravel's dependency injection and inversion of control (IoC) container. It manages class dependencies and allows for dependency injection throughout your application.
+### Problem 3: Running Commands with the `Artisan` Facade
+**Definition:** The `Artisan` facade allows you to interact with the Artisan command-line tool programmatically, making it easier to automate tasks.
 
-8. **Contracts**: Contracts define a set of interfaces that Laravel components and packages implement. They promote consistency and provide a way for you to swap out implementations easily.
+**Problem:** Run a custom Artisan command from your code.
 
-9. **Cookie**: The Cookie component helps in working with HTTP cookies, enabling you to set, retrieve, and manipulate cookies in your application.
+**Solution:**
+```php
+use Illuminate\Support\Facades\Artisan;
 
-10. **Database**: Database is a comprehensive component for working with databases. Laravel supports multiple database systems and provides an elegant query builder, migrations, and Eloquent ORM for database interactions.
+Artisan::call('custom:command');
+```
 
-11. **Encryption**: Encryption is used for encrypting and decrypting data. Laravel includes tools for secure data handling and storage.
+### Problem 4: Implementing Authentication with the `Auth` Facade
+**Definition:** The `Auth` facade is used for authentication and authorization. It provides methods for user authentication and authorization checks.
 
-12. **Events**: The Events component allows you to define and listen for events in your application, facilitating a decoupled and event-driven architecture.
+**Problem:** Implement a custom authentication guard for a specific user type.
 
-13. **Filesystem**: Filesystem provides an abstraction layer for working with files and storage. It supports local and cloud-based file storage.
+**Solution:**
+```php
+use Illuminate\Support\Facades\Auth;
 
-14. **Hashing**: Hashing is used for secure password hashing and verification. It helps in storing and checking user passwords securely.
+Auth::viaRequest('custom-token', function ($request) {
+    // Implement custom authentication logic
+});
+```
 
-15. **Http**: The Http component includes tools for handling HTTP requests and responses, routing, and middleware, making it a core part of building web applications.
+### Problem 5: Templating with the `Blade` Facade
+**Definition:** The `Blade` facade provides access to the Blade templating engine, allowing you to compile and render Blade templates.
 
-16. **Log**: Log allows you to log application events and activities. It supports multiple log channels and log levels for debugging and monitoring.
+**Problem:** Create a Blade template that includes conditionals and loops.
 
-17. **Mail**: The Mail component simplifies sending email messages from your application. It supports various email drivers and templates.
+**Solution:**
+```php
+use Illuminate\Support\Facades\Blade;
 
-18. **Notifications**: Notifications provide a way to send notifications via different channels (email, SMS, Slack, etc.) based on various events in your application.
+Blade::directive('datetime', function ($expression) {
+    return "<?php echo ($expression)->format('m/d/Y H:i'); ?>";
+});
+```
 
-19. **Pagination**: Pagination helps in paginating large data sets, making it easier to display data in a user-friendly way.
+### Problem 6: Broadcasting Real-Time Updates with the `Broadcast` Facade
+**Definition:** The `Broadcast` facade is used to broadcast real-time events to connected clients using WebSockets.
 
-20. **Queue**: Queue allows you to defer time-consuming tasks to be processed in the background, improving application responsiveness.
+**Problem:** Implement a chat application that broadcasts messages to a specific channel.
 
-21. **Redis**: Laravel integrates with Redis for fast and efficient caching and data storage.
+**Solution:**
+```php
+use Illuminate\Support\Facades\Broadcast;
 
-22. **Routing**: The Routing component defines the routes and URL patterns for your application, enabling you to map HTTP requests to controller actions.
+Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
+    return true; // Logic to determine if user can join the chat room
+});
+```
 
-23. **Session**: Session management is crucial for tracking user state across requests, and this component helps in managing user sessions.
+### Problem 7: Using the `Bus` Facade for Command and Event Handling
+**Definition:** The `Bus` facade allows you to dispatch and handle commands and events in your application. It is often used for decoupling and organizing application logic.
 
-24. **Support**: The Support component provides various utility classes and functions for common tasks.
+**Problem:** Create a command and an event, and dispatch them through the bus.
 
-25. **Testing**: Laravel's testing tools help in writing and running automated tests to ensure the reliability of your application.
+**Solution:**
+```php
+use Illuminate\Support\Facades\Bus;
 
-26. **Translation**: Translation provides tools for translating your application into different languages, making it more accessible to a global audience.
+// Define a command
+class MyCommand implements ShouldQueue
+{
+    // Command implementation
+}
 
-27. **Validation**: Validation helps in validating user input and ensuring that it meets the required criteria.
+// Dispatch the command
+Bus::dispatch(new MyCommand($data));
+```
 
+### Problem 8: Implementing Caching with the `Cache` Facade
+**Definition:** The `Cache` facade provides a consistent way to work with caching in Laravel. It allows you to store and retrieve cached data easily.
 
-### Illuminate\Auth
+**Problem:** Implement caching to store frequently accessed data and improve application performance.
 
-1. **Problem: Implementing Custom User Providers**
-   
-   **Solution:** You can create a custom user provider for authenticating users from a different data source, like an API.
+**Solution:**
+```php
+use Illuminate\Support\Facades\Cache;
 
-   **Example:**
-   ```php
-   // Define a custom user provider in config/auth.php
-   'providers' => [
-       'custom' => [
-           'driver' => 'custom',
-           'model' => App\CustomUser::class,
-       ],
-   ],
-   ```
+$users = Cache::remember('popular_users', 3600, function () {
+    return DB::table('users')->orderBy('views', 'desc')->get();
+});
+```
 
-2. **Problem: Implementing Multi-Authentication**
-   
-   **Solution:** You can configure multiple authentication guards for different types of users.
+### Problem 9: Managing Configuration with the `Config` Facade
+**Definition:** The `Config` facade provides access to configuration values defined in your Laravel application. It allows you to retrieve and modify configuration settings.
 
-   **Example:**
-   ```php
-   // Define a guard in config/auth.php
-   'guards' => [
-       'admin' => [
-           'driver' => 'session',
-           'provider' => 'admins',
-       ],
-   ],
-   ```
+**Problem:** Retrieve and modify the application's timezone configuration.
 
-### Illuminate\Broadcasting
+**Solution:**
+```php
+use Illuminate\Support\Facades\Config;
 
-3. **Problem: Setting Up Broadcasting with Redis**
+$timezone = Config::get('app.timezone');
+Config::set('app.timezone', 'America/New_York');
+```
 
-   **Solution:** Configure Laravel to use Redis as a broadcasting driver for real-time updates.
+### Problem 10: Working with Cookies using the `Cookie` Facade
+**Definition:** The `Cookie` facade is used for working with HTTP cookies. It allows you to set, retrieve, and manipulate cookies in your application.
 
-   **Example:**
-   ```php
-   // Set the broadcasting driver in .env
-   BROADCAST_DRIVER=redis
-   ```
-
-4. **Problem: Broadcasting Events to Frontend with Vue.js**
-
-   **Solution:** Use Laravel Echo and Vue.js to broadcast events to the frontend in real-time.
-
-   **Example:**
-   ```javascript
-   // Listen to an event in a Vue component
-   Echo.channel('channel-name')
-       .listen('EventName', (data) => {
-           // Handle the event data
-       });
-   ```
-
-### Illuminate\Bus
-
-5. **Problem: Creating Custom Artisan Commands**
-   
-   **Solution:** You can create custom Artisan commands for running specific tasks.
-
-   **Example:**
-   ```php
-   // Create a new Artisan command
-   php artisan make:command CustomCommand
-   ```
-
-6. **Problem: Dispatching Jobs to Queues**
-   
-   **Solution:** Use Laravel's job dispatching to handle tasks asynchronously.
-
-   **Example:**
-   ```php
-   // Dispatch a job to a queue
-   dispatch(new ProcessPodcast($podcast));
-   ```
-
-### Illuminate\Cache
-
-7. **Problem: Configuring Cache Drivers**
-   
-   **Solution:** Choose and configure the appropriate cache driver (e.g., Redis, Memcached).
-
-   **Example:**
-   ```php
-   // Set the cache driver in .env
-   CACHE_DRIVER=redis
-   ```
-
-8. **Problem: Caching Database Queries**
-   
-   **Solution:** Cache frequently used database queries to improve application performance.
-
-   **Example:**
-   ```php
-   // Cache a query result
-   $users = Cache::remember('users', 60, function () {
-       return DB::table('users')->get();
-   });
-   ```
-
-### Illuminate\Config
-
-9. **Problem: Managing Configuration Files**
-   
-   **Solution:** Create and manage custom configuration files for your Laravel application.
-
-   **Example:**
-   ```php
-   // Create a custom configuration file
-   php artisan make:config custom
-   ```
-
-10. **Problem: Accessing Configuration Values**
-   
-    **Solution:** Access configuration values in your application.
-
-    **Example:**
-    ```php
-    // Access a configuration value
-    $value = config('custom.key');
-    ```
-
-### Illuminate\Console
-
-11. **Problem: Running Artisan Commands Programmatically**
-    
-    **Solution:** Execute Artisan commands programmatically from within your code.
-
-    **Example:**
-    ```php
-    // Run an Artisan command
-    Artisan::call('command-name');
-    ```
-
-12. **Problem: Customizing Artisan Commands**
-    
-    **Solution:** Customize existing Artisan commands or create your own.
-
-    **Example:**
-    ```php
-    // Customize an existing Artisan command
-    protected $signature = 'command-name:custom';
-    ```
-
-### Illuminate\Container
-
-13. **Problem: Binding Interfaces to Concrete Classes**
-    
-    **Solution:** Use Laravel's IoC container to bind interfaces to their concrete implementations.
-
-    **Example:**
-    ```php
-    // Bind an interface to a concrete class
-    $this->app->bind(Interface::class, Concrete::class);
-    ```
-
-14. **Problem: Resolving Dependencies Automatically**
-    
-    **Solution:** Laravel's IoC container can automatically resolve dependencies when injecting them into a class.
-
-    **Example:**
-    ```php
-    // Automatically resolve dependencies
-    public function __construct(OtherClass $other)
+**Problem:** Set a cookie with a custom expiration time and retrieve its value.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Cookie;
+
+Cookie::queue('username', 'john_doe', 60);
+$username = Cookie::get('username');
+```
+
+### Problem 11: Data Encryption with the `Crypt` Facade
+**Definition:** The `Crypt` facade provides encryption and decryption services for securing sensitive data.
+
+**Problem:** Encrypt user passwords and decrypt them for verification.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Crypt;
+
+$encrypted = Crypt::encryptString('user_password');
+$decrypted = Crypt::decryptString($encrypted);
+```
+
+### Problem 12: Database Queries with the `DB` Facade
+**Definition:** The `DB` facade is used for interacting with databases. It provides methods for executing database queries and transactions.
+
+**Problem:** Execute a complex database query involving joins and conditions.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\DB;
+
+$users = DB::table('users')
+    ->join('orders', 'users.id', '=', 'orders.user_id')
+    ->where('orders.status', 'shipped')
+    ->get();
+```
+
+### Problem 13: Working with Dates and Times using the `Date` Facade
+**Definition:** The `Date` facade provides utilities for working with dates and times in a convenient and expressive way.
+
+**Problem:** Format a date in a custom format.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Date;
+
+$now = Date::now();
+$formattedDate = $now->format('Y-m-d H:i:s');
+```
+
+### Problem 14: Implementing Event Handling with the `Event` Facade
+**Definition:** The `Event` facade is used for working with events and event listeners. You can define, dispatch, and listen for events in your application.
+
+**Problem:** Define a custom event, dispatch it, and listen for it.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Event;
+
+// Define the event class
+class UserRegistered
+{
+    public $user;
+
+    public function __construct($user)
     {
-        // $other is automatically resolved
+        $this->user = $user;
     }
-    ```
+}
 
-### Illuminate\Contracts
+// Dispatch the event
+Event::dispatch(new UserRegistered($user));
 
-15. **Problem: Implementing Custom Contracts**
-    
-    **Solution:** Define and implement custom contracts for your application's specific needs.
+// Listen for the event
+Event::listen(UserRegistered::class, function ($event) {
+    // Handle user registration event
+});
+```
 
-    **Example:**
-    ```php
-    // Create a custom contract
-    interface CustomContract
-    {
-        public function customMethod();
-    }
-    ```
+### Problem 15: Using the `Facade` Facade
+**Definition:** The `Facade` class is the base class for all Laravel facades. It provides the static methods for accessing underlying services.
 
-16. **Problem: Using Laravel's Built-in Contracts**
-    
-    **Solution:** Leverage Laravel's built-in contracts for common functionality like authentication and validation.
+**Problem:** Explain how the `Facade` class simplifies access to Laravel services.
 
-    **Example:**
-    ```php
-    // Implement Laravel's Authenticatable contract
-    class User implements Authenticatable
-    {
+**Solution:**
+The `Facade` class provides a simple and expressive way to access various Laravel services without needing to create instances manually or resolve dependencies. It abstract
+
+s complex operations and makes them easily accessible through static methods, improving the readability and maintainability of your code.
+
+### Problem 16: Managing Files with the `File` Facade
+**Definition:** The `File` facade provides methods for working with files and the file system. You can create, read, and manipulate files.
+
+**Problem:** Copy a file from one directory to another.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\File;
+
+File::copy('path/to/source/file.txt', 'path/to/destination/file.txt');
+```
+
+### Problem 17: Implementing Authorization with the `Gate` Facade
+**Definition:** The `Gate` facade is used for defining and performing authorization checks. It's commonly used with policies to define access control.
+
+**Problem:** Define a custom policy and use the `Gate` facade to check authorization.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Gate;
+
+// Define a custom policy
+Gate::define('update-post', function ($user, $post) {
+    return $user->id === $post->user_id;
+});
+
+// Check authorization
+if (Gate::allows('update-post', $post)) {
+    // User can update the post
+}
+```
+
+### Problem 18: Secure Hashing with the `Hash` Facade
+**Definition:** The `Hash` facade is used for secure password hashing and verification.
+
+**Problem:** Hash a user's password and verify it during login.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Hash;
+
+// Hash a password
+$hashedPassword = Hash::make('user_password');
+
+// Verify a password
+if (Hash::check('user_password', $hashedPassword)) {
+    // Password is correct
+}
+```
+
+### Problem 19: Handling HTTP Requests with the `Http` Facade
+**Definition:** The `Http` facade provides tools for handling HTTP requests and responses. It's central to building web applications.
+
+**Problem:** Send an HTTP GET request to an external API and process the response.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Http;
+
+$response = Http::get('https://api.example.com/data');
+$data = $response->json();
+```
+
+### Problem 20: Localization with the `Lang` Facade
+**Definition:** The `Lang` facade is used for localization and internationalization. It allows you to retrieve translated messages.
+
+**Problem:** Translate a message into multiple languages using the `Lang` facade.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Lang;
+
+$message = Lang::get('messages.welcome', ['name' => 'John']);
+```
+
+### Problem 21: Logging Messages with the `Log` Facade
+**Definition:** The `Log` facade is used for logging messages and events. It provides various log channels and levels.
+
+**Problem:** Log custom messages with different log levels.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Log;
+
+Log::info('Informational message');
+Log::warning('Warning message');
+Log::error('Error message');
+```
+
+### Problem 22: Sending Email with the `Mail` Facade
+**Definition:** The `Mail` facade is used for sending email messages from your application.
+
+**Problem:** Send a custom email with attachments to multiple recipients.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CustomEmail;
+
+$mail = new CustomEmail($data);
+Mail::to(['user1@example.com', 'user2@example.com'])->send($mail);
+```
+
+### Problem 23: Notifying Users with the `Notification` Facade
+**Definition:** The `Notification` facade is used for sending notifications to users through various channels (email, SMS, etc.).
+
+**Problem:** Send a custom notification to users when they receive a new message.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NewMessage;
+
+$users = User::whereIn('id', [1, 2, 3])->get();
+Notification::send($users, new NewMessage($message));
+```
+
+### Problem 24: Parallel Testing Configuration with the `ParallelTesting` Facade
+**Definition:** The `ParallelTesting` facade is used for configuring parallel testing settings for PHPUnit.
+
+**Problem:** Configure parallel testing settings to speed up test execution.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\ParallelTesting;
+
+ParallelTesting::configure(['processes' => 4]);
+```
+
+### Problem 25: Handling Password Resets with the `Password` Facade
+**Definition:** The `Password` facade provides functionality for handling password resets in your application.
+
+**Problem:** Implement a password reset feature to allow users to reset their passwords.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Password;
+
+Password::sendResetLink(['email' => $request->email]);
+```
+
+### Problem 26: Building Pipelines with the `Pipeline` Facade
+**Definition:** The `Pipeline` facade allows you to create and use pipelines for processing data through a series of stages.
+
+**Problem:** Create a data processing pipeline with multiple stages.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Pipeline;
+
+$result = Pipeline::new()
+    ->send($data)
+    ->through([
+        Stage1::class,
+        Stage2::class,
         // ...
-    }
-    ```
-
-### Illuminate\Cookie
-
-17. **Problem: Storing and Retrieving Cookies**
-    
-    **Solution:** Use Laravel's cookie methods to store and retrieve cookies.
-
-    **Example:**
-    ```php
-    // Store a cookie
-    Cookie::queue('name', 'value', 60);
-
-    // Retrieve a cookie
-    $value = Cookie::get('name');
-    ```
-
-18. **Problem: Encrypting Cookies**
-    
-    **Solution:** Encrypt sensitive data in cookies using Laravel's encryption methods.
-
-    **Example:**
-    ```php
-    // Encrypt and store a cookie
-    Cookie::queue(Cookie::make('name', 'value')->encrypt());
-    ```
-
-### Illuminate\Database
-
-19. **Problem: Defining and Migrating Database Tables**
-    
-    **Solution:** Define database schema and migrate tables using Laravel's migration system.
-
-    **Example:**
-    ```php
-    // Create a new migration
-    php artisan make:migration create_table_name
-
-    // Run migrations
-    php artisan migrate
-    ```
-
-20. **Problem: Implementing Database Relationships**
-    
-    **Solution:** Define relationships between Eloquent models for database queries.
-
-    **Example:**
-    ```php
-    // Define a one-to-many relationship
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
-    ```
-
-### Illuminate\Encryption
-
-21. **Problem: Encrypting and Decrypting Data**
-    
-    **Solution:** Use Laravel's encryption methods to secure sensitive data.
-
-    **Example:**
-    ```php
-    // Encrypt data
-    $encrypted = encrypt('sensitive data');
-
-    // Decrypt data
-    $decrypted = decrypt($encrypted);
-    ```
-
-22. **Problem: Custom Encryption Keys**
-    
-    **Solution:** Configure custom encryption keys for your application.
-
-    **Example:**
-    ```php
-    // Set a custom encryption key in .env
-    ENCRYPT_KEY=mycustomkey
-    ```
-
-###
-
- Illuminate\Events
-
-23. **Problem: Creating Custom Events and Listeners**
-    
-    **Solution:** Define custom events and listeners for specific application events.
-
-    **Example:**
-    ```php
-    // Create a custom event
-    php artisan make:event CustomEvent
-
-    // Create a custom event listener
-    php artisan make:listener CustomEventListener --event=CustomEvent
-    ```
-
-24. **Problem: Broadcasting Events**
-    
-    **Solution:** Use Laravel's event broadcasting to send real-time updates to connected clients.
-
-    **Example:**
-    ```php
-    // Broadcast an event
-    event(new CustomEvent($data));
-    ```
-
-### Illuminate\Filesystem
-
-25. **Problem: File Uploads and Storage**
-    
-    **Solution:** Handle file uploads and store files in Laravel's storage system.
-
-    **Example:**
-    ```php
-    // Handle file upload
-    $file = $request->file('file');
-    $file->store('path');
-    ```
-
-26. **Problem: Reading and Writing Files**
-    
-    **Solution:** Use Laravel's filesystem methods to read from and write to files.
-
-    **Example:**
-    ```php
-    // Read from a file
-    $contents = Storage::get('file.txt');
-
-    // Write to a file
-    Storage::put('file.txt', 'contents');
-    ```
-
-### Illuminate\Foundation
-
-27. **Problem: Application Configuration and Bootstrapping**
-    
-    **Solution:** Customize your Laravel application's configuration and bootstrap process.
-
-    **Example:**
-    ```php
-    // Customize the application configuration
-    config(['key' => 'value']);
-    ```
-
-28. **Problem: Application Service Providers**
-    
-    **Solution:** Implement custom service providers to extend Laravel's functionality.
-
-    **Example:**
-    ```php
-    // Create a custom service provider
-    php artisan make:provider CustomServiceProvider
-    ```
-
-### Illuminate\Hashing
-
-29. **Problem: Hashing Passwords**
-    
-    **Solution:** Use Laravel's hashing methods to securely hash and verify passwords.
-
-    **Example:**
-    ```php
-    // Hash a password
-    $hashed = Hash::make('password');
-
-    // Verify a password
-    $isValid = Hash::check('password', $hashed);
-    ```
-
-30. **Problem: Using Custom Hashing Algorithms**
-    
-    **Solution:** Implement and use custom hashing algorithms in Laravel.
-
-    **Example:**
-    ```php
-    // Define a custom hashing algorithm
-    Hash::extend('myalgorithm', function ($password) {
-        // Custom hashing logic
-    });
-    ```
-
-### Illuminate\Http
-
-31. **Problem: Handling HTTP Requests and Responses**
-    
-    **Solution:** Implement request handling and generate responses in your Laravel application.
-
-    **Example:**
-    ```php
-    // Handle an HTTP request
-    public function handle(Request $request)
-    {
-        // Handle the request
-    }
-
-    // Generate an HTTP response
-    return response('Hello, world!', 200);
-    ```
-
-32. **Problem: Middleware for Request Processing**
-    
-    **Solution:** Use middleware to process incoming requests and responses.
-
-    **Example:**
-    ```php
-    // Create custom middleware
-    php artisan make:middleware CustomMiddleware
-    ```
-
-### Illuminate\Log
-
-33. **Problem: Logging Messages**
-    
-    **Solution:** Log messages and events using Laravel's logging functionality.
-
-    **Example:**
-    ```php
-    // Log an error message
-    Log::error('This is an error message.');
-    ```
-
-34. **Problem: Customizing Log Channels**
-    
-    **Solution:** Configure custom log channels for different parts of your application.
-
-    **Example:**
-    ```php
-    // Define a custom log channel in config/logging.php
-    'channels' => [
-        'custom' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/custom.log'),
-        ],
-    ],
-    ```
-
-### Illuminate\Mail
-
-35. **Problem: Sending Emails**
-    
-    **Solution:** Send email messages using Laravel's built-in mail functionality.
-
-    **Example:**
-    ```php
-    // Send an email
-    Mail::to('recipient@example.com')->send(new CustomMail($data));
-    ```
-
-36. **Problem: Customizing Email Templates**
-    
-    **Solution:** Customize email templates and notifications.
-
-    **Example:**
-    ```php
-    // Create a custom email template
-    php artisan make:mail CustomMail
-    ```
-
-### Illuminate\Notifications
-
-37. **Problem: Implementing Notifications**
-    
-    **Solution:** Implement notifications to send messages to users through various channels (e.g., email, SMS).
-
-    **Example:**
-    ```php
-    // Send a notification
-    $user->notify(new CustomNotification($data));
-    ```
-
-38. **Problem: Custom Notification Channels**
-    
-    **Solution:** Define custom notification channels for your application.
-
-    **Example:**
-    ```php
-    // Define a custom notification channel
-    public function toCustomChannel($notifiable)
-    {
-        // Custom channel logic
-    }
-    ```
-
-### Illuminate\Pagination
-
-39. **Problem: Paginating Database Query Results**
-    
-    **Solution:** Use Laravel's pagination methods to paginate database query results.
-
-    **Example:**
-    ```php
-    // Paginate query results
-    $users = DB::table('users')->paginate(10);
-    ```
-
-40. **Problem: Customizing Pagination Views**
-    
-    **Solution:** Customize pagination views to match your application's design.
-
-    **Example:**
-    ```php
-    // Customize the pagination view
-    php artisan vendor:publish --tag=laravel-pagination
-    ```
-
-### Illuminate\Pipeline
-
-41. **Problem: Implementing Pipelines for Request Handling**
-    
-    **Solution:** Use Laravel's pipeline functionality to handle requests through a series of stages.
-
-    **Example:**
-    ```php
-    // Define a pipeline
-    $pipeline = (new Pipeline)
-        ->send($data)
-        ->through([
-            CustomMiddleware::class,
-            AnotherMiddleware::class,
-        ])
-        ->then(function ($data) {
-            // Final processing
-        });
-    ```
-
-### Illuminate\Process
-
-42. **Problem: Running Shell Commands**
-    
-    **Solution:** Execute shell commands from your Laravel application.
-
-    **Example:**
-    ```php
-    // Run a shell command
-    $output = Process::run('ls -l');
-    ```
-
-### Illuminate\Queue
-
-43. **Problem: Working with Queue Jobs**
-    
-    **Solution:** Use Laravel's queue system to handle background jobs and tasks.
-
-    **Example:**
-    ```php
-    // Dispatch a job to a queue
-    dispatch(new ProcessPodcast($podcast));
-    ```
-
-44. **Problem: Configuring Queue Drivers**
-    
-    **Solution:** Choose and configure the appropriate queue driver (e.g., Redis, Database).
-
-    **Example:**
-    ```php
-    // Set the queue driver in .env
-    QUEUE_CONNECTION=redis
-    ```
-
-### Illuminate\Redis
-
-45. **Problem: Interacting with Redis**
-    
-    **Solution:** Use Laravel's Redis methods to interact with a Redis server.
-
-    **Example:**
-    ```php
-
-
-    // Store data in Redis
-    Redis::set('key', 'value');
-
-    // Retrieve data from Redis
-    $value = Redis::get('key');
-    ```
-
-46. **Problem: Redis Pub/Sub for Real-Time Updates**
-    
-    **Solution:** Implement Redis Pub/Sub to broadcast real-time updates.
-
-    **Example:**
-    ```php
-    // Subscribe to a Redis channel
-    Redis::subscribe('channel-name', function ($message) {
-        // Handle the message
-    });
-    ```
-
-### Illuminate\Routing
-
-47. **Problem: Defining and Managing Routes**
-    
-    **Solution:** Define routes for handling HTTP requests in your Laravel application.
-
-    **Example:**
-    ```php
-    // Define a route
-    Route::get('/example', 'ExampleController@index');
-    ```
-
-48. **Problem: Middleware for Route Protection**
-    
-    **Solution:** Apply middleware to protect routes and handle requests.
-
-    **Example:**
-    ```php
-    // Apply middleware to a route
-    Route::middleware(['auth'])->group(function () {
-        // Protected routes
-    });
-    ```
-
-### Illuminate\Session
-
-49. **Problem: Managing User Sessions**
-    
-    **Solution:** Use Laravel's session handling for managing user sessions.
-
-    **Example:**
-    ```php
-    // Store a value in the session
-    session(['key' => 'value']);
-
-    // Retrieve a value from the session
-    $value = session('key');
-    ```
-
-50. **Problem: Changing Session Drivers**
-    
-    **Solution:** Configure different session drivers (e.g., file, database) based on your application's needs.
-
-    **Example:**
-    ```php
-    // Set the session driver in .env
-    SESSION_DRIVER=database
-    ```
+    ])
+    ->then(fn ($result) => $result);
+```
+
+### Problem 27: Executing System Processes with the `Process` Facade
+**Definition:** The `Process` facade provides methods for executing system processes from your application.
+
+**Problem:** Run a system command to execute a task asynchronously.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Process;
+
+Process::run(['php', 'artisan', 'queue:work', '--daemon']);
+```
+
+### Problem 28: Working with Queues using the `Queue` Facade
+**Definition:** The `Queue` facade is used for working with queues and background job processing.
+
+**Problem:** Implement a job that processes data in the background.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Queue;
+use App\Jobs\ProcessData;
+
+Queue::push(new ProcessData($data));
+```
+
+### Problem 29: Implementing Rate Limiting with the `RateLimiter` Facade
+**Definition:** The `RateLimiter` facade is used for implementing rate limiting to control access to certain parts of your application.
+
+**Problem:** Implement rate limiting for API requests to prevent abuse.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\RateLimiter;
+
+RateLimiter::for('api', function ($request) {
+    return Limit::perMinute(60);
+});
+```
+
+### Problem 30: Handling HTTP Redirects with the `Redirect` Facade
+**Definition:** The `Redirect` facade is used for creating HTTP redirects in your application.
+
+**Problem:** Implement a redirect after a successful form submission.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Redirect;
+
+return Redirect::to('/dashboard');
+```
+
+### Problem 31: Working with Redis using the `Redis` Facade
+**Definition:** The `Redis` facade provides access to Redis, a popular in-memory data store, for caching and other data storage needs.
+
+**Problem:** Store and retrieve data from a Redis cache.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Redis;
+
+Redis::set('key', 'value');
+$value = Redis::get('key');
+```
+
+### Problem 32: Handling Request Data with the `Request` Facade
+**
+
+Definition:** The `Request` facade allows you to access request data and input parameters within a controller method.
+
+**Problem:** Retrieve input data from a POST request.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Request;
+
+$input = Request::input('key');
+```
+
+### Problem 33: Creating HTTP Responses with the `Response` Facade
+**Definition:** The `Response` facade is used for creating and sending HTTP responses from your application.
+
+**Problem:** Send a JSON response with custom headers.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Response;
+
+return Response::json(['message' => 'Success'], 200, ['X-Custom-Header' => 'Value']);
+```
+
+### Problem 34: Defining and Managing Routes with the `Route` Facade
+**Definition:** The `Route` facade is used for defining and managing routes in your application.
+
+**Problem:** Define a named route and generate its URL.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Route;
+
+Route::get('/profile/{id}', 'ProfileController@show')->name('profile.show');
+
+$url = route('profile.show', ['id' => 1]);
+```
+
+### Problem 35: Managing Database Schema with the `Schema` Facade
+**Definition:** The `Schema` facade provides tools for defining and managing database schema, including creating tables and modifying columns.
+
+**Problem:** Create a migration to add a new column to an existing table.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Schema;
+
+Schema::table('users', function ($table) {
+    $table->string('phone_number')->nullable();
+});
+```
+
+### Problem 36: Managing User Sessions with the `Session` Facade
+**Definition:** The `Session` facade provides methods for managing user sessions in your application.
+
+**Problem:** Store and retrieve data in the user's session.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Session;
+
+Session::put('key', 'value');
+$value = Session::get('key');
+```
+
+### Problem 37: Working with File Storage using the `Storage` Facade
+**Definition:** The `Storage` facade is used for working with file storage disks, such as local storage or cloud storage.
+
+**Problem:** Upload a file and store it in the storage disk.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Storage;
+
+$path = $request->file('avatar')->store('avatars', 'public');
+```
+
+### Problem 38: Generating URLs with the `URL` Facade
+**Definition:** The `URL` facade provides methods for generating URLs to various parts of your application.
+
+**Problem:** Generate a URL to a named route.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\URL;
+
+$url = URL::route('profile.show', ['id' => 1]);
+```
+
+### Problem 39: Data Validation with the `Validator` Facade
+**Definition:** The `Validator` facade provides tools for validating user input, form data, and more.
+
+**Problem:** Create a custom validation rule for checking unique values in a specific database table.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Validator;
+
+Validator::extend('unique_in_table', function ($attribute, $value, $parameters, $validator) {
+    return ! DB::table($parameters[0])->where($attribute, $value)->exists();
+});
+```
+
+### Problem 40: Rendering Views with the `View` Facade
+**Definition:** The `View` facade is used for rendering views and templates in your Laravel application.
+
+**Problem:** Render a Blade view and pass data to it.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\View;
+
+return View::make('profile', ['user' => $user]);
+```
+
+### Problem 41: Asset Compilation with the `Vite` Facade
+**Definition:** The `Vite` facade is used for configuring and working with the Vite asset build tool in Laravel projects.
+
+**Problem:** Configure Vite to compile JavaScript assets in a Laravel application.
+
+**Solution:**
+```php
+use Illuminate\Support\Facades\Vite;
+
+Vite::registerPreset('default', 'resources/js/app.js');
+```
+
+These complex problems and solutions cover a wide range of Laravel's `Illuminate\Support\Facades` components, providing real-life examples that you can use for Laravel developer interviews or projects.
