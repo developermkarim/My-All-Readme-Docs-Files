@@ -7727,8 +7727,9 @@ composer require laravel/socialite
 
 Then, set up the socialite configuration and implement social authentication.
 
-## ILLUMINATE
+## [LARAVEL API DOUCMNENTION](https://laravel.com/api/10.x/doc-index.html) : ILLUMINATE
 ---
+
 Laravel Illuminate is a set of components or packages that make up the foundational framework for the Laravel PHP framework. Laravel is a popular PHP framework used for web application development, and Illuminate provides various tools and libraries that simplify common tasks in web development.
 
 Here's a brief description of some of the key Illuminate components and their typical use cases:
