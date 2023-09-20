@@ -407,9 +407,10 @@ RIGHT JOIN departments ON employees.department_id = departments.department_id;
 
 In a RIGHT JOIN, all rows from the right table (`departments`) are returned, and matching rows from the left table (`employees`) are included. If there's no match, NULL values are shown for the columns from the left table.
 
-**4. FULL JOIN (FULL OUTER JOIN):**
+**4. FULL JOIN (FULL OUTER JOIN):** // It is for raw SQL(MS SQL SERVER) .But Not For MYSQL
 
 ```sql
+# It is for raw SQL(MS SQL SERVER) .But Not For MYSQL
 SELECT employees.emp_id, employees.emp_name, departments.department_name
 FROM employees
 FULL JOIN departments ON employees.department_id = departments.department_id;
