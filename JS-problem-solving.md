@@ -6615,65 +6615,6985 @@ ArrayByLengthDescendingAlternate3(arr) {
    }
    ```
    
-### statements, syntax, variables, keywords, and operators
+### JS Date : Date objects, Date formats, date get & set methods
 ---
 
-### statements, syntax, variables, keywords, and operators
+**1. Problem: Create a Date object for the current date and time.**
+   - Solution: 
+     ```javascript
+     const currentDate = new Date();
+     console.log(currentDate);
+     ```
+
+**2. Problem: Get the current year from a Date object.**
+   - Solution:
+     ```javascript
+     const currentDate = new Date();
+     const currentYear = currentDate.getFullYear();
+     console.log(currentYear);
+     ```
+
+**3. Problem: Format a date as "MM/DD/YYYY".**
+   - Solution:
+     ```javascript
+     function formatDate(date) {
+       const month = date.getMonth() + 1;
+       const day = date.getDate();
+       const year = date.getFullYear();
+       return `${month}/${day}/${year}`;
+     }
+     const currentDate = new Date();
+     console.log(formatDate(currentDate));
+     ```
+
+**4. Problem: Calculate the difference in days between two dates.**
+   - Solution:
+     ```javascript
+     function dateDiffInDays(date1, date2) {
+       const diffInMilliseconds = Math.abs(date1 - date2);
+       return Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+     }
+     const dateA = new Date('2023-09-01');
+     const dateB = new Date('2023-09-15');
+     console.log(dateDiffInDays(dateA, dateB));
+     ```
+
+**5. Problem: Get the current day of the week.**
+   - Solution:
+     ```javascript
+     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+     const currentDate = new Date();
+     const currentDayOfWeek = daysOfWeek[currentDate.getDay()];
+     console.log(currentDayOfWeek);
+     ```
+
+**6. Problem: Create a Date object for a specific date.**
+   - Solution:
+     ```javascript
+     const specificDate = new Date('2023-10-15');
+     console.log(specificDate);
+     ```
+
+**7. Problem: Add a specific number of days to a date.**
+   - Solution:
+     ```javascript
+     function addDaysToDate(date, days) {
+       date.setDate(date.getDate() + days);
+       return date;
+     }
+     const startDate = new Date('2023-09-15');
+     const newDate = addDaysToDate(startDate, 7);
+     console.log(newDate);
+     ```
+
+**8. Problem: Get the last day of the current month.**
+   - Solution:
+     ```javascript
+     const currentDate = new Date();
+     const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+     console.log(lastDayOfMonth.getDate());
+     ```
+
+**9. Problem: Check if a given year is a leap year.**
+   - Solution:
+     ```javascript
+     function isLeapYear(year) {
+       return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+     }
+     const yearToCheck = 2024;
+     console.log(isLeapYear(yearToCheck));
+     ```
+
+**10. Problem: Get the current time in 12-hour format with AM/PM.**
+    - Solution:
+      ```javascript
+      function getTimeIn12HourFormat() {
+        const currentDate = new Date();
+        const hours = currentDate.getHours();
+        const minutes = currentDate.getMinutes();
+        const amOrPm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours % 12 || 12; // Convert 0 to 12
+        return `${formattedHours}:${minutes} ${amOrPm}`;
+      }
+      console.log(getTimeIn12HourFormat());
+      ```
+
+**11. Problem: Calculate the age of a person based on their birthdate.**
+   - Solution:
+     ```javascript
+     function calculateAge(birthdate) {
+       const today = new Date();
+       const birthYear = birthdate.getFullYear();
+       const currentYear = today.getFullYear();
+       const age = currentYear - birthYear;
+       return age;
+     }
+     const birthdate = new Date('1990-05-15');
+     console.log(calculateAge(birthdate));
+     ```
+
+**12. Problem: Find the number of days in a given month of a specific year.**
+   - Solution:
+     ```javascript
+     function daysInMonth(year, month) {
+       return new Date(year, month + 1, 0).getDate();
+     }
+     const year = 2023;
+     const month = 2; // March (0-based index)
+     console.log(daysInMonth(year, month));
+     ```
+
+**13. Problem: Get the first day of a specific month.**
+   - Solution:
+     ```javascript
+     function getFirstDayOfMonth(year, month) {
+       return new Date(year, month, 1).getDay();
+     }
+     const year = 2023;
+     const month = 8; // September (0-based index)
+     console.log(getFirstDayOfMonth(year, month)); // 4 (Thursday)
+     ```
+
+**14. Problem: Determine if a date is in the future.**
+   - Solution:
+     ```javascript
+     function isFutureDate(date) {
+       const today = new Date();
+       return date > today;
+     }
+     const futureDate = new Date('2024-12-31');
+     console.log(isFutureDate(futureDate));
+     ```
+
+**15. Problem: Convert a date to a Unix timestamp.**
+   - Solution:
+     ```javascript
+     function dateToUnixTimestamp(date) {
+       return Math.floor(date.getTime() / 1000);
+     }
+     const currentDate = new Date();
+     console.log(dateToUnixTimestamp(currentDate));
+     ```
+
+**16. Problem: Find the number of days between a specific date and today.**
+   - Solution:
+     ```javascript
+     function daysUntilToday(targetDate) {
+       const today = new Date();
+       const diffInMilliseconds = targetDate - today;
+       return Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+     }
+     const targetDate = new Date('2023-12-31');
+     console.log(daysUntilToday(targetDate));
+     ```
+
+**17. Problem: Determine if a year is within a specific range.**
+   - Solution:
+     ```javascript
+     function isYearInRange(year, startYear, endYear) {
+       return year >= startYear && year <= endYear;
+     }
+     const yearToCheck = 2023;
+     const startYear = 2000;
+     const endYear = 2050;
+     console.log(isYearInRange(yearToCheck, startYear, endYear));
+     ```
+
+**18. Problem: Find the current quarter (Q1, Q2, Q3, Q4).**
+   - Solution:
+     ```javascript
+     function getCurrentQuarter() {
+       const currentDate = new Date();
+       const currentMonth = currentDate.getMonth() + 1;
+       return Math.ceil(currentMonth / 3);
+     }
+     console.log(`Current quarter: Q${getCurrentQuarter()}`);
+     ```
+
+**19. Problem: Check if a given date is a weekend (Saturday or Sunday).**
+   - Solution:
+     ```javascript
+     function isWeekend(date) {
+       const dayOfWeek = date.getDay();
+       return dayOfWeek === 0 || dayOfWeek === 6;
+     }
+     const someDate = new Date('2023-09-23');
+     console.log(isWeekend(someDate));
+     ```
+
+**20. Problem: Get the number of days remaining in the current month.**
+   - Solution:
+     ```javascript
+     function daysRemainingInMonth() {
+       const currentDate = new Date();
+       const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+       const daysRemaining = lastDayOfMonth.getDate() - currentDate.getDate();
+       return daysRemaining;
+     }
+     console.log(daysRemainingInMonth());
+     ```
+
+
+**1. Problem: Find the square root of a number.**
+   - Solution:
+     ```javascript
+     const number = 16;
+     const squareRoot = Math.sqrt(number);
+     console.log(squareRoot);
+     ```
+
+**2. Problem: Round a number to the nearest integer.**
+   - Solution:
+     ```javascript
+     const number = 3.7;
+     const roundedNumber = Math.round(number);
+     console.log(roundedNumber);
+     ```
+
+**3. Problem: Calculate the absolute value of a number.**
+   - Solution:
+     ```javascript
+     const number = -5;
+     const absoluteValue = Math.abs(number);
+     console.log(absoluteValue);
+     ```
+
+**4. Problem: Generate a random integer between a given range.**
+   - Solution:
+     ```javascript
+     function getRandomInt(min, max) {
+       return Math.floor(Math.random() * (max - min + 1)) + min;
+     }
+     console.log(getRandomInt(1, 10));
+     ```
+
+**5. Problem: Calculate the power of a number.**
+   - Solution:
+     ```javascript
+     const base = 2;
+     const exponent = 3;
+     const result = Math.pow(base, exponent);
+     console.log(result);
+     ```
+
+**6. Problem: Calculate the factorial of a number.**
+   - Solution:
+     ```javascript
+     function factorial(n) {
+       if (n === 0) return 1;
+       return n * factorial(n - 1);
+     }
+     console.log(factorial(5));
+     ```
+
+**7. Problem: Round down to the nearest integer.**
+   - Solution:
+     ```javascript
+     const number = 7.9;
+     const roundedDown = Math.floor(number);
+     console.log(roundedDown);
+     ```
+
+**8. Problem: Round up to the nearest integer.**
+   - Solution:
+     ```javascript
+     const number = 2.1;
+     const roundedUp = Math.ceil(number);
+     console.log(roundedUp);
+     ```
+
+**9. Problem: Find the minimum of two numbers.**
+   - Solution:
+     ```javascript
+     const num1 = 5;
+     const num2 = 3;
+     const minNumber = Math.min(num1, num2);
+     console.log(minNumber);
+     ```
+
+**10. Problem: Find the maximum of two numbers.**
+    - Solution:
+      ```javascript
+      const num1 = 8;
+      const num2 = 12;
+      const maxNumber = Math.max(num1, num2);
+      console.log(maxNumber);
+      ```
+
+**11. Problem: Calculate the sine of an angle in radians.**
+    - Solution:
+      ```javascript
+      const angle = Math.PI / 4; // 45 degrees in radians
+      const sineValue = Math.sin(angle);
+      console.log(sineValue);
+      ```
+
+**12. Problem: Calculate the cosine of an angle in radians.**
+    - Solution:
+      ```javascript
+      const angle = Math.PI / 3; // 60 degrees in radians
+      const cosineValue = Math.cos(angle);
+      console.log(cosineValue);
+      ```
+
+**13. Problem: Calculate the tangent of an angle in radians.**
+    - Solution:
+      ```javascript
+      const angle = Math.PI / 6; // 30 degrees in radians
+      const tangentValue = Math.tan(angle);
+      console.log(tangentValue);
+      ```
+
+**14. Problem: Convert degrees to radians.**
+    - Solution:
+      ```javascript
+      function degreesToRadians(degrees) {
+        return (degrees * Math.PI) / 180;
+      }
+      console.log(degreesToRadians(90));
+      ```
+
+**15. Problem: Generate a random number between 0 and 1.**
+    - Solution:
+      ```javascript
+      const randomNum = Math.random();
+      console.log(randomNum);
+      ```
+
+**16. Problem: Calculate the natural logarithm (base e) of a number.**
+    - Solution:
+      ```javascript
+      const number = 2.718; // Approximately e
+      const logValue = Math.log(number);
+      console.log(logValue);
+      ```
+
+**17. Problem: Calculate the base 10 logarithm of a number.**
+    - Solution:
+      ```javascript
+      const number = 100;
+      const log10Value = Math.log10(number);
+      console.log(log10Value);
+      ```
+
+**18. Problem: Find the nearest integer less than or equal to a number.**
+    - Solution:
+      ```javascript
+      const number = 5.8;
+      const nearestInteger = Math.floor(number);
+      console.log(nearestInteger);
+      ```
+
+**19. Problem: Find the nearest integer greater than or equal to a number.**
+    - Solution:
+      ```javascript
+      const number = 3.2;
+      const nearestInteger = Math.ceil(number);
+      console.log(nearestInteger);
+      ```
+
+**20. Problem: Calculate the cube root of a number.**
+    - Solution:
+      ```javascript
+      const number = 8;
+      const cubeRoot = Math.cbrt(number);
+      console.log(cubeRoot);
+      ```
+
+**21. Problem: Calculate the hypotenuse of a right triangle given two side lengths.**
+    - Solution:
+      ```javascript
+      function calculateHypotenuse(a, b) {
+        return Math.sqrt(a * a + b * b);
+      }
+      console.log(calculateHypotenuse(3, 4));
+      ```
+
+**22. Problem: Calculate the arc tangent of a number.**
+    - Solution:
+      ```javascript
+      const number = 1;
+      const arcTanValue = Math.atan(number);
+      console.log(arcTanValue);
+      ```
+
+**23. Problem: Calculate the exponent (e^x) of a number.**
+    - Solution:
+      ```javascript
+      const x = 2;
+      const exponentValue = Math.exp(x);
+      console.log(exponentValue);
+      ```
+
+**24. Problem: Find the greatest common divisor (GCD) of two numbers.**
+    - Solution:
+      ```javascript
+      function gcd(a, b) {
+        if (b === 0) return a;
+        return gcd(b, a % b);
+      }
+      console.log(gcd(48, 18));
+      ```
+
+**25. Problem: Calculate the square of a number.**
+    - Solution:
+      ```javascript
+      const number = 7;
+      const square = Math.pow(number, 2);
+      console.log(square);
+      ```
+
+**26. Problem: Calculate the cube of a number.**
+    - Solution:
+      ```javascript
+      const number = 4;
+      const cube = Math.pow(number, 3);
+      console.log(cube);
+      ```
+
+**27. Problem: Calculate the remainder when dividing two numbers.**
+    - Solution:
+      ```javascript
+      const dividend = 19;
+      const divisor = 5;
+      const remainder = dividend % divisor;
+      console.log(remainder);
+      ```
+
+**28. Problem: Find the average of an array of numbers.**
+    - Solution:
+      ```javascript
+     
+
+ function calculateAverage(numbers) {
+        const sum = numbers.reduce((acc, num) => acc + num, 0);
+        return sum / numbers.length;
+      }
+      const numbers = [5, 10, 15, 20];
+      console.log(calculateAverage(numbers));
+      ```
+
+**29. Problem: Calculate the standard deviation of an array of numbers.**
+    - Solution:
+      ```javascript
+      function calculateStandardDeviation(numbers) {
+        const mean = calculateAverage(numbers);
+        const squaredDifferences = numbers.map((num) => Math.pow(num - mean, 2));
+        const variance = calculateAverage(squaredDifferences);
+        return Math.sqrt(variance);
+      }
+      const numbers = [4, 7, 10, 13];
+      console.log(calculateStandardDeviation(numbers));
+      ```
+
+**30. Problem: Generate a random boolean value (true or false).**
+    - Solution:
+      ```javascript
+      const randomBoolean = Math.random() < 0.5;
+      console.log(randomBoolean);
+      ```
+
+**31. Problem: Calculate the sine of an angle in degrees.**
+    - Solution:
+      ```javascript
+      function degreesToRadians(degrees) {
+        return (degrees * Math.PI) / 180;
+      }
+      const angleInDegrees = 45;
+      const angleInRadians = degreesToRadians(angleInDegrees);
+      const sineValue = Math.sin(angleInRadians);
+      console.log(sineValue);
+      ```
+
+**32. Problem: Calculate the cosine of an angle in degrees.**
+    - Solution:
+      ```javascript
+      function degreesToRadians(degrees) {
+        return (degrees * Math.PI) / 180;
+      }
+      const angleInDegrees = 60;
+      const angleInRadians = degreesToRadians(angleInDegrees);
+      const cosineValue = Math.cos(angleInRadians);
+      console.log(cosineValue);
+      ```
+
+**33. Problem: Calculate the tangent of an angle in degrees.**
+    - Solution:
+      ```javascript
+      function degreesToRadians(degrees) {
+        return (degrees * Math.PI) / 180;
+      }
+      const angleInDegrees = 30;
+      const angleInRadians = degreesToRadians(angleInDegrees);
+      const tangentValue = Math.tan(angleInRadians);
+      console.log(tangentValue);
+      ```
+
+**34. Problem: Calculate the arc sine of a number and convert it to degrees.**
+    - Solution:
+      ```javascript
+      const number = 0.5;
+      const arcSineValue = Math.asin(number);
+      function radiansToDegrees(radians) {
+        return (radians * 180) / Math.PI;
+      }
+      console.log(radiansToDegrees(arcSineValue));
+      ```
+
+**35. Problem: Calculate the arc cosine of a number and convert it to degrees.**
+    - Solution:
+      ```javascript
+      const number = 0.866; // cos(30 degrees)
+      const arcCosineValue = Math.acos(number);
+      function radiansToDegrees(radians) {
+        return (radians * 180) / Math.PI;
+      }
+      console.log(radiansToDegrees(arcCosineValue));
+      ```
+
+**36. Problem: Calculate the arc tangent of a number and convert it to degrees.**
+    - Solution:
+      ```javascript
+      const number = 1;
+      const arcTanValue = Math.atan(number);
+      function radiansToDegrees(radians) {
+        return (radians * 180) / Math.PI;
+      }
+      console.log(radiansToDegrees(arcTanValue));
+      ```
+
+**37. Problem: Calculate the hyperbolic sine of a number.**
+    - Solution:
+      ```javascript
+      const number = 2;
+      const hyperbolicSineValue = Math.sinh(number);
+      console.log(hyperbolicSineValue);
+      ```
+
+**38. Problem: Calculate the hyperbolic cosine of a number.**
+    - Solution:
+      ```javascript
+      const number = 2;
+      const hyperbolicCosineValue = Math.cosh(number);
+      console.log(hyperbolicCosineValue);
+      ```
+
+**39. Problem: Calculate the hyperbolic tangent of a number.**
+    - Solution:
+      ```javascript
+      const number = 1;
+      const hyperbolicTangentValue = Math.tanh(number);
+      console.log(hyperbolicTangentValue);
+      ```
+
+**40. Problem: Calculate the base 2 logarithm (binary logarithm) of a number.**
+    - Solution:
+      ```javascript
+      const number = 32;
+      const log2Value = Math.log2(number);
+      console.log(log2Value);
+      ```
+
+**41. Problem: Generate a random color in hexadecimal format (e.g., #RRGGBB).**
+   - Solution:
+     ```javascript
+     function getRandomColor() {
+       const letters = '0123456789ABCDEF';
+       let color = '#';
+       for (let i = 0; i < 6; i++) {
+         color += letters[Math.floor(Math.random() * 16)];
+       }
+       return color;
+     }
+     console.log(getRandomColor());
+     ```
+
+**42. Problem: Generate a random RGB color (e.g., rgb(255, 100, 0)).**
+   - Solution:
+     ```javascript
+     function getRandomRGBColor() {
+       const r = Math.floor(Math.random() * 256);
+       const g = Math.floor(Math.random() * 256);
+       const b = Math.floor(Math.random() * 256);
+       return `rgb(${r}, ${g}, ${b})`;
+     }
+     console.log(getRandomRGBColor());
+     ```
+
+**43. Problem: Generate a random boolean value with a given probability (e.g., 70% chance of true).**
+   - Solution:
+     ```javascript
+     function randomBooleanWithProbability(probability) {
+       return Math.random() < probability;
+     }
+     console.log(randomBooleanWithProbability(0.7)); // 70% chance of true
+     ```
+
+**44. Problem: Generate a random integer within a specific range, inclusive.**
+   - Solution:
+     ```javascript
+     function getRandomIntInclusive(min, max) {
+       min = Math.ceil(min);
+       max = Math.floor(max);
+       return Math.floor(Math.random() * (max - min + 1)) + min;
+     }
+     console.log(getRandomIntInclusive(1, 10)); // Random integer between 1 and 10 (inclusive)
+     ```
+
+**45. Problem: Generate a random item from an array.**
+   - Solution:
+     ```javascript
+     function getRandomItemFromArray(arr) {
+       const randomIndex = Math.floor(Math.random() * arr.length);
+       return arr[randomIndex];
+     }
+     const fruits = ['apple', 'banana', 'orange', 'kiwi'];
+     console.log(getRandomItemFromArray(fruits));
+     ```
+
+**46. Problem: Simulate a dice roll and return the result (1 to 6).**
+   - Solution:
+     ```javascript
+     function rollDice() {
+       return Math.floor(Math.random() * 6) + 1;
+     }
+     console.log(rollDice());
+     ```
+
+**47. Problem: Generate a random time within a specified time range.**
+   - Solution:
+     ```javascript
+     function getRandomTime(startTime, endTime) {
+       const startTimestamp = startTime.getTime();
+       const endTimestamp = endTime.getTime();
+       const randomTimestamp = Math.random() * (endTimestamp - startTimestamp) + startTimestamp;
+       return new Date(randomTimestamp);
+     }
+     const startDate = new Date('2023-01-01');
+     const endDate = new Date('2023-12-31');
+     console.log(getRandomTime(startDate, endDate));
+     ```
+
+**48. Problem: Shuffle an array randomly.**
+   - Solution:
+     ```javascript
+     function shuffleArray(array) {
+       for (let i = array.length - 1; i > 0; i--) {
+         const j = Math.floor(Math.random() * (i + 1));
+         [array[i], array[j]] = [array[j], array[i]];
+       }
+       return array;
+     }
+     const numbers = [1, 2, 3, 4, 5];
+     console.log(shuffleArray(numbers));
+     ```
+
+**49. Problem: Generate a random UUID (Universally Unique Identifier).**
+   - Solution:
+     ```javascript
+     function generateUUID() {
+       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+         const r = Math.random() * 16 | 0;
+         const v = c === 'x' ? r : (r & 0x3 | 0x8);
+         return v.toString(16);
+       });
+     }
+     console.log(generateUUID());
+     ```
+
+**50. Problem: Generate a random password with a specified length and character set.**
+   - Solution:
+     ```javascript
+     function generateRandomPassword(length) {
+       const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+       let password = '';
+       for (let i = 0; i < length; i++) {
+         const randomIndex = Math.floor(Math.random() * charset.length);
+         password += charset[randomIndex];
+       }
+       return password;
+     }
+     console.log(generateRandomPassword(8)); // Generates an 8-character password
+     ```
+
+**51. Problem: Generate a random number between 0 and 1.**
+   - Solution:
+     ```javascript
+     const randomNum = Math.random();
+     console.log(randomNum);
+     ```
+
+**52. Problem: Generate a random number between 1 and 10.**
+   - Solution:
+     ```javascript
+     const randomNum = Math.floor(Math.random() * 10) + 1;
+     console.log(randomNum);
+     ```
+
+**53. Problem: Generate a random integer between 0 and 100.**
+   - Solution:
+     ```javascript
+     const randomInt = Math.floor(Math.random() * 101);
+     console.log(randomInt);
+     ```
+
+**54. Problem: Generate a random boolean value (true or false).**
+   - Solution:
+     ```javascript
+     const randomBoolean = Math.random() < 0.5;
+     console.log(randomBoolean);
+     ```
+
+**55. Problem: Simulate a coin toss (heads or tails).**
+   - Solution:
+     ```javascript
+     const coinToss = Math.random() < 0.5 ? 'Heads' : 'Tails';
+     console.log(coinToss);
+     ```
+
+**56. Problem: Roll a fair six-sided die (generate a random number from 1 to 6).**
+   - Solution:
+     ```javascript
+     const dieRoll = Math.floor(Math.random() * 6) + 1;
+     console.log(dieRoll);
+     ```
+
+**57. Problem: Generate a random index for selecting an item from an array.**
+   - Solution:
+     ```javascript
+     const items = ['apple', 'banana', 'cherry', 'date'];
+     const randomIndex = Math.floor(Math.random() * items.length);
+     console.log(items[randomIndex]);
+     ```
+
+**58. Problem: Create a random RGB color.**
+   - Solution:
+     ```javascript
+     function getRandomRGBColor() {
+       const r = Math.floor(Math.random() * 256);
+       const g = Math.floor(Math.random() * 256);
+       const b = Math.floor(Math.random() * 256);
+       return `rgb(${r}, ${g}, ${b})`;
+     }
+     console.log(getRandomRGBColor());
+     ```
+
+**59. Problem: Simulate a 20% chance event.**
+   - Solution:
+     ```javascript
+     const eventOccurred = Math.random() < 0.2;
+     console.log(eventOccurred);
+     ```
+
+**60. Problem: Generate a random year between 2000 and 2022.**
+   - Solution:
+     ```javascript
+     const randomYear = Math.floor(Math.random() * 23) + 2000;
+     console.log(randomYear);
+     ```
+### JS Boolean & comparison : all typea of boolean & various comparisons
 ---
 
-### statements, syntax, variables, keywords, and operators
+
+**1. Problem: Check if a variable is a boolean.**
+   - Solution:
+     ```javascript
+     const value = true;
+     const isBoolean = typeof value === 'boolean';
+     console.log(isBoolean);
+     ```
+
+**2. Problem: Check if a number is even.**
+   - Solution:
+     ```javascript
+     const number = 8;
+     const isEven = number % 2 === 0;
+     console.log(isEven);
+     ```
+
+**3. Problem: Check if a number is positive.**
+   - Solution:
+     ```javascript
+     const number = 5;
+     const isPositive = number > 0;
+     console.log(isPositive);
+     ```
+
+**4. Problem: Check if a string is empty.**
+   - Solution:
+     ```javascript
+     const text = '';
+     const isEmpty = text.length === 0;
+     console.log(isEmpty);
+     ```
+
+**5. Problem: Check if an array is not empty.**
+   - Solution:
+     ```javascript
+     const array = [1, 2, 3];
+     const isNotEmpty = array.length > 0;
+     console.log(isNotEmpty);
+     ```
+
+**6. Problem: Check if a string contains a specific substring.**
+   - Solution:
+     ```javascript
+     const text = 'Hello, World!';
+     const containsSubstring = text.includes('World');
+     console.log(containsSubstring);
+     ```
+
+**7. Problem: Check if a number is within a specified range.**
+   - Solution:
+     ```javascript
+     const number = 15;
+     const min = 10;
+     const max = 20;
+     const isInRange = number >= min && number <= max;
+     console.log(isInRange);
+     ```
+
+**8. Problem: Check if two strings are equal (case-sensitive).**
+   - Solution:
+     ```javascript
+     const str1 = 'Hello';
+     const str2 = 'hello';
+     const areEqual = str1 === str2;
+     console.log(areEqual);
+     ```
+
+**9. Problem: Check if two strings are equal (case-insensitive).**
+   - Solution:
+     ```javascript
+     const str1 = 'Hello';
+     const str2 = 'hello';
+     const areEqual = str1.toLowerCase() === str2.toLowerCase();
+     console.log(areEqual);
+     ```
+
+**10. Problem: Check if an object has a specific property.**
+    - Solution:
+      ```javascript
+      const person = { name: 'John', age: 30 };
+      const hasProperty = 'age' in person;
+      console.log(hasProperty);
+      ```
+
+**11. Problem: Check if a value is null or undefined.**
+    - Solution:
+      ```javascript
+      const value = null;
+      const isNullOrUndefined = value === null || value === undefined;
+      console.log(isNullOrUndefined);
+      ```
+
+**12. Problem: Check if a value is truthy.**
+    - Solution:
+      ```javascript
+      const value = 'Hello';
+      const isTruthy = !!value; // Using double negation
+      console.log(isTruthy);
+      ```
+
+**13. Problem: Check if a value is falsy.**
+    - Solution:
+      ```javascript
+      const value = 0;
+      const isFalsy = !value; // Using negation
+      console.log(isFalsy);
+      ```
+
+**14. Problem: Check if a number is a multiple of another number.**
+    - Solution:
+      ```javascript
+      const number = 12;
+      const multipleOf = 3;
+      const isMultiple = number % multipleOf === 0;
+      console.log(isMultiple);
+      ```
+
+**15. Problem: Check if a string starts with a specific prefix.**
+    - Solution:
+      ```javascript
+      const text = 'Hello, World!';
+      const startsWithPrefix = text.startsWith('Hello');
+      console.log(startsWithPrefix);
+      ```
+
+**16. Problem: Check if a string ends with a specific suffix.**
+    - Solution:
+      ```javascript
+      const text = 'Hello, World!';
+      const endsWithSuffix = text.endsWith('World!');
+      console.log(endsWithSuffix);
+      ```
+
+**17. Problem: Check if an array contains a specific element.**
+    - Solution:
+      ```javascript
+      const array = [1, 2, 3, 4, 5];
+      const containsElement = array.includes(3);
+      console.log(containsElement);
+      ```
+
+**18. Problem: Check if a date is in the future.**
+    - Solution:
+      ```javascript
+      const futureDate = new Date('2024-12-31');
+      const currentDate = new Date();
+      const isInFuture = futureDate > currentDate;
+      console.log(isInFuture);
+      ```
+
+**19. Problem: Check if a date is today.**
+    - Solution:
+      ```javascript
+      const dateToCheck = new Date('2023-09-22');
+      const today = new Date();
+      const isToday = dateToCheck.toDateString() === today.toDateString();
+      console.log(isToday);
+      ```
+
+**20. Problem: Check if a number is not equal to another number.**
+    - Solution:
+      ```javascript
+      const num1 = 5;
+      const num2 = 7;
+      const notEqual = num1 !== num2;
+      console.log(notEqual);
+      ```
+
+### JS sets and maps
 ---
 
-### statements, syntax, variables, keywords, and operators
+
+**1. Problem: Remove duplicates from an array using a Set.**
+   - Solution:
+     ```javascript
+     const array = [1, 2, 2, 3, 4, 4, 5];
+     const uniqueArray = [...new Set(array)];
+     console.log(uniqueArray);
+     ```
+
+**2. Problem: Check if an array contains duplicate elements using a Set.**
+   - Solution:
+     ```javascript
+     function hasDuplicates(array) {
+       return new Set(array).size !== array.length;
+     }
+     const array1 = [1, 2, 3, 4, 5];
+     const array2 = [1, 2, 2, 3, 4];
+     console.log(hasDuplicates(array1)); // false
+     console.log(hasDuplicates(array2)); // true
+     ```
+
+**3. Problem: Count the frequency of elements in an array using a Map.**
+   - Solution:
+     ```javascript
+     function countFrequency(array) {
+       const frequencyMap = new Map();
+       array.forEach((item) => {
+         frequencyMap.set(item, (frequencyMap.get(item) || 0) + 1);
+       });
+       return frequencyMap;
+     }
+     const array = [1, 2, 2, 3, 4, 4, 5];
+     console.log(countFrequency(array));
+     ```
+
+**4. Problem: Implement a simple cache using a Map with a maximum size.**
+   - Solution:
+     ```javascript
+     class Cache {
+       constructor(maxSize) {
+         this.maxSize = maxSize;
+         this.cache = new Map();
+       }
+     
+       set(key, value) {
+         if (this.cache.size >= this.maxSize) {
+           const oldestKey = this.cache.keys().next().value;
+           this.cache.delete(oldestKey);
+         }
+         this.cache.set(key, value);
+       }
+     
+       get(key) {
+         return this.cache.get(key);
+       }
+     }
+     
+     const cache = new Cache(3);
+     cache.set('a', 1);
+     cache.set('b', 2);
+     cache.set('c', 3);
+     cache.set('d', 4); // 'a' will be evicted
+     console.log(cache.get('a')); // undefined
+     ```
+
+**5. Problem: Find the intersection of two arrays using Sets.**
+   - Solution:
+     ```javascript
+     function findIntersection(arr1, arr2) {
+       const set1 = new Set(arr1);
+       const set2 = new Set(arr2);
+       return [...set1].filter((item) => set2.has(item));
+     }
+     const array1 = [1, 2, 3, 4, 5];
+     const array2 = [3, 4, 5, 6, 7];
+     console.log(findIntersection(array1, array2));
+     ```
+
+**6. Problem: Group objects by a common property using a Map.**
+   - Solution:
+     ```javascript
+     const people = [
+       { id: 1, name: 'Alice' },
+       { id: 2, name: 'Bob' },
+       { id: 3, name: 'Alice' },
+     ];
+     
+     function groupByName(people) {
+       const groupMap = new Map();
+       people.forEach((person) => {
+         const name = person.name;
+         if (!groupMap.has(name)) {
+           groupMap.set(name, []);
+         }
+         groupMap.get(name).push(person);
+       });
+       return groupMap;
+     }
+     
+     console.log(groupByName(people));
+     ```
+
+**7. Problem: Determine if two strings are anagrams using Sets.**
+   - Solution:
+     ```javascript
+     function areAnagrams(str1, str2) {
+       const set1 = new Set(str1);
+       const set2 = new Set(str2);
+       if (set1.size !== set2.size) {
+         return false;
+       }
+       for (const char of set1) {
+         if (str1.split(char).length !== str2.split(char).length) {
+           return false;
+         }
+       }
+       return true;
+     }
+     const string1 = 'listen';
+     const string2 = 'silent';
+     console.log(areAnagrams(string1, string2));
+     ```
+
+**8. Problem: Calculate the union of multiple sets.**
+   - Solution:
+     ```javascript
+     function unionSets(...sets) {
+       return new Set([...sets].flatMap((set) => [...set]));
+     }
+     const set1 = new Set([1, 2, 3]);
+     const set2 = new Set([3, 4, 5]);
+     const set3 = new Set([5, 6, 7]);
+     console.log(unionSets(set1, set2, set3));
+     ```
+
+**9. Problem: Find the difference between two sets.**
+   - Solution:
+     ```javascript
+     function differenceSets(set1, set2) {
+       return new Set([...set1].filter((item) => !set2.has(item)));
+     }
+     const setA = new Set([1, 2, 3, 4]);
+     const setB = new Set([3, 4, 5, 6]);
+     console.log(differenceSets(setA, setB));
+     ```
+
+**10. Problem: Check if one set is a subset of another.**
+    - Solution:
+      ```javascript
+      function isSubset(subset, superset) {
+        for (const item of subset) {
+          if (!superset.has(item)) {
+            return false;
+          }
+        }
+        return true;
+      }
+      const set1 = new Set([1, 2]);
+      const set2 = new Set([1, 2, 3, 4]);
+      console.log(isSubset(set1, set2));
+      ```
+
+### JS 'typeof' & type conversion & coercion 
 ---
 
-### statements, syntax, variables, keywords, and operators
+```javascript
+// Problem 1: Check the type of a variable.
+const variable1 = 42;
+console.log(typeof variable1);
+
+// Problem 2: Type conversion from string to number.
+const numString = '42';
+const num = Number(numString);
+console.log(num);
+
+// Problem 3: Type conversion from number to string.
+const number = 42;
+const str = String(number);
+console.log(str);
+
+// Problem 4: Type conversion from boolean to number.
+const bool = true;
+const numFromBool = Number(bool);
+console.log(numFromBool);
+
+// Problem 5: Type conversion from number to boolean.
+const num2 = 0;
+const boolFromNum = Boolean(num2);
+console.log(boolFromNum);
+
+// Problem 6: Type coercion in a mathematical operation.
+const strNum = '5';
+const result1 = strNum * 2;
+console.log(result1);
+
+// Problem 7: Type coercion in string concatenation.
+const str2 = 'Hello';
+const num3 = 42;
+const result2 = str2 + num3;
+console.log(result2);
+
+// Problem 8: Type coercion with loose equality.
+const value1 = '5';
+const value2 = 5;
+console.log(value1 == value2);
+
+// Problem 9: Type coercion with strict equality.
+const value3 = '5';
+const value4 = 5;
+console.log(value3 === value4);
+
+// Problem 10: Check if a variable is undefined.
+const variable2 = undefined;
+console.log(typeof variable2 === 'undefined');
+
+// Problem 11: Check if a variable is null.
+const variable3 = null;
+console.log(variable3 === null);
+
+// Problem 12: Type conversion from an array to a string.
+const array = [1, 2, 3];
+const arrayAsString = array.toString();
+console.log(arrayAsString);
+
+// Problem 13: Type conversion from a string to a boolean.
+const str3 = 'true';
+const boolFromString = Boolean(str3);
+console.log(boolFromString);
+
+// Problem 14: Type conversion from an object to a number.
+const obj = { value: 42 };
+const numFromObj = Number(obj);
+console.log(numFromObj);
+
+// Problem 15: Type conversion from a boolean to a string.
+const bool2 = false;
+const strFromBool = String(bool2);
+console.log(strFromBool);
+
+// Problem 16: Type coercion with addition.
+const num4 = 5;
+const str4 = '2';
+const result3 = num4 + str4;
+console.log(result3);
+
+// Problem 17: Type coercion with subtraction.
+const num5 = 10;
+const str5 = '5';
+const result4 = num5 - str5;
+console.log(result4);
+
+// Problem 18: Type coercion with equality and logical operators.
+const num6 = 0;
+const str6 = '0';
+console.log(num6 == str6 && num6 === str6);
+
+// Problem 19: Check if a variable is an array.
+const variable4 = [1, 2, 3];
+console.log(Array.isArray(variable4));
+
+// Problem 20: Check if a variable is a function.
+const variable5 = function () {};
+console.log(typeof variable5 === 'function');
+```
+
+### JS bitwise, Regexp,  and Precedence
 ---
 
-### statements, syntax, variables, keywords, and operators
+
+
+**1. Problem: Use bitwise AND to check if a number is even.**
+   - Solution:
+     ```javascript
+     const number = 6;
+     const isEven = (number & 1) === 0;
+     console.log(isEven);
+     ```
+
+**2. Problem: Use bitwise OR to set specific bits in a number.**
+   - Solution:
+     ```javascript
+     let number = 5; // Binary: 0101
+     const mask = 2; // Binary: 0010
+     number |= mask; // Set the second bit
+     console.log(number); // Result: 7 (Binary: 0111)
+     ```
+
+**3. Problem: Use bitwise XOR to toggle specific bits in a number.**
+   - Solution:
+     ```javascript
+     let number = 10; // Binary: 1010
+     const toggleMask = 5; // Binary: 0101
+     number ^= toggleMask; // Toggle the 2nd and 0th bits
+     console.log(number); // Result: 15 (Binary: 1111)
+     ```
+
+**4. Problem: Use bitwise NOT to invert the bits of a number.**
+   - Solution:
+     ```javascript
+     let number = 5; // Binary: 0101
+     const inverted = ~number; // Invert the bits
+     console.log(inverted); // Result: -6
+     ```
+
+**5. Problem: Use a regular expression to validate an email address.**
+   - Solution:
+     ```javascript
+     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+     const email = 'user@example.com';
+     const isValid = emailRegex.test(email);
+     console.log(isValid);
+     ```
+
+**6. Problem: Use regular expressions to extract phone numbers from a text.**
+   - Solution:
+     ```javascript
+     const text = 'Call me at 123-456-7890 or 987-654-3210.';
+     const phoneRegex = /\d{3}-\d{3}-\d{4}/g;
+     const phoneNumbers = text.match(phoneRegex);
+     console.log(phoneNumbers);
+     ```
+
+**7. Problem: Use regular expressions to replace words in a text.**
+   - Solution:
+     ```javascript
+     const text = 'Replace all the apples with oranges.';
+     const newText = text.replace(/apples/g, 'oranges');
+     console.log(newText);
+     ```
+
+**8. Problem: Understand operator precedence with logical AND and OR.**
+   - Solution:
+     ```javascript
+     const a = true, b = false, c = true;
+     const result = a || b && c; // What is the result?
+     console.log(result); // Result: true (AND has higher precedence)
+     ```
+
+**9. Problem: Use parentheses to control operator precedence.**
+   - Solution:
+     ```javascript
+     const a = true, b = false, c = true;
+     const result = (a || b) && c; // Use parentheses to clarify
+     console.log(result); // Result: true (OR has lower precedence)
+     ```
+
+**10. Problem: Use bitwise shift to perform integer division and multiplication.**
+    - Solution:
+      ```javascript
+      const number = 16;
+      const dividedBy2 = number >> 1; // Integer division by 2
+      const multipliedBy2 = number << 1; // Integer multiplication by 2
+      console.log(dividedBy2, multipliedBy2);
+      ```
+
+
+### JS Boolean & comparison : Errors, Scope & Hoisting
 ---
 
-### statements, syntax, variables, keywords, and operators
+**1. Problem: Identify the scope of a variable and handle reference errors.**
+   - Solution:
+     ```javascript
+     function checkScope() {
+       if (true) {
+         let innerVar = 'Inside if';
+       }
+       console.log(innerVar); // ReferenceError: innerVar is not defined
+     }
+     checkScope();
+     ```
+
+**2. Problem: Explain variable hoisting and avoid unexpected behavior.**
+   - Solution:
+     ```javascript
+     function hoistingExample() {
+       console.log(myVar); // undefined
+       var myVar = 'I am hoisted!';
+     }
+     hoistingExample();
+     ```
+
+**3. Problem: Identify and handle type errors when using incorrect data types.**
+   - Solution:
+     ```javascript
+     function typeErrorExample() {
+       let num = '42';
+       let result = num + 5; // This will result in a string
+       console.log(result);
+     }
+     typeErrorExample();
+     ```
+
+**4. Problem: Scope variables to avoid global scope pollution.**
+   - Solution:
+     ```javascript
+     function avoidGlobalScope() {
+       var globalVar = 'I am global';
+       console.log(globalVar);
+     }
+     avoidGlobalScope();
+     console.log(globalVar); // ReferenceError: globalVar is not defined
+     ```
+
+**5. Problem: Explain the difference between `var`, `let`, and `const` regarding scope and reassignment.**
+   - Solution:
+     ```javascript
+     function scopeExample() {
+       var x = 1;
+       if (true) {
+         let y = 2;
+         const z = 3;
+         x = 4; // This reassigns the outer variable
+       }
+       console.log(x); // 4
+       console.log(y); // ReferenceError: y is not defined
+       console.log(z); // ReferenceError: z is not defined
+     }
+     scopeExample();
+     ```
+
+**6. Problem: Understand the behavior of `this` in different contexts and avoid `this` errors.**
+   - Solution:
+     ```javascript
+     const person = {
+       name: 'Alice',
+       greet: function () {
+         console.log('Hello, ' + this.name);
+       },
+     };
+     const greetFunc = person.greet;
+     greetFunc(); // This will result in an error
+     ```
+
+**7. Problem: Explain the concept of closures and use them to encapsulate data.**
+   - Solution:
+     ```javascript
+     function createCounter() {
+       let count = 0;
+       return function () {
+         return ++count;
+       };
+     }
+     const counter = createCounter();
+     console.log(counter()); // 1
+     console.log(counter()); // 2
+     ```
+
+**8. Problem: Handle try-catch blocks to gracefully handle errors.**
+   - Solution:
+     ```javascript
+     try {
+       // Code that might throw an error
+       throw new Error('An error occurred.');
+     } catch (error) {
+       console.log('Error: ' + error.message);
+     }
+     ```
+
+**9. Problem: Explain the concept of the "Temporal Dead Zone" and avoid issues with variable access.**
+   - Solution:
+     ```javascript
+     function temporalDeadZoneExample() {
+       console.log(x); // ReferenceError: Cannot access 'x' before initialization
+       let x = 42;
+     }
+     temporalDeadZoneExample();
+     ```
+
+**10. Problem: Explain variable shadowing and its implications on scope.**
+    - Solution:
+      ```javascript
+      const x = 'Global X';
+      function shadowingExample() {
+        const x = 'Local X';
+        console.log(x); // Local X
+      }
+      shadowingExample();
+      console.log(x); // Global X
+      ```
+
+### Strick mode, this keyword,  and arrow functions
 ---
 
-### statements, syntax, variables, keywords, and operators
+**1. Problem: Explain what strict mode is and enable it in a function.**
+   - Solution:
+     ```javascript
+     'use strict';
+     function strictModeExample() {
+       // Strict mode enabled here
+       // ...
+     }
+     ```
+
+**2. Problem: Describe the differences between strict mode and non-strict mode.**
+   - Solution:
+     Strict mode helps catch common coding mistakes and "unsafe" actions. For example, it disallows the use of undeclared variables and prohibits assignments to non-writable properties.
+
+**3. Problem: Explain how the `this` keyword works in the context of an object method.**
+   - Solution:
+     ```javascript
+     const person = {
+       name: 'Alice',
+       greet: function () {
+         console.log('Hello, ' + this.name);
+       },
+     };
+     person.greet(); // Outputs: Hello, Alice
+     ```
+
+**4. Problem: Demonstrate the behavior of `this` when used in a nested function.**
+   - Solution:
+     ```javascript
+     const obj = {
+       name: 'Alice',
+       greet: function () {
+         function innerFunction() {
+           console.log('Hello, ' + this.name);
+         }
+         innerFunction(); // Outputs: Hello, undefined
+       },
+     };
+     obj.greet();
+     ```
+
+**5. Problem: Use the `bind` method to set the value of `this` in a function.**
+   - Solution:
+     ```javascript
+     const obj = {
+       name: 'Alice',
+       greet: function () {
+         function innerFunction() {
+           console.log('Hello, ' + this.name);
+         }
+         const boundFunction = innerFunction.bind(this);
+         boundFunction(); // Outputs: Hello, Alice
+       },
+     };
+     obj.greet();
+     ```
+
+**6. Problem: Explain the concept of lexical scoping in arrow functions.**
+   - Solution:
+     Arrow functions inherit the `this` value from their enclosing lexical context (i.e., the context in which they are defined).
+
+**7. Problem: Compare the behavior of `this` in regular functions and arrow functions.**
+   - Solution:
+     ```javascript
+     const obj = {
+       name: 'Alice',
+       greetRegular: function () {
+         setTimeout(function () {
+           console.log('Regular: Hello, ' + this.name); // Outputs: Regular: Hello, undefined
+         }, 1000);
+       },
+       greetArrow: function () {
+         setTimeout(() => {
+           console.log('Arrow: Hello, ' + this.name); // Outputs: Arrow: Hello, Alice
+         }, 1000);
+       },
+     };
+     obj.greetRegular();
+     obj.greetArrow();
+     ```
+
+**8. Problem: Describe the benefits of using arrow functions for concise syntax.**
+   - Solution:
+     Arrow functions are concise and maintain the lexical scope of `this`, making them suitable for shorter, clearer code.
+
+**9. Problem: Explain when to use arrow functions and when not to use them.**
+   - Solution:
+     Arrow functions are great for non-method functions and situations where you want to maintain the enclosing context (`this`). However, avoid using them for methods within objects or constructors that need their own `this`.
+
+**10. Problem: Demonstrate how to use arrow functions to refactor code.**
+    - Solution:
+      ```javascript
+      // Before refactoring
+      const numbers = [1, 2, 3];
+      const doubledNumbers = numbers.map(function (num) {
+        return num * 2;
+      });
+
+      // After refactoring with arrow function
+      const doubledNumbers = numbers.map((num) => num * 2);
+      ```
+
+**11. Problem: Explain the purpose of arrow functions in callback functions.**
+    - Solution:
+      Arrow functions are commonly used in callback functions to maintain the outer context (`this`) and reduce code verbosity.
+
+**12. Problem: Describe the behavior of arrow functions in terms of the `arguments` object.**
+    - Solution:
+      Arrow functions do not have their own `arguments` object. They inherit the `arguments` object from the containing function.
+
+**13. Problem: Use arrow functions in array methods like `map`, `filter`, and `reduce`.**
+    - Solution:
+      ```javascript
+      const numbers = [1, 2, 3, 4, 5];
+      const squaredNumbers = numbers.map((num) => num * num);
+      const evenNumbers = numbers.filter((num) => num % 2 === 0);
+      const sum = numbers.reduce((acc, num) => acc + num, 0);
+      ```
+
+**14. Problem: Explain how to define default function parameters.**
+    - Solution:
+      ```javascript
+      function greet(name = 'Guest') {
+        console.log('Hello, ' + name);
+      }
+      greet(); // Outputs: Hello, Guest
+      ```
+
+**15. Problem: Describe the differences between arrow functions and function expressions.**
+    - Solution:
+      Arrow functions do not have their own `this`, `arguments`, or `super`. They cannot be used as constructors or with the `new` keyword.
+
+**16. Problem: Explain how to use rest parameters in function definitions.**
+    - Solution:
+      ```javascript
+      function sum(...numbers) {
+        return numbers.reduce((acc, num) => acc + num, 0);
+      }
+      console.log(sum(1, 2, 3)); // Outputs: 6
+      ```
+
+**17. Problem: Demonstrate the use of the `call` and `apply` methods to set the value of `this` in a function.**
+    - Solution:
+      ```javascript
+      function greet() {
+        console.log('Hello, ' + this.name);
+      }
+      const person = { name: 'Alice' };
+      greet.call(person); // Outputs: Hello, Alice
+      greet.apply(person); // Outputs: Hello, Alice
+      ```
+
+**18. Problem: Describe the advantages of arrow functions in avoiding binding issues.**
+
+
+    - Solution:
+      Arrow functions automatically capture the `this` value from the surrounding lexical context, making them immune to binding issues.
+
+**19. Problem: Explain how to use the `new.target` property in constructors.**
+    - Solution:
+      ```javascript
+      function MyClass() {
+        if (!new.target) {
+          throw new Error('Class must be instantiated with new keyword.');
+        }
+        // Constructor logic here
+      }
+      const instance = new MyClass();
+      ```
+
+**20. Problem: Discuss common pitfalls when using arrow functions and best practices.**
+    - Solution:
+      Pitfalls include overusing arrow functions for methods and not considering their context. Best practices involve using them for short, concise functions and avoiding them for methods and constructors.
+
+
+### JS Modules, style guide, Json,  and Debugging
 ---
 
-### statements, syntax, variables, keywords, and operators
+#### problem 1: Import a Module
+
+**Solution:**
+```javascript
+import { greet } from './greetings.js';
+
+const message = greet('Alice');
+console.log(message); // Outputs: Hello, Alice!
+```
+
+#### problem 2: Export a Function from a Module
+
+**Solution:**
+```javascript
+// greetings.js
+export function greet(name) {
+  return `Hello, ${name}!`;
+}
+```
+
+#### problem 3: Use Default Exports in Modules
+
+**Solution:**
+```javascript
+// utils.js
+export default function add(a, b) {
+  return a + b;
+}
+
+// main.js
+import add from './utils.js';
+
+const sum = add(5, 3);
+console.log(sum); // Outputs: 8
+```
+
+#### problem 4: Follow a JavaScript Style Guide
+
+**Solution:**
+Follow a widely accepted style guide like Airbnb's JavaScript Style Guide for consistent code formatting and best practices.
+
+#### problem 5: Validate JSON Data
+
+**Solution:**
+```javascript
+try {
+  const jsonData = JSON.parse('{"name": "Alice", "age": 30}');
+  console.log(jsonData.name); // Outputs: Alice
+} catch (error) {
+  console.error('Invalid JSON:', error.message);
+}
+```
+
+#### problem 6: Serialize JavaScript Objects to JSON
+
+**Solution:**
+```javascript
+const person = { name: 'Bob', age: 25 };
+const jsonPerson = JSON.stringify(person);
+console.log(jsonPerson); // Outputs: {"name":"Bob","age":25}
+```
+
+#### problem 7: Deserialize JSON to JavaScript Object
+
+**Solution:**
+```javascript
+const jsonText = '{"name": "Charlie", "age": 35}';
+const person = JSON.parse(jsonText);
+console.log(person.name); // Outputs: Charlie
+```
+
+#### problem 8: Handle JSON Parsing Errors
+
+**Solution:**
+```javascript
+try {
+  const jsonData = JSON.parse('invalid JSON');
+  console.log(jsonData);
+} catch (error) {
+  console.error('Error parsing JSON:', error.message);
+}
+```
+
+#### problem 9: Use Debugger to Set Breakpoints
+
+**Solution:**
+```javascript
+function calculateSum(a, b) {
+  debugger; // Set a breakpoint here
+  return a + b;
+}
+
+const result = calculateSum(5, 3);
+console.log(result);
+```
+
+#### problem 10: Inspect Variables with Debugger
+
+**Solution:**
+```javascript
+function calculateSum(a, b) {
+  debugger;
+  const sum = a + b;
+  return sum;
+}
+
+const result = calculateSum(5, 3);
+console.log(result); // Debugger will pause here to inspect variables
+```
+
+#### problem 11: Step Through Code with Debugger
+
+**Solution:**
+Use debugger commands (step over, step into, step out) to navigate through your code during debugging.
+
+#### problem 12: Print Debugging Messages
+
+**Solution:**
+```javascript
+function calculateSum(a, b) {
+  console.log(`Calculating sum of ${a} and ${b}`);
+  return a + b;
+}
+
+const result = calculateSum(5, 3);
+console.log(result);
+```
+
+#### problem 13: Utilize Console Logging for Debugging
+
+**Solution:**
+Use `console.log()` statements to print variable values and debug information during development.
+
+#### problem 14: Detect and Fix Syntax Errors
+
+**Solution:**
+```javascript
+function calculateProduct(a, b) {
+  return a * b; // Syntax error: missing semicolon
+}
+
+const result = calculateProduct(5, 3);
+console.log(result);
+```
+
+#### problem 15: Detect and Fix Runtime Errors
+
+**Solution:**
+```javascript
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error('Division by zero');
+  }
+  return a / b;
+}
+
+try {
+  const result = divide(5, 0);
+  console.log(result);
+} catch (error) {
+  console.error('Error:', error.message);
+}
+```
+
+#### problem 16: Use a Linter for Code Quality
+
+**Solution:**
+Integrate a linter like ESLint into your development environment to catch code quality issues and enforce coding standards.
+
+#### problem 17: Configure ESLint with a Style Guide
+
+**Solution:**
+```javascript
+// .eslintrc.js
+module.exports = {
+  extends: 'eslint-config-airbnb-base',
+  rules: {
+    // Customize rules here
+  },
+};
+```
+
+#### problem 18: Format Code with Prettier
+
+**Solution:**
+Integrate Prettier into your development workflow to automatically format code according to your style guide.
+
+#### problem 19: Detect and Fix Logical Errors
+
+**Solution:**
+```javascript
+function factorial(n) {
+  if (n === 0) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+
+const result = factorial(5); // Should be 120, not 125
+console.log(result);
+```
+
+#### problem 20: Use a Comprehensive Development Environment
+
+**Solution:**
+Set up a development environment with tools like version control (e.g., Git), a code editor or IDE, and debugging tools to enhance your productivity and code quality.
+
+
+## JS OBJECTS 
 ---
 
-### statements, syntax, variables, keywords, and operators
+
+### definition, properties, methods, display, accessors, and constructors, prototype,iterables
+---
+JavaScript objects are a fundamental data type in the language that allow you to store and organize data as key-value pairs. Objects are used to represent complex data structures and can include properties and methods.
+
+1. **Definition of Objects:**
+   - JavaScript objects are data structures that store collections of key-value pairs, representing entities or concepts in code.
+
+2. **Properties:**
+   - Properties are variables contained within objects that store data.
+   
+   ```javascript
+   var person = {
+       firstName: "John",
+       lastName: "Doe"
+   };
+   console.log(person.firstName); // Output: John
+   ```
+
+3. **Methods:**
+   - Methods are functions contained within objects, allowing objects to perform actions.
+
+   ```javascript
+   var person = {
+       firstName: "John",
+       lastName: "Doe",
+       fullName: function() {
+           return this.firstName + " " + this.lastName;
+       }
+   };
+   console.log(person.fullName()); // Output: John Doe
+   ```
+
+4. **Display:**
+   - Displaying object properties and methods is typically done using dot notation or bracket notation.
+
+5. **Accessors:**
+   - Accessors are special methods used to access or modify object properties.
+
+   ```javascript
+   var person = {
+       firstName: "John",
+       lastName: "Doe",
+       getFullName: function() {
+           return this.firstName + " " + this.lastName;
+       },
+       setFirstName: function(newName) {
+           this.firstName = newName;
+       }
+   };
+   person.setFirstName("Alice");
+   console.log(person.getFullName()); // Output: Alice Doe
+   ```
+
+6. **Constructors:**
+   - Constructors are functions used to create and initialize objects of a specific type or class.
+
+   ```javascript
+   function Person(firstName, lastName) {
+       this.firstName = firstName;
+       this.lastName = lastName;
+   }
+   var person = new Person("John", "Doe");
+   ```
+
+7. **Prototype:**
+   - Prototypes allow you to add properties or methods to all objects of a particular type.
+
+   ```javascript
+   Person.prototype.getFullName = function() {
+       return this.firstName + " " + this.lastName;
+   };
+   var person = new Person("John", "Doe");
+   console.log(person.getFullName()); // Output: John Doe
+   ```
+
+8. **Iterables:**
+   - Iterables are objects that can be looped over using `for...of` loops or other iterable mechanisms.
+
+   ```javascript
+   var iterableArray = [1, 2, 3];
+   for (var item of iterableArray) {
+       console.log(item); // Output: 1, 2, 3
+   }
+   ```
+
+
+#### problem 1: Create an Object Literal
+
+**Solution:**
+```javascript
+const person = {
+  name: 'Alice',
+  age: 30,
+};
+```
+
+#### problem 2: Access Object Properties
+
+**Solution:**
+```javascript
+const person = {
+  name: 'Bob',
+  age: 25,
+};
+
+console.log(person.name); // Outputs: Bob
+```
+
+#### problem 3: Add New Properties to an Object
+
+**Solution:**
+```javascript
+const person = {
+  name: 'Charlie',
+  age: 35,
+};
+
+person.country = 'USA';
+console.log(person.country); // Outputs: USA
+```
+
+#### problem 4: Define Methods in an Object
+
+**Solution:**
+```javascript
+const person = {
+  name: 'David',
+  greet: function () {
+    console.log('Hello, ' + this.name);
+  },
+};
+
+person.greet(); // Outputs: Hello, David
+```
+
+#### problem 5: Use Shorthand Method Notation
+
+**Solution:**
+```javascript
+const person = {
+  name: 'Eve',
+  greet() {
+    console.log('Hello, ' + this.name);
+  },
+};
+
+person.greet(); // Outputs: Hello, Eve
+```
+
+#### problem 6: Display Object Properties with a Loop
+
+**Solution:**
+```javascript
+const person = {
+  name: 'Frank',
+  age: 40,
+};
+
+for (const key in person) {
+  console.log(`${key}: ${person[key]}`);
+}
+```
+
+#### problem 7: Create an Object Constructor Function
+
+**Solution:**
+```javascript
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+const person = new Person('Grace', 45);
+console.log(person.name); // Outputs: Grace
+```
+
+#### problem 8: Use Object Prototypes
+
+**Solution:**
+```javascript
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.greet = function () {
+  console.log('Hello, ' + this.name);
+};
+
+const person = new Person('Hannah', 50);
+person.greet(); // Outputs: Hello, Hannah
+```
+
+#### problem 9: Access Object Prototype Properties
+
+**Solution:**
+```javascript
+function Animal(type) {
+  this.type = type;
+}
+
+Animal.prototype.sound = 'No sound';
+
+const dog = new Animal('Dog');
+console.log(dog.sound); // Outputs: No sound
+```
+
+#### problem 10: Create a Getter and Setter for an Object Property
+
+**Solution:**
+```javascript
+const student = {
+  _name: 'John',
+  get name() {
+    return this._name;
+  },
+  set name(newName) {
+    this._name = newName;
+  },
+};
+
+student.name = 'Alice';
+console.log(student.name); // Outputs: Alice
+```
+
+#### problem 11: Use Object Destructuring
+
+**Solution:**
+```javascript
+const car = {
+  make: 'Toyota',
+  model: 'Camry',
+  year: 2022,
+};
+
+const { make, model, year } = car;
+console.log(make, model, year); // Outputs: Toyota Camry 2022
+```
+
+#### problem 12: Create an Object Method That Returns an Iterator
+
+**Solution:**
+```javascript
+const numbers = {
+  *[Symbol.iterator]() {
+    for (let i = 1; i <= 5; i++) {
+      yield i;
+    }
+  },
+};
+
+for (const num of numbers) {
+  console.log(num);
+}
+```
+
+#### problem 13: Create an Object Method That Implements the Iterable Protocol
+
+**Solution:**
+```javascript
+const person = {
+  name: 'Linda',
+  hobbies: ['Reading', 'Painting', 'Hiking'],
+  [Symbol.iterator]() {
+    let index = 0;
+    const hobbies = this.hobbies;
+    return {
+      next() {
+        if (index < hobbies.length) {
+          return { value: hobbies[index++], done: false };
+        } else {
+          return { done: true };
+        }
+      },
+    };
+  },
+};
+
+for (const hobby of person) {
+  console.log(hobby);
+}
+```
+
+#### problem 14: Merge Two Objects
+
+**Solution:**
+```javascript
+const obj1 = { a: 1, b: 2 };
+const obj2 = { b: 3, c: 4 };
+
+const merged = { ...obj1, ...obj2 };
+console.log(merged); // Outputs: { a: 1, b: 3, c: 4 }
+```
+
+#### problem 15: Check If an Object Has a Property
+
+**Solution:**
+```javascript
+const student = {
+  name: 'Oliver',
+  age: 20,
+};
+
+const hasAge = 'age' in student;
+console.log(hasAge); // Outputs: true
+```
+
+#### problem 16: Remove a Property from an Object
+
+**Solution:**
+```javascript
+const person = {
+  name: 'Paul',
+  age: 30,
+};
+
+delete person.age;
+console.log(person.age); // Outputs: undefined
+```
+
+#### problem 17: Clone an Object
+
+**Solution:**
+```javascript
+const original = { a: 1, b: 2 };
+const clone = { ...original };
+```
+
+#### problem 18: Freeze an Object
+
+**Solution:**
+```javascript
+const constant = Object.freeze({ x: 1, y: 2 });
+// Attempts to modify constant will result in an error
+```
+
+#### problem 19: Check if an Object is Empty
+
+**Solution:**
+```javascript
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
+const emptyObj = {};
+console.log(isEmpty(emptyObj)); // Outputs: true
+```
+
+#### problem 20: Iterate Over Object Entries
+
+**Solution:**
+```javascript
+const person = {
+  name: 'Sophia',
+  age: 25,
+};
+
+for (const [key, value] of Object.entries(person)) {
+  console.log(`${key}: ${value}`);
+}
+```
+
+### JS OBJECTS : sets,maps, iterables & reference 
 ---
 
-### statements, syntax, variables, keywords, and operators
+#### problem 1: Create and Use a Set
+
+**Solution:**
+```javascript
+const mySet = new Set();
+
+mySet.add(1);
+mySet.add(2);
+mySet.add(3);
+
+console.log(mySet.has(2)); // Outputs: true
+mySet.delete(3);
+console.log([...mySet]); // Outputs: [1, 2]
+```
+
+#### problem 2: Iterate Over a Set
+
+**Solution:**
+```javascript
+const mySet = new Set([1, 2, 3, 4, 5]);
+
+for (const item of mySet) {
+  console.log(item);
+}
+```
+
+#### problem 3: Create and Use a Map
+
+**Solution:**
+```javascript
+const myMap = new Map();
+
+myMap.set('name', 'Alice');
+myMap.set('age', 30);
+
+console.log(myMap.get('name')); // Outputs: Alice
+console.log(myMap.has('gender')); // Outputs: false
+myMap.delete('age');
+console.log([...myMap]); // Outputs: [['name', 'Alice']]
+```
+
+#### problem 4: Iterate Over a Map
+
+**Solution:**
+```javascript
+const myMap = new Map([
+  ['name', 'Bob'],
+  ['age', 25],
+]);
+
+for (const [key, value] of myMap) {
+  console.log(`${key}: ${value}`);
+}
+```
+
+#### problem 5: Convert an Array to a Set
+
+**Solution:**
+```javascript
+const myArray = [1, 2, 3, 3, 4, 5];
+const mySet = new Set(myArray);
+
+console.log([...mySet]); // Outputs: [1, 2, 3, 4, 5]
+```
+
+#### problem 6: Convert an Object to a Map
+
+**Solution:**
+```javascript
+const myObject = { name: 'Charlie', age: 35 };
+const myMap = new Map(Object.entries(myObject));
+
+console.log([...myMap]); // Outputs: [['name', 'Charlie'], ['age', 35]]
+```
+
+#### problem 7: Understand Reference vs. Value
+
+**Solution:**
+```javascript
+let a = 5;
+let b = a;
+b = 10;
+
+console.log(a); // Outputs: 5 (unchanged)
+console.log(b); // Outputs: 10
+```
+
+#### problem 8: Deep Clone an Object
+
+**Solution:**
+```javascript
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+const original = { a: 1, b: { c: 2 } };
+const clone = deepClone(original);
+
+console.log(clone.b.c); // Outputs: 2
+```
+
+#### problem 9: Use Sets for Unique Values
+
+**Solution:**
+```javascript
+const numbers = [1, 2, 3, 3, 4, 5];
+const uniqueNumbers = [...new Set(numbers)];
+
+console.log(uniqueNumbers); // Outputs: [1, 2, 3, 4, 5]
+```
+
+#### problem 10: Use Maps to Store Key-Value Pairs
+
+**Solution:**
+```javascript
+const studentGrades = new Map();
+
+studentGrades.set('Alice', 95);
+studentGrades.set('Bob', 88);
+studentGrades.set('Charlie', 92);
+
+console.log(studentGrades.get('Alice')); // Outputs: 95
+console.log(studentGrades.size); // Outputs: 3
+```
+
+### JS functions : definition, all types of functions, invocation, parameters, call, bind, apply, callbacks & closures
 ---
 
-### statements, syntax, variables, keywords, and operators
+
+### Problem 1: Create a Function
+
+**Solution:**
+```javascript
+function sayHello() {
+  console.log('Hello, World!');
+}
+sayHello();
+```
+
+### Problem 2: Define a Function Expression
+
+**Solution:**
+```javascript
+const greet = function (name) {
+  console.log(`Hello, ${name}!`);
+};
+greet('Alice');
+```
+
+### Problem 3: Use Arrow Functions
+
+**Solution:**
+```javascript
+const add = (a, b) => a + b;
+console.log(add(3, 5)); // Outputs: 8
+```
+
+### Problem 4: Create a Function with Default Parameters
+
+**Solution:**
+```javascript
+function greet(name = 'Guest') {
+  console.log(`Hello, ${name}!`);
+}
+greet(); // Outputs: Hello, Guest!
+```
+
+### Problem 5: Define a Function That Takes a Callback
+
+**Solution:**
+```javascript
+function calculate(a, b, operation) {
+  return operation(a, b);
+}
+
+const add = (a, b) => a + b;
+console.log(calculate(3, 5, add)); // Outputs: 8
+```
+
+### Problem 6: Use Function Call Method
+
+**Solution:**
+```javascript
+function greet() {
+  console.log(`Hello, ${this.name}!`);
+}
+
+const person = { name: 'Alice' };
+greet.call(person); // Outputs: Hello, Alice!
+```
+
+### Problem 7: Use Function Apply Method
+
+**Solution:**
+```javascript
+function greet() {
+  console.log(`Hello, ${this.name}!`);
+}
+
+const person = { name: 'Bob' };
+greet.apply(person); // Outputs: Hello, Bob!
+```
+
+### Problem 8: Use the Bind Method
+
+**Solution:**
+```javascript
+function greet() {
+  console.log(`Hello, ${this.name}!`);
+}
+
+const person = { name: 'Charlie' };
+const greetPerson = greet.bind(person);
+greetPerson(); // Outputs: Hello, Charlie!
+```
+
+### Problem 9: Create a Closure
+
+**Solution:**
+```javascript
+function outer() {
+  const message = 'Hello, ';
+
+  function inner(name) {
+    console.log(message + name);
+  }
+
+  return inner;
+}
+
+const greet = outer();
+greet('David'); // Outputs: Hello, David
+```
+
+### Problem 10: Define a Recursive Function
+
+**Solution:**
+```javascript
+function factorial(n) {
+  if (n <= 1) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+
+console.log(factorial(5)); // Outputs: 120
+```
+
+### Problem 11: Create a Higher-Order Function
+
+**Solution:**
+```javascript
+function multiplier(factor) {
+  return function (number) {
+    return number * factor;
+  };
+}
+
+const double = multiplier(2);
+console.log(double(5)); // Outputs: 10
+```
+
+### Problem 12: Use a Generator Function
+
+**Solution:**
+```javascript
+function* countdown(n) {
+  while (n > 0) {
+    yield n;
+    n--;
+  }
+}
+
+const generator = countdown(5);
+for (const number of generator) {
+  console.log(number);
+}
+```
+
+### Problem 13: Define a Function That Returns a Promise
+
+**Solution:**
+```javascript
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    // Asynchronous operation here
+    setTimeout(() => {
+      resolve('Data fetched successfully');
+    }, 1000);
+  });
+}
+
+fetchData()
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+### Problem 14: Implement a Function That Uses async/await
+
+**Solution:**
+```javascript
+async function fetchData() {
+  return new Promise((resolve, reject) => {
+    // Asynchronous operation here
+    setTimeout(() => {
+      resolve('Data fetched successfully');
+    }, 1000);
+  });
+}
+
+async function getData() {
+  try {
+    const data = await fetchData();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+getData();
+```
+
+### Problem 15: Create a Function That Memoizes Results
+
+**Solution:**
+```javascript
+function memoize(func) {
+  const cache = new Map();
+  return function (...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = func(...args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+const factorial = memoize((n) => {
+  if (n <= 1) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+});
+
+console.log(factorial(5)); // Outputs: 120 (Memoized)
+```
+
+### Problem 16: Use the Rest Parameter
+
+**Solution:**
+```javascript
+function sum(...numbers) {
+  return numbers.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3)); // Outputs: 6
+```
+
+### Problem 17: Create a Function That Curries Arguments
+
+**Solution:**
+```javascript
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn(...args);
+    } else {
+      return function (...moreArgs) {
+        return curried(...args, ...moreArgs);
+      };
+    }
+  };
+}
+
+function add(a, b, c) {
+  return a + b + c;
+}
+
+const curriedAdd = curry(add);
+console.log(curriedAdd(1)(2)(3)); // Outputs: 6
+```
+
+### Problem 18: Use Function Prototypes
+
+**Solution:**
+```javascript
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.greet = function () {
+  console.log(`Hello, ${this.name}!`);
+};
+
+const person = new Person('Eve', 30);
+person.greet(); // Outputs: Hello, Eve!
+```
+
+### Problem 19: Implement a Function That Applies Throttling
+
+**Solution:**
+```javascript
+function throttle(func, delay) {
+  let canCall = true;
+  return function (...args) {
+    if (canCall) {
+      func(...args);
+      canCall = false;
+      setTimeout(() => {
+        canCall = true;
+      }, delay);
+    }
+  };
+}
+
+function logMessage(message) {
+  console.log(message);
+}
+
+const throttledLog = throttle(logMessage, 1000);
+throttledLog('Hello');
+throttledLog('World'); // Only logs "Hello"
+```
+
+### Problem 20: Create a Function That Applies Debouncing
+
+**Solution:**
+```javascript
+function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId
+
+ = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}
+
+function search(query) {
+  console.log(`Searching for: ${query}`);
+}
+
+const debouncedSearch = debounce(search, 500);
+debouncedSearch('JavaScript');
+debouncedSearch('React'); // Only searches for "React"
+```
+
+### Problem 21: Define a Function That Checks for Palindromes
+
+**Solution:**
+```javascript
+function isPalindrome(str) {
+  const cleanStr = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const reversed = cleanStr.split('').reverse().join('');
+  return cleanStr === reversed;
+}
+
+console.log(isPalindrome('racecar')); // Outputs: true
+```
+
+### Problem 22: Create a Function That Capitalizes Words
+
+**Solution:**
+```javascript
+function capitalizeWords(sentence) {
+  const words = sentence.split(' ');
+  const capitalizedWords = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+  return capitalizedWords.join(' ');
+}
+
+console.log(capitalizeWords('hello world')); // Outputs: Hello World
+```
+
+### Problem 23: Implement a Function That Sorts an Array
+
+**Solution:**
+```javascript
+function sortArray(arr) {
+  return arr.slice().sort((a, b) => a - b);
+}
+
+const numbers = [4, 2, 7, 1, 9];
+const sortedNumbers = sortArray(numbers);
+console.log(sortedNumbers); // Outputs: [1, 2, 4, 7, 9]
+```
+
+### Problem 24: Define a Function That Filters an Array
+
+**Solution:**
+```javascript
+function filterEvenNumbers(arr) {
+  return arr.filter((number) => number % 2 === 0);
+}
+
+const numbers = [1, 2, 3, 4, 5, 6];
+const evenNumbers = filterEvenNumbers(numbers);
+console.log(evenNumbers); // Outputs: [2, 4, 6]
+```
+
+### Problem 25: Create a Function That Maps an Array
+
+**Solution:**
+```javascript
+function doubleNumbers(arr) {
+  return arr.map((number) => number * 2);
+}
+
+const numbers = [1, 2, 3, 4, 5];
+const doubledNumbers = doubleNumbers(numbers);
+console.log(doubledNumbers); // Outputs: [2, 4, 6, 8, 10]
+```
+
+### Problem 26: Implement a Function That Reduces an Array
+
+**Solution:**
+```javascript
+function sumArray(arr) {
+  return arr.reduce((total, number) => total + number, 0);
+}
+
+const numbers = [1, 2, 3, 4, 5];
+const total = sumArray(numbers);
+console.log(total); // Outputs: 15
+```
+
+### Problem 27: Create a Function That Finds the Maximum Element in an Array
+
+**Solution:**
+```javascript
+function findMax(arr) {
+  return Math.max(...arr);
+}
+
+const numbers = [1, 7, 3, 9, 4];
+const max = findMax(numbers);
+console.log(max); // Outputs: 9
+```
+
+### Problem 28: Define a Function That Checks for Anagrams
+
+**Solution:**
+```javascript
+function areAnagrams(str1, str2) {
+  const cleanStr1 = str1.toLowerCase().replace(/[^a-z]/g, '');
+  const cleanStr2 = str2.toLowerCase().replace(/[^a-z]/g, '');
+  const sortedStr1 = cleanStr1.split('').sort().join('');
+  const sortedStr2 = cleanStr2.split('').sort().join('');
+  return sortedStr1 === sortedStr2;
+}
+
+console.log(areAnagrams('listen', 'silent')); // Outputs: true
+```
+
+### Problem 29: Create a Function That Checks for a Prime Number
+
+**Solution:**
+```javascript
+function isPrime(number) {
+  if (number <= 1) {
+    return false;
+  }
+  for (let i = 2; i <= Math.sqrt(number); i++) {
+    if (number % i === 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+console.log(isPrime(17)); // Outputs: true
+```
+
+### Problem 30: Implement a Function That Generates Fibonacci Numbers
+
+**Solution:**
+```javascript
+function generateFibonacci(n) {
+  const sequence = [0, 1];
+  for (let i = 2; i < n; i++) {
+    const next = sequence[i - 1] + sequence[i - 2];
+    sequence.push(next);
+  }
+  return sequence;
+}
+
+const fibonacciSequence = generateFibonacci(10);
+console.log(fibonacciSequence); // Outputs: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+```
+
+### JS Class:  inheritance, encapsulation, abstraction and polymorphism.and also static & final
 ---
 
-### statements, syntax, variables, keywords, and operators
+### Problem 1: Define a Simple Class
+
+**Solution:**
+```javascript
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  introduce() {
+    console.log(`Hi, I'm ${this.name} and I'm ${this.age} years old.`);
+  }
+}
+
+const person = new Person('Alice', 25);
+person.introduce();
+```
+
+**Explanation:** This problem defines a simple class `Person` with a constructor to initialize name and age properties and an `introduce` method to print an introduction.
+
+### Problem 2: Create an Inherited Class
+
+**Solution:**
+```javascript
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(`${this.name} makes a sound.`);
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    console.log(`${this.name} barks.`);
+  }
+}
+
+const dog = new Dog('Buddy');
+dog.speak();
+```
+
+**Explanation:** This problem demonstrates class inheritance, where `Dog` is a subclass of `Animal`. The `speak` method in the `Dog` class overrides the one in the `Animal` class.
+
+### Problem 3: Implement Encapsulation
+
+**Solution:**
+```javascript
+class BankAccount {
+  constructor(balance) {
+    this._balance = balance; // Use underscore to indicate a private property
+  }
+
+  get balance() {
+    return this._balance;
+  }
+
+  deposit(amount) {
+    if (amount > 0) {
+      this._balance += amount;
+    }
+  }
+
+  withdraw(amount) {
+    if (amount > 0 && amount <= this._balance) {
+      this._balance -= amount;
+    }
+  }
+}
+
+const account = new BankAccount(1000);
+account.deposit(500);
+account.withdraw(200);
+console.log(account.balance);
+```
+
+**Explanation:** Encapsulation is achieved by marking the `_balance` property as private, and using getters and setters to control access and modification.
+
+### Problem 4: Implement Abstraction
+
+**Solution:**
+```javascript
+class Shape {
+  constructor() {
+    if (new.target === Shape) {
+      throw new Error('Shape class cannot be instantiated directly.');
+    }
+  }
+
+  calculateArea() {
+    throw new Error('Subclasses must implement calculateArea method.');
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius) {
+    super();
+    this.radius = radius;
+  }
+
+  calculateArea() {
+    return Math.PI * this.radius ** 2;
+  }
+}
+
+const circle = new Circle(5);
+console.log(circle.calculateArea());
+```
+
+**Explanation:** Abstraction is achieved by defining abstract methods (like `calculateArea` in the `Shape` class) that must be implemented by subclasses.
+
+### Problem 5: Implement Polymorphism
+
+**Solution:**
+```javascript
+class Animal {
+  makeSound() {
+    console.log('Animal makes a sound.');
+  }
+}
+
+class Dog extends Animal {
+  makeSound() {
+    console.log('Dog barks.');
+  }
+}
+
+class Cat extends Animal {
+  makeSound() {
+    console.log('Cat meows.');
+  }
+}
+
+function animalSounds(animal) {
+  animal.makeSound();
+}
+
+const dog = new Dog();
+const cat = new Cat();
+
+animalSounds(dog);
+animalSounds(cat);
+```
+
+**Explanation:** Polymorphism is demonstrated by the `animalSounds` function, which can accept different types of animals and call their specific `makeSound` method.
+
+### Problem 6: Define a Static Method
+
+**Solution:**
+```javascript
+class MathUtils {
+  static square(x) {
+    return x * x;
+  }
+}
+
+console.log(MathUtils.square(5));
+```
+
+**Explanation:** Static methods are called on the class itself rather than on instances of the class. In this example, `square` is a static method of `MathUtils`.
+
+### Problem 7: Implement a Singleton Class
+
+**Solution:**
+```javascript
+class Singleton {
+  constructor() {
+    if (Singleton.instance) {
+      return Singleton.instance;
+    }
+    this.data = [];
+    Singleton.instance = this;
+  }
+}
+
+const instance1 = new Singleton();
+const instance2 = new Singleton();
+
+console.log(instance1 === instance2); // Outputs: true
+```
+
+**Explanation:** A singleton class ensures that only one instance of the class is ever created. In this example, both `instance1` and `instance2` refer to the same object.
+
+### Problem 8: Use Class Inheritance with `super`
+
+**Solution:**
+```javascript
+class Vehicle {
+  constructor(make, model) {
+    this.make = make;
+    this.model = model;
+  }
+
+  start() {
+    console.log(`${this.make} ${this.model} started.`);
+  }
+}
+
+class Car extends Vehicle {
+  constructor(make, model, year) {
+    super(make, model);
+    this.year = year;
+  }
+
+  start() {
+    super.start();
+    console.log(`It's a ${this.year} model.`);
+  }
+}
+
+const myCar = new Car('Toyota', 'Camry', 2023);
+myCar.start();
+```
+
+**Explanation:** The `super` keyword is used to call the parent class's constructor and methods. This example demonstrates class inheritance and method overriding.
+
+### Problem 9: Create an Abstract Base Class
+
+**Solution:**
+```javascript
+class Shape {
+  constructor() {
+    if (new.target === Shape) {
+      throw new Error('Shape class cannot be instantiated directly.');
+    }
+  }
+
+  draw() {
+    throw new Error('Subclasses must implement draw method.');
+  }
+}
+
+class Circle extends Shape {
+  draw() {
+    console.log('Drawing a circle.');
+  }
+}
+
+const shape = new Shape(); // Error: Shape class cannot be instantiated directly.
+const circle = new Circle();
+circle.draw();
+```
+
+**Explanation:** An abstract base class `Shape` ensures that it cannot be instantiated directly and requires its subclasses to implement the `draw` method.
+
+### Problem 10: Use Composition Over Inheritance
+
+**Solution:**
+```javascript
+class Engine {
+  start() {
+    console.log('Engine started.');
+  }
+}
+
+class Car {
+  constructor() {
+    this.engine = new Engine();
+  }
+
+  start() {
+    this.engine.start();
+    console.log('Car started.');
+  }
+}
+
+const myCar = new Car();
+myCar.start();
+```
+
+**Explanation:** Composition is a design principle where objects are composed of other objects. In this example, the `Car` class uses composition to include an `Engine` object.
+
+### Problem 11: Create a Class Hierarchy
+
+**Solution:**
+```javascript
+class Employee {
+  constructor(name, salary) {
+    this.name = name;
+    this.salary = salary;
+  }
+
+  getDetails() {
+    return `${this.name
+
+} earns $${this.salary}.`;
+  }
+}
+
+class Manager extends Employee {
+  constructor(name, salary, teamSize) {
+    super(name, salary);
+    this.teamSize = teamSize;
+  }
+
+  getDetails() {
+    return `${super.getDetails()} Manages a team of ${this.teamSize}.`;
+  }
+}
+
+const employee = new Employee('Alice', 50000);
+const manager = new Manager('Bob', 75000, 10);
+
+console.log(employee.getDetails());
+console.log(manager.getDetails());
+```
+
+**Explanation:** This example demonstrates a class hierarchy with `Employee` and `Manager` classes. The `Manager` class extends `Employee` and overrides the `getDetails` method.
+
+### Problem 12: Implement Polymorphism with Interfaces
+
+**Solution:**
+```javascript
+class Shape {
+  area() {
+    throw new Error('Subclasses must implement area method.');
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius) {
+    super();
+    this.radius = radius;
+  }
+
+  area() {
+    return Math.PI * this.radius ** 2;
+  }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    super();
+    this.width = width;
+    this.height = height;
+  }
+
+  area() {
+    return this.width * this.height;
+  }
+}
+
+function calculateArea(shape) {
+  if (shape instanceof Shape) {
+    return shape.area();
+  }
+  throw new Error('Invalid shape.');
+}
+
+const circle = new Circle(5);
+const rectangle = new Rectangle(4, 6);
+
+console.log(calculateArea(circle)); // Outputs: 78.53981633974483
+console.log(calculateArea(rectangle)); // Outputs: 24
+```
+
+**Explanation:** Polymorphism is implemented by defining a common method `area` in both `Circle` and `Rectangle` classes and calling it through the `calculateArea` function.
+
+### Problem 13: Implement a Final Class (Note: JavaScript doesn't have a "final" keyword, so this is a conceptual example)
+
+**Solution:**
+```javascript
+class FinalClass {
+  constructor() {
+    if (new.target !== FinalClass) {
+      throw new Error('FinalClass cannot be subclassed.');
+    }
+  }
+}
+
+class SubClass extends FinalClass {}
+
+const instance = new SubClass(); // Error: FinalClass cannot be subclassed.
+```
+
+**Explanation:** In some languages, a "final" class cannot be subclassed. This is a conceptual example in JavaScript.
+
+### Problem 14: Use Mixins for Reusable Behavior
+
+**Solution:**
+```javascript
+class CanSwim {
+  swim() {
+    console.log('Swimming...');
+  }
+}
+
+class CanFly {
+  fly() {
+    console.log('Flying...');
+  }
+}
+
+class Dolphin {}
+class Bird {}
+
+Object.assign(Dolphin.prototype, CanSwim);
+Object.assign(Bird.prototype, CanFly);
+
+const flipper = new Dolphin();
+const eagle = new Bird();
+
+flipper.swim();
+eagle.fly();
+```
+
+**Explanation:** Mixins are used to add functionality to classes without inheritance. In this example, `CanSwim` and `CanFly` mixins are added to `Dolphin` and `Bird` classes.
+
+### Problem 15: Use Composition for Configurable Behavior
+
+**Solution:**
+```javascript
+class Logger {
+  log(message) {
+    console.log(`[Log]: ${message}`);
+  }
+}
+
+class UserManager {
+  constructor(logger) {
+    this.logger = logger;
+  }
+
+  addUser(user) {
+    // Perform user addition logic
+    this.logger.log('User added.');
+  }
+}
+
+const logger = new Logger();
+const userManager = new UserManager(logger);
+
+userManager.addUser({ name: 'Alice' });
+```
+
+**Explanation:** Composition is used to inject configurable behavior into the `UserManager` class through the `Logger` class.
+
+### Problem 16: Implement Multiple Interfaces
+
+**Solution:**
+```javascript
+class Drivable {
+  drive() {
+    console.log('Driving...');
+  }
+}
+
+class Flyable {
+  fly() {
+    console.log('Flying...');
+  }
+}
+
+class FlyingCar {}
+
+Object.assign(FlyingCar.prototype, Drivable.prototype, Flyable.prototype);
+
+const flyingCar = new FlyingCar();
+flyingCar.drive();
+flyingCar.fly();
+```
+
+**Explanation:** Multiple interfaces can be implemented by merging their methods into a single class prototype.
+
+### Problem 17: Use Class Composition for Complex Objects
+
+**Solution:**
+```javascript
+class Engine {
+  start() {
+    console.log('Engine started.');
+  }
+}
+
+class Wheels {
+  rotate() {
+    console.log('Wheels rotating.');
+  }
+}
+
+class Car {
+  constructor() {
+    this.engine = new Engine();
+    this.wheels = new Wheels();
+  }
+
+  drive() {
+    this.engine.start();
+    this.wheels.rotate();
+    console.log('Car is moving.');
+  }
+}
+
+const myCar = new Car();
+myCar.drive();
+```
+
+**Explanation:** Class composition is used to build complex objects by combining simpler classes.
+
+### Problem 18: Implement Abstract Methods Using Composition
+
+**Solution:**
+```javascript
+class Engine {
+  start() {
+    console.log('Engine started.');
+  }
+}
+
+class AbstractCar {
+  constructor(engine) {
+    this.engine = engine;
+  }
+
+  drive() {
+    throw new Error('Subclasses must implement drive method.');
+  }
+}
+
+class Sedan extends AbstractCar {
+  drive() {
+    this.engine.start();
+    console.log('Sedan is driving.');
+  }
+}
+
+const engine = new Engine();
+const sedan = new Sedan(engine);
+sedan.drive();
+```
+
+**Explanation:** Abstract methods can be implemented using composition. In this example, `AbstractCar` is a class with an abstract method `drive`.
+
+### Problem 19: Create an Interface for Common Behavior
+
+**Solution:**
+```javascript
+class Animal {
+  speak() {
+    throw new Error('Subclasses must implement speak method.');
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    console.log('Dog barks.');
+  }
+}
+
+class Cat extends Animal {
+  speak() {
+    console.log('Cat meows.');
+  }
+}
+
+function animalSounds(animal) {
+  animal.speak();
+}
+
+const dog = new Dog();
+const cat = new Cat();
+
+animalSounds(dog);
+animalSounds(cat);
+```
+
+**Explanation:** An interface-like behavior is achieved by defining an abstract class `Animal` with an abstract method `speak`.
+
+### Problem 20: Implement Dependency Injection
+
+**Solution:**
+```javascript
+class Logger {
+  log(message) {
+    console.log(`[Log]: ${message}`);
+  }
+}
+
+class UserManager {
+  constructor(logger) {
+    this.logger = logger;
+  }
+
+  addUser(user) {
+    // Perform user addition logic
+    this.logger.log('User added.');
+ 
+
+ }
+}
+
+const logger = new Logger();
+const userManager = new UserManager(logger);
+
+userManager.addUser({ name: 'Alice' });
+```
+
+**Explanation:** Dependency injection is demonstrated by injecting a `Logger` instance into the `UserManager` class.
+
+### Problem 21: Implement a Factory Method
+
+**Solution:**
+```javascript
+class Car {
+  constructor(make, model) {
+    this.make = make;
+    this.model = model;
+  }
+
+  start() {
+    console.log(`${this.make} ${this.model} started.`);
+  }
+}
+
+class CarFactory {
+  createCar(make, model) {
+    return new Car(make, model);
+  }
+}
+
+const factory = new CarFactory();
+const myCar = factory.createCar('Toyota', 'Camry');
+myCar.start();
+```
+
+**Explanation:** The factory method is used to create instances of a class with specific configurations.
+
+### Problem 22: Implement a Builder Pattern
+
+**Solution:**
+```javascript
+class Car {
+  constructor() {
+    this.make = null;
+    this.model = null;
+    this.color = null;
+  }
+
+  setMake(make) {
+    this.make = make;
+    return this;
+  }
+
+  setModel(model) {
+    this.model = model;
+    return this;
+  }
+
+  setColor(color) {
+    this.color = color;
+    return this;
+  }
+
+  build() {
+    return this;
+  }
+
+  start() {
+    console.log(`${this.color} ${this.make} ${this.model} started.`);
+  }
+}
+
+const myCar = new Car()
+  .setMake('Toyota')
+  .setModel('Camry')
+  .setColor('Blue')
+  .build();
+
+myCar.start();
+```
+
+**Explanation:** The builder pattern is used to construct objects step by step with a fluent interface.
+
+### Problem 23: Implement an Observer Pattern
+
+**Solution:**
+```javascript
+class Observer {
+  constructor() {
+    this.observers = [];
+  }
+
+  addObserver(callback) {
+    this.observers.push(callback);
+  }
+
+  notify(data) {
+    this.observers.forEach((observer) => observer(data));
+  }
+}
+
+const observer = new Observer();
+
+function logMessage(message) {
+  console.log(`Received message: ${message}`);
+}
+
+observer.addObserver(logMessage);
+
+observer.notify('Hello, World!');
+```
+
+**Explanation:** The observer pattern is implemented to allow objects (observers) to subscribe and receive notifications from a subject.
+
+### Problem 24: Implement a Decorator Pattern
+
+**Solution:**
+```javascript
+class Coffee {
+  cost() {
+    return 5;
+  }
+}
+
+class MilkDecorator {
+  constructor(coffee) {
+    this.coffee = coffee;
+  }
+
+  cost() {
+    return this.coffee.cost() + 2;
+  }
+}
+
+class SugarDecorator {
+  constructor(coffee) {
+    this.coffee = coffee;
+  }
+
+  cost() {
+    return this.coffee.cost() + 1;
+  }
+}
+
+const plainCoffee = new Coffee();
+const coffeeWithMilk = new MilkDecorator(plainCoffee);
+const coffeeWithSugar = new SugarDecorator(plainCoffee);
+
+console.log(plainCoffee.cost()); // Outputs: 5
+console.log(coffeeWithMilk.cost()); // Outputs: 7
+console.log(coffeeWithSugar.cost()); // Outputs: 6
+```
+
+**Explanation:** The decorator pattern is used to add behavior to objects dynamically.
+
+### Problem 25: Implement a State Pattern
+
+**Solution:**
+```javascript
+class VendingMachine {
+  constructor() {
+    this.state = 'idle';
+  }
+
+  insertCoin() {
+    if (this.state === 'idle') {
+      console.log('Coin inserted.');
+      this.state = 'coinInserted';
+    } else {
+      console.log('Coin already inserted.');
+    }
+  }
+
+  selectProduct() {
+    if (this.state === 'coinInserted') {
+      console.log('Product dispensed.');
+      this.state = 'idle';
+    } else {
+      console.log('Please insert a coin first.');
+    }
+  }
+}
+
+const vendingMachine = new VendingMachine();
+
+vendingMachine.insertCoin();
+vendingMachine.selectProduct();
+```
+
+**Explanation:** The state pattern allows an object to alter its behavior when its internal state changes.
+
+### Problem 26: Implement a Strategy Pattern
+
+**Solution:**
+```javascript
+class PaymentStrategy {
+  pay(amount) {
+    throw new Error('Subclasses must implement pay method.');
+  }
+}
+
+class CreditCardPayment extends PaymentStrategy {
+  pay(amount) {
+    console.log(`Paid $${amount} using a credit card.`);
+  }
+}
+
+class PayPalPayment extends PaymentStrategy {
+  pay(amount) {
+    console.log(`Paid $${amount} using PayPal.`);
+  }
+}
+
+class ShoppingCart {
+  constructor(paymentStrategy) {
+    this.paymentStrategy = paymentStrategy;
+  }
+
+  checkout(amount) {
+    this.paymentStrategy.pay(amount);
+  }
+}
+
+const creditCardPayment = new CreditCardPayment();
+const payPalPayment = new PayPalPayment();
+
+const cart1 = new ShoppingCart(creditCardPayment);
+const cart2 = new ShoppingCart(payPalPayment);
+
+cart1.checkout(100);
+cart2.checkout(50);
+```
+
+**Explanation:** The strategy pattern is used to define a family of algorithms, encapsulate each one, and make them interchangeable.
+
+### Problem 27: Implement a Command Pattern
+
+**Solution:**
+```javascript
+class Light {
+  turnOn() {
+    console.log('Light is on.');
+  }
+
+  turnOff() {
+    console.log('Light is off.');
+  }
+}
+
+class LightOnCommand {
+  constructor(light) {
+    this.light = light;
+  }
+
+  execute() {
+    this.light.turnOn();
+  }
+}
+
+class LightOffCommand {
+  constructor(light) {
+    this.light = light;
+  }
+
+  execute() {
+    this.light.turnOff();
+  }
+}
+
+class RemoteControl {
+  constructor() {
+    this.commands = [];
+  }
+
+  addCommand(command) {
+    this.commands.push(command);
+  }
+
+  executeCommands() {
+    this.commands.forEach((command) => command.execute());
+  }
+}
+
+const livingRoomLight = new Light();
+const kitchenLight = new Light();
+
+const livingRoomLightOn = new LightOnCommand(livingRoomLight);
+const livingRoomLightOff = new LightOffCommand(livingRoomLight);
+const kitchenLightOn = new LightOnCommand(kitchenLight);
+const kitchenLightOff = new LightOffCommand(kitchenLight);
+
+const remote = new RemoteControl();
+remote.addCommand(livingRoomLightOn);
+remote.addCommand(livingRoomLightOff);
+remote.addCommand(kitchenLightOn);
+remote.addCommand(kitchenLightOff);
+
+remote.executeCommands();
+```
+
+**Explanation:** The command pattern is used to encapsulate a request as an object, thereby allowing for parameterization of clients with queues, requests, and operations.
+
+### Problem 28: Implement an Iterator Pattern
+
+**Solution:**
+```javascript
+class MyArray {
+  constructor() {
+    this.data = [];
+  }
+
+  add(item) {
+    this.data.push(item);
+  }
+
+  [Symbol.iterator]() {
+    let index = 0;
+    const data = this.data;
+
+    return {
+      next() {
+        if (index < data.length) {
+          return { value: data[index++], done: false };
+        } else {
+          return { done: true };
+        }
+      },
+    };
+  }
+}
+
+const array = new MyArray();
+array.add(1);
+array.add(2);
+array.add(3);
+
+for (const item of array) {
+  console.log
+
+(item);
+}
+```
+
+**Explanation:** The iterator pattern is used to provide a way to access elements of an object sequentially without exposing its underlying representation.
+
+### Problem 29: Implement a Mediator Pattern
+
+**Solution:**
+```javascript
+class User {
+  constructor(name, mediator) {
+    this.name = name;
+    this.mediator = mediator;
+  }
+
+  send(message) {
+    this.mediator.sendMessage(this, message);
+  }
+
+  receive(message) {
+    console.log(`${this.name} received: ${message}`);
+  }
+}
+
+class ChatMediator {
+  constructor() {
+    this.users = [];
+  }
+
+  addUser(user) {
+    this.users.push(user);
+  }
+
+  sendMessage(sender, message) {
+    for (const user of this.users) {
+      if (user !== sender) {
+        user.receive(message);
+      }
+    }
+  }
+}
+
+const mediator = new ChatMediator();
+
+const user1 = new User('Alice', mediator);
+const user2 = new User('Bob', mediator);
+
+mediator.addUser(user1);
+mediator.addUser(user2);
+
+user1.send('Hello, Bob!');
+user2.send('Hi, Alice!');
+```
+
+**Explanation:** The mediator pattern is used to reduce the complexity of communication between multiple objects or classes.
+
+### Problem 30: Implement a Template Method Pattern
+
+**Solution:**
+```javascript
+class Game {
+  start() {
+    this.initialize();
+    this.play();
+    this.finish();
+  }
+
+  initialize() {
+    console.log('Game initialized.');
+  }
+
+  play() {
+    throw new Error('Subclasses must implement play method.');
+  }
+
+  finish() {
+    console.log('Game finished.');
+  }
+}
+
+class Chess extends Game {
+  play() {
+    console.log('Playing chess.');
+  }
+}
+
+class TicTacToe extends Game {
+  play() {
+    console.log('Playing Tic-Tac-Toe.');
+  }
+}
+
+const chess = new Chess();
+const ticTacToe = new TicTacToe();
+
+chess.start();
+ticTacToe.start();
+```
+
+**Explanation:** The template method pattern defines the skeleton of an algorithm in the superclass but lets subclasses override specific steps of the algorithm without changing its structure.
+
+## JS ASYNC
+---
+JavaScript (JS) asynchronous programming refers to the execution of code in a non-blocking manner, allowing tasks to be performed independently of the main program flow. In other words, asynchronous operations in JS allow you to execute tasks in the background without waiting for each one to finish before moving on to the next task. This is crucial for tasks that may take some time to complete, such as fetching data from a server, reading files, or handling user input.
+
+Key characteristics of asynchronous programming in JavaScript include:
+
+1. **Non-Blocking:** Asynchronous code does not block the execution of other code. It allows multiple tasks to run concurrently, improving overall program efficiency and responsiveness.
+
+2. **Callbacks:** Asynchronous operations often involve the use of callback functions. Callbacks are functions passed as arguments to asynchronous functions and are executed once the task is complete. They allow you to specify what should happen after an asynchronous operation finishes.
+
+3. **Promises:** Promises are a more structured way to handle asynchronous operations. They represent a future value or error and provide methods for chaining asynchronous operations together and handling success or failure elegantly.
+
+4. **Async/Await:** Introduced in modern JavaScript, the `async/await` syntax provides a more readable and synchronous-like way to work with asynchronous code. It allows you to write asynchronous code that looks similar to synchronous code, making it easier to understand and maintain.
+
+### JS Callbacks, JS Asynchronous, JS Promises, and Async/Await
 ---
 
-### statements, syntax, variables, keywords, and operators
+#### Problem 1: Understanding Callbacks
+**Problem:** Explain what a callback function is in JavaScript and provide an example of how it can be used.
+
+**Solution:**
+A callback function is a function that is passed as an argument to another function and is executed after the completion of that function. It is often used for asynchronous operations.
+
+```javascript
+// Example of using a callback function
+function fetchData(callback) {
+  setTimeout(function () {
+    callback("Data fetched successfully!");
+  }, 1000);
+}
+
+function displayData(data) {
+  console.log(data);
+}
+
+fetchData(displayData);
+```
+
+#### Problem 2: Callback Hell (Callback Pyramid)
+**Problem:** Explain the issue of callback hell in JavaScript and provide a solution using named functions.
+
+**Solution:**
+Callback hell occurs when nested callbacks make the code hard to read. Using named functions can help alleviate this problem.
+
+```javascript
+function fetchData(callback) {
+  setTimeout(function () {
+    callback("Data fetched successfully!");
+  }, 1000);
+}
+
+function processData(data, callback) {
+  setTimeout(function () {
+    callback("Data processed: " + data);
+  }, 1000);
+}
+
+function displayData(data) {
+  console.log(data);
+}
+
+fetchData(function (data) {
+  processData(data, function (processedData) {
+    displayData(processedData);
+  });
+});
+```
+
+#### Problem 3: Promises Basics
+**Problem:** Explain what a promise is and provide an example of creating and consuming a promise.
+
+**Solution:**
+A promise is an object that represents the eventual completion or failure of an asynchronous operation.
+
+```javascript
+// Creating a promise
+const fetchData = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Data fetched successfully!");
+  }, 1000);
+});
+
+// Consuming a promise
+fetchData
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Problem 4: Chaining Promises
+**Problem:** Explain how to chain promises in JavaScript to handle multiple asynchronous operations sequentially.
+
+**Solution:**
+Chaining promises allows you to execute asynchronous operations one after the other.
+
+```javascript
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Data fetched successfully!");
+    }, 1000);
+  });
+}
+
+function processData(data) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Data processed: " + data);
+    }, 1000);
+  });
+}
+
+fetchData()
+  .then(processData)
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Problem 5: Async/Await Basics
+**Problem:** Explain the async/await syntax in JavaScript and provide an example of using it for asynchronous operations.
+
+**Solution:**
+Async/await provides a more readable way to work with promises.
+
+```javascript
+async function fetchData() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Data fetched successfully!");
+    }, 1000);
+  });
+}
+
+async function processData(data) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Data processed: " + data);
+    }, 1000);
+  });
+}
+
+async function fetchDataAndProcess() {
+  try {
+    const data = await fetchData();
+    const result = await processData(data);
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+fetchDataAndProcess();
+```
+
+#### Problem 11: Handling Multiple Concurrent Requests
+**Problem:** Explain how to make multiple asynchronous requests concurrently and handle their results using async/await.
+
+**Solution:**
+You can use `Promise.all` with async/await to handle multiple concurrent requests.
+
+```javascript
+async function fetchUserData(userId) {
+  const userPromise = fetch(`https://api.example.com/users/${userId}`);
+  const postsPromise = fetch(`https://api.example.com/posts?userId=${userId}`);
+
+  const [userData, postsData] = await Promise.all([userPromise, postsPromise]);
+
+  const user = await userData.json();
+  const posts = await postsData.json();
+
+  return { user, posts };
+}
+
+async function getUserData(userId) {
+  try {
+    const data = await fetchUserData(userId);
+    console.log("User:", data.user);
+    console.log("Posts:", data.posts);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+getUserData(1);
+```
+
+#### Problem 12: Throttling and Debouncing
+**Problem:** Explain the concepts of throttling and debouncing in JavaScript and provide examples of their usage.
+
+**Solution:**
+Throttling limits the rate of execution of a function, while debouncing delays execution until a pause in input.
+
+```javascript
+// Throttle function to limit calls to once every 500ms
+function throttle(func, delay) {
+  let lastCall = 0;
+  return function (...args) {
+    const now = new Date().getTime();
+    if (now - lastCall >= delay) {
+      func(...args);
+      lastCall = now;
+    }
+  };
+}
+
+// Debounce function to wait for 500ms of inactivity before calling
+function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}
+```
+
+#### Problem 13: Fetching Data with Axios
+**Problem:** Explain how to make HTTP requests using the Axios library in JavaScript and provide an example.
+
+**Solution:**
+Axios is a popular library for making HTTP requests.
+
+```javascript
+const axios = require("axios");
+
+async function fetchData() {
+  try {
+    const response = await axios.get("https://api.example.com/data");
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+fetchData();
+```
+
+#### Problem 14: Handling Fetch Errors
+**Problem:** Explain how to handle errors when using the Fetch API for HTTP requests and provide an example.
+
+**Solution:**
+You can check the response status and handle errors accordingly.
+
+```javascript
+async function fetchData() {
+  try {
+    const response = await fetch("https://api.example.com/data");
+    if (!response.ok) {
+      throw new Error("HTTP error! Status: " + response.status);
+    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+fetchData();
+```
+
+#### Problem 15: Using Axios Interceptors
+**Problem:** Explain how to use Axios interceptors to globally handle requests and responses.
+
+**Solution:**
+Axios interceptors allow you to add middleware for requests and responses.
+
+```javascript
+const axios = require("axios");
+
+axios.interceptors.request.use(
+  (config) => {
+    // Add headers or modify request config
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  (response) => {
+    // Process successful responses
+    return response;
+  },
+  (error) => {
+    // Handle response errors
+    return Promise.reject(error);
+  }
+);
+```
+
+#### Problem 16: Using Local Storage with Promises
+**Problem:** Explain how to use Promises with local storage in JavaScript and provide an example.
+
+**Solution:**
+You can wrap local storage operations in promises for better async handling.
+
+```javascript
+function getItemFromLocalStorage(key) {
+  return new Promise((resolve, reject) => {
+    try {
+      const data = localStorage.getItem(key);
+      if (data !== null) {
+        resolve(data);
+      } else {
+        reject("Item not found in local storage.");
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+function setItemInLocalStorage(key, value) {
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem(key, value);
+      resolve("Item saved in local storage.");
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+// Example usage
+setItemInLocalStorage("username", "John")
+  .then((result) => {
+    console.log(result);
+    return getItemFromLocalStorage("username");
+  })
+  .then((data) => {
+    console.log("Username:", data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Problem 17: Handling Fetch with Async Generators
+**Problem:** Explain how to use async generators to handle paginated data fetched from an API and provide an example.
+
+**Solution:**
+Async generators are useful for fetching and processing paginated data.
+
+```javascript
+async function* fetchPaginatedData(url) {
+  let page = 1;
+  while (true) {
+    const response = await fetch(`${url}?page=${page}`);
+    const data = await response.json();
+    if (data.length === 0) {
+      break;
+    }
+    yield data;
+    page++;
+  }
+}
+
+(async () => {
+  for await (const pageData of fetchPaginatedData("https://api.example.com/data")) {
+    console.log(pageData);
+  }
+})();
+```
+
+#### Problem 18: Using Axios with Cancel Tokens
+**Problem:** Explain how to cancel Axios requests using cancel tokens and provide an example.
+
+**Solution:**
+Cancel tokens allow you to cancel Axios requests.
+
+```javascript
+const axios = require("axios");
+const { CancelToken, isCancel } = axios;
+
+const source = CancelToken.source();
+
+axios
+  .get("https://api.example.com/data", {
+    cancelToken: source.token,
+  })
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    if (isCancel(error)) {
+      console.log("Request canceled:", error.message);
+    } else {
+      console.error(error);
+    }
+  });
+
+// Cancel the request
+source.cancel("Request canceled by the user.");
+```
+
+#### Problem 19: Promise.finally
+**Problem:** Explain how to use the `finally` method with promises and provide an example.
+
+**Solution:**
+The `finally` method allows you to execute code regardless of whether the promise is resolved or rejected.
+
+```javascript
+const fetchData = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Data fetched successfully!");
+  }, 1000);
+});
+
+fetchData
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error(error);
+  })
+  .finally(() => {
+    console.log("Request completed.");
+  });
+```
+
+#### Problem 20: Parallel Execution with Promise.allSettled
+**Problem:** Explain how to use `Promise.allSettled` to execute promises in parallel and handle their results.
+
+**Solution:**
+`Promise.allSettled` allows you to wait for all promises to settle (either resolve or reject) and get their results.
+
+```javascript
+const promise1 = fetchData();
+const promise2 = processData();
+
+Promise.allSettled([promise1, promise2]).then((results) => {
+  results.forEach((result, index) => {
+    if (result.status === "fulfilled") {
+      console.log(`Promise ${index + 1}: ${result.value}`);
+    } else {
+      console.error(`Promise ${index + 1} failed: ${result.reason}`);
+    }
+  });
+});
+```
+
+#### Problem 21: Caching API Responses
+**Problem:** Explain how to implement caching for API responses to improve performance and provide an example.
+
+**Solution:**
+Caching API responses can reduce unnecessary network requests.
+
+```javascript
+const cache = new Map();
+
+async function fetchDataWithCache(url) {
+  if (cache.has(url)) {
+    return cache.get(url);
+  }
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  cache.set(url, data);
+
+  return data;
+}
+
+// Example usage
+fetchDataWithCache("https://api.example.com/data")
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Problem 22: Handling Promise Timeout
+**Problem:** Explain how to add a timeout to a promise to handle cases where it takes too long to resolve and provide an example.
+
+**Solution:**
+You can add a timeout to a promise using `Promise.race`.
+
+```javascript
+function timeout(ms) {
+  return new Promise((_, reject) => {
+    setTimeout(() => {
+      reject("Promise timed out.");
+    }, ms);
+  });
+}
+
+const fetchData = new Promise((resolve) => {
+  setTimeout(() => {
+    resolve("Data fetched successfully!");
+  }, 2000);
+});
+
+Promise.race([fetchData, timeout(1000)])
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Problem 23: Async Iteration with for-await-of
+**Problem:** Explain how to use `for-await-of` to iterate over asynchronous data streams and provide an example.
+
+**Solution:**
+`for-await-of` simplifies asynchronous iteration.
+
+```javascript
+async function* generateAsyncData() {
+  yield "First";
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay
+  yield "Second";
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay
+  yield "Third";
+}
+
+(async () => {
+  for await (const data of generateAsyncData()) {
+    console.log(data);
+  }
+})();
+```
+
+#### Problem 24: Converting Callbacks to Promises
+**Problem:** Explain how to convert a callback-based function to return a promise and provide an example.
+
+**Solution:**
+You can promisify a callback function to use it with promises.
+
+```javascript
+const fs = require("fs");
+
+function readFileAsync(path) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, "utf8", (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
+// Example usage
+readFileAsync("sample.txt")
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Problem 25: Parallel Fetch with Promise.all
+**Problem:** Explain how to use `Promise.all` to fetch multiple resources in parallel and provide an example.
+
+**Solution:**
+`Promise.all` can be used to make multiple parallel requests.
+
+```javascript
+const urls = ["https://api.example.com/data1", "https://api.example.com/data2"];
+
+const requests = urls.map((url) => fetch(url));
+
+Promise.all(requests)
+  .then((responses) => {
+    return Promise.all(responses.map((response) => response.json()));
+  })
+  .then((data) => {
+    console.log("Data 1:", data[0]);
+    console.log("Data 2:", data[1]);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+## JS HTML DOM
+---
+The HTML DOM (Document Object Model) in JavaScript is a programming interface that represents the structure and content of a web page as a tree-like structure of objects. It allows JavaScript to interact with and manipulate the elements and content of an HTML document dynamically. Here's a brief overview of key concepts related to the HTML DOM in JavaScript:
+
+1. **Document Object Model (DOM):** The DOM is a hierarchical representation of an HTML document, where each HTML element is represented as an object. These objects can be manipulated using JavaScript to change the structure and content of the web page dynamically.
+
+2. **DOM Elements:** HTML elements (e.g., `<div>`, `<p>`, `<a>`) are represented as DOM elements or nodes. Each element is an object with properties and methods that allow you to access and modify its attributes and content.
+
+3. **Accessing Elements:** You can access DOM elements using various methods like `getElementById`, `getElementsByTagName`, `getElementsByClassName`, and more. Modern JavaScript often uses the `querySelector` and `querySelectorAll` methods to select elements using CSS-like selectors.
+
+4. **Manipulating Content:** JavaScript can be used to change the text, attributes, and structure of DOM elements. For example, you can update text content, add or remove HTML elements, and modify attributes like `src` or `href`.
+
+5. **Event Handling:** The DOM allows you to attach event listeners to elements, enabling you to respond to user interactions like clicks, input, and mouse movements. Event handlers are functions that execute in response to specific events.
+
+6. **Traversal:** You can navigate the DOM tree by moving between parent, child, and sibling elements. This is useful for accessing related elements and performing complex operations.
+
+7. **Creating Elements:** JavaScript can create new HTML elements dynamically and append them to the DOM. This is commonly used for adding content or components to a web page on-the-fly.
+
+8. **Removing Elements:** Elements can be removed from the DOM using JavaScript, allowing you to clean up or modify the structure of a web page dynamically.
+
+9. **Style and CSS:** You can access and modify the style properties of elements through the DOM, enabling dynamic styling changes. This is commonly used for animations and user interface effects.
+
+10. **Document Lifecycle:** The DOM is affected by the document's lifecycle events, such as "DOMContentLoaded" and "load." These events allow you to run JavaScript code at specific times during the page's loading process.
+
+### Document, Elements, HTML, Forms, CSS, Animations, Events, Event Listener, Navigation, Nodes, Collections, Node Lists
 ---
 
-### statements, syntax, variables, keywords, and operators
+#### Problem 1: Accessing DOM Elements
+**Problem:** Explain how to access HTML DOM elements in JavaScript and provide an example.
+
+**Solution:**
+You can access DOM elements using various methods like `getElementById` and `querySelector`.
+
+```javascript
+// Accessing an element by ID
+const elementById = document.getElementById("myElementId");
+
+// Accessing an element by class
+const elementByClass = document.querySelector(".myElementClass");
+
+// Accessing an element by tag name
+const elementsByTag = document.getElementsByTagName("div");
+
+// Accessing elements by CSS selector
+const elementsBySelector = document.querySelectorAll(".mySelector");
+
+// Accessing the document body
+const bodyElement = document.body;
+```
+
+#### Problem 2: Modifying DOM Elements
+**Problem:** Explain how to modify the content and attributes of DOM elements and provide an example.
+
+**Solution:**
+You can modify elements using properties like `textContent`, `innerHTML`, and `setAttribute`.
+
+```javascript
+// Modifying element content
+const paragraph = document.getElementById("myParagraph");
+paragraph.textContent = "New text content";
+
+// Modifying inner HTML
+const div = document.querySelector(".myDiv");
+div.innerHTML = "<p>Updated HTML</p>";
+
+// Modifying attributes
+const image = document.getElementById("myImage");
+image.setAttribute("src", "new_image.jpg");
+```
+
+#### Problem 3: Creating DOM Elements
+**Problem:** Explain how to create new DOM elements and add them to the document and provide an example.
+
+**Solution:**
+You can create elements with `createElement` and append them using `appendChild`.
+
+```javascript
+// Create a new paragraph element
+const newParagraph = document.createElement("p");
+newParagraph.textContent = "New paragraph";
+
+// Append it to an existing element
+const container = document.getElementById("container");
+container.appendChild(newParagraph);
+```
+
+#### Problem 4: Removing DOM Elements
+**Problem:** Explain how to remove DOM elements from the document and provide an example.
+
+**Solution:**
+You can remove elements using the `remove` method.
+
+```javascript
+// Remove an element by reference
+const elementToRemove = document.getElementById("elementToRemove");
+elementToRemove.remove();
+
+// Remove an element by parent and child relationship
+const parent = document.getElementById("parentElement");
+const child = document.getElementById("childElement");
+parent.removeChild(child);
+```
+
+#### Problem 5: Handling DOM Events
+**Problem:** Explain how to handle DOM events like clicks and keypresses and provide an example.
+
+**Solution:**
+You can add event listeners to elements to handle events.
+
+```javascript
+// Add a click event listener
+const button = document.getElementById("myButton");
+button.addEventListener("click", function () {
+  alert("Button clicked!");
+});
+
+// Add a keypress event listener
+document.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    console.log("Enter key pressed");
+  }
+});
+```
+
+#### Problem 6: Dynamically Styling DOM Elements
+**Problem:** Explain how to dynamically change the styles of DOM elements and provide an example.
+
+**Solution:**
+You can modify the `style` property of elements.
+
+```javascript
+// Change background color
+const element = document.getElementById("myElement");
+element.style.backgroundColor = "blue";
+
+// Modify font size
+const paragraph = document.querySelector(".myParagraph");
+paragraph.style.fontSize = "16px";
+```
+
+#### Problem 7: Working with Forms and Input Elements
+**Problem:** Explain how to work with HTML forms and input elements in JavaScript and provide an example.
+
+**Solution:**
+You can access form elements and their values.
+
+```javascript
+// Accessing form elements
+const form = document.getElementById("myForm");
+const inputField = form.querySelector("input[name='username']");
+
+// Getting input value
+const username = inputField.value;
+
+// Submitting a form programmatically
+form.submit();
+```
+
+#### Problem 8: Manipulating the Document Structure
+**Problem:** Explain how to manipulate the structure of the HTML document, like creating and removing nodes, and provide an example.
+
+**Solution:**
+You can create, insert, and remove nodes in the document.
+
+```javascript
+// Create a new element
+const newElement = document.createElement("div");
+newElement.textContent = "New div";
+
+// Insert it before another element
+const referenceElement = document.getElementById("referenceElement");
+referenceElement.parentNode.insertBefore(newElement, referenceElement);
+
+// Remove an element
+const elementToRemove = document.getElementById("elementToRemove");
+elementToRemove.parentNode.removeChild(elementToRemove);
+```
+
+#### Problem 9: Using Node Lists and DOM Collections
+**Problem:** Explain the concepts of Node Lists and DOM Collections and how to work with them in JavaScript and provide an example.
+
+**Solution:**
+Node Lists and DOM Collections are collections of DOM elements.
+
+```javascript
+// Using Node List (e.g., result of querySelectorAll)
+const elements = document.querySelectorAll(".myElements");
+elements.forEach((element) => {
+  console.log(element.textContent);
+});
+
+// Using DOM Collection (e.g., result of getElementsByTagName)
+const divs = document.getElementsByTagName("div");
+for (let i = 0; i < divs.length; i++) {
+  console.log(divs[i].textContent);
+}
+```
+
+#### Problem 10: Animating DOM Elements
+**Problem:** Explain how to animate DOM elements using JavaScript and provide an example.
+
+**Solution:**
+You can use JavaScript and CSS transitions or libraries like GreenSock (GSAP) for animations.
+
+```javascript
+// Using CSS transitions
+const element = document.getElementById("animatedElement");
+element.style.transition = "transform 2s";
+element.style.transform = "translateX(100px)";
+
+// Using GreenSock Animation Platform (GSAP)
+gsap.to(".animateMe", { x: 200, duration: 2 });
+```
+
+#### Problem 11: Traversing the DOM
+**Problem:** Explain how to traverse the DOM tree, moving between parent, child, and sibling elements, and provide an example.
+
+**Solution:**
+You can traverse the DOM tree using properties like `parentNode`, `children`, `nextSibling`, and `previousSibling`.
+
+```javascript
+const parentElement = document.getElementById("parent");
+const firstChild = parentElement.firstChild;
+const nextSibling = firstChild.nextSibling;
+```
+
+#### Problem 12: Adding and Removing Classes
+**Problem:** Explain how to add and remove CSS classes from DOM elements and provide an example.
+
+**Solution:**
+You can use the `classList` property to manage classes.
+
+```javascript
+const element = document.getElementById("myElement");
+
+// Adding a class
+element.classList.add("active");
+
+// Removing a class
+element.classList.remove("inactive");
+
+// Toggling a class
+element.classList.toggle("highlight");
+```
+
+#### Problem 13: Handling Checkboxes and Radio Buttons
+**Problem:** Explain how to work with checkboxes and radio buttons in forms using JavaScript and provide an example.
+
+**Solution:**
+You can access and manipulate the `checked` property of checkboxes and radio buttons.
+
+```javascript
+// Accessing a checkbox
+const checkbox = document.getElementById("myCheckbox");
+
+// Checking/unchecking a checkbox
+checkbox.checked = true;
+
+// Accessing a radio button
+const radio = document.querySelector("input[name='gender']:checked");
+```
+
+#### Problem 14: Creating and Appending Table Rows
+**Problem:** Explain how to create and append table rows dynamically in HTML tables and provide an example.
+
+**Solution:**
+You can create `tr` elements and append them to a `table`.
+
+```javascript
+// Create a new table row
+const newRow = document.createElement("tr");
+
+// Create and append table cells to the row
+for (let i = 0; i < 3; i++) {
+  const newCell = document.createElement("td");
+  newCell.textContent = `Cell ${i + 1}`;
+  newRow.appendChild(newCell);
+}
+
+// Append the row to the table
+const table = document.getElementById("myTable");
+table.appendChild(newRow);
+```
+
+#### Problem 15: Handling Mouse Events
+**Problem:** Explain how to handle mouse events like mouseover, mouseout, and mouse click on DOM elements and provide an example.
+
+**Solution:**
+You can add event listeners for mouse events.
+
+```javascript
+// Mouseover event
+const element = document.getElementById("myElement");
+element.addEventListener("mouseover", function () {
+  console.log("Mouse over element");
+});
+
+// Mouseout event
+element.addEventListener("mouseout", function () {
+  console.log("Mouse out of element");
+});
+
+// Click event
+element.addEventListener("click", function () {
+  console.log("Element clicked");
+});
+```
+
+#### Problem 16: Validating Form Data
+**Problem:** Explain how to validate form data using JavaScript and provide an example.
+
+**Solution:**
+You can use JavaScript to validate form input before submission.
+
+```javascript
+const form = document.getElementById("myForm");
+
+form.addEventListener("submit", function (event) {
+  const inputField = document.getElementById("username");
+  const username = inputField.value;
+
+  if (username.length < 5) {
+    event.preventDefault(); // Prevent form submission
+    alert("Username must be at least 5 characters long.");
+  }
+});
+```
+
+#### Problem 17: Creating Dropdown Menus
+**Problem:** Explain how to create and manage dropdown menus in HTML and JavaScript and provide an example.
+
+**Solution:**
+You can create dropdown menus using HTML and toggle their visibility with JavaScript.
+
+```javascript
+const dropdownButton = document.getElementById("dropdownButton");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+dropdownButton.addEventListener("click", function () {
+  dropdownMenu.classList.toggle("show");
+});
+
+// Close the dropdown when clicking outside
+window.addEventListener("click", function (event) {
+  if (!event.target.matches("#dropdownButton")) {
+    dropdownMenu.classList.remove("show");
+  }
+});
+```
+
+#### Problem 18: Creating Sliders and Carousels
+**Problem:** Explain how to create image sliders and carousels using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can create image sliders by changing the visibility of images using JavaScript.
+
+```javascript
+let currentIndex = 0;
+const images = document.querySelectorAll(".slider-image");
+
+function showImage(index) {
+  images.forEach((image, i) => {
+    if (i === index) {
+      image.style.display = "block";
+    } else {
+      image.style.display = "none";
+    }
+  });
+}
+
+function nextSlide() {
+  currentIndex++;
+  if (currentIndex >= images.length) {
+    currentIndex = 0;
+  }
+  showImage(currentIndex);
+}
+
+function prevSlide() {
+  currentIndex--;
+  if (currentIndex < 0) {
+    currentIndex = images.length - 1;
+  }
+  showImage(currentIndex);
+}
+
+showImage(currentIndex);
+
+// Example usage with buttons
+document.getElementById("nextButton").addEventListener("click", nextSlide);
+document.getElementById("prevButton").addEventListener("click", prevSlide);
+```
+
+### Problem 19: Dynamic Content Loading
+**Problem:** Explain how to load content dynamically from a server and update the DOM using JavaScript and provide an example.
+
+**Solution:**
+You can use the `fetch` API to retrieve data from a server and update the DOM with the received data.
+
+```javascript
+const button = document.getElementById("loadDataButton");
+const contentContainer = document.getElementById("contentContainer");
+
+button.addEventListener("click", function () {
+  fetch("https://api.example.com/data")
+    .then((response) => response.json())
+    .then((data) => {
+      contentContainer.textContent = data.message;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+```
+
+### Problem 20: Implementing a Lightbox Gallery
+**Problem:** Explain how to create a lightbox gallery for images using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can create a lightbox by displaying images in a modal dialog.
+
+```javascript
+const images = document.querySelectorAll(".lightbox-image");
+const modal = document.getElementById("lightboxModal");
+const modalImage = document.getElementById("modalImage");
+
+images.forEach((image) => {
+  image.addEventListener("click", function () {
+    modal.style.display = "block";
+    modalImage.src = this.src;
+  });
+});
+
+modal.addEventListener("click", function () {
+  modal.style.display = "none";
+});
+```
+
+
+### Problem 21: Implementing a Tabbed Interface
+**Problem:** Explain how to create a tabbed interface using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can create a tabbed interface by showing and hiding content based on user clicks.
+
+```javascript
+const tabButtons = document.querySelectorAll(".tab-button");
+const tabContents = document.querySelectorAll(".tab-content");
+
+tabButtons.forEach((button, index) => {
+  button.addEventListener("click", function () {
+    // Hide all tab contents
+    tabContents.forEach((content) => {
+      content.style.display = "none";
+    });
+
+    // Show the selected tab content
+    tabContents[index].style.display = "block";
+  });
+});
+```
+
+### Problem 22: Drag and Drop Elements
+**Problem:** Explain how to implement drag and drop functionality for DOM elements using JavaScript and provide an example.
+
+**Solution:**
+You can make elements draggable and handle the drag-and-drop events.
+
+```javascript
+const draggableElement = document.getElementById("draggableElement");
+
+draggableElement.addEventListener("dragstart", function (event) {
+  event.dataTransfer.setData("text/plain", "This is draggable!");
+});
+
+const dropZone = document.getElementById("dropZone");
+
+dropZone.addEventListener("dragover", function (event) {
+  event.preventDefault();
+});
+
+dropZone.addEventListener("drop", function (event) {
+  event.preventDefault();
+  const data = event.dataTransfer.getData("text/plain");
+  dropZone.textContent = data;
+});
+```
+
+### Problem 23: Implementing a Tooltip
+**Problem:** Explain how to create tooltips for HTML elements using JavaScript and provide an example.
+
+**Solution:**
+You can show and hide tooltips on hover events.
+
+```javascript
+const tooltipTrigger = document.getElementById("tooltipTrigger");
+const tooltip = document.getElementById("tooltip");
+
+tooltipTrigger.addEventListener("mouseenter", function () {
+  tooltip.style.visibility = "visible";
+});
+
+tooltipTrigger.addEventListener("mouseleave", function () {
+  tooltip.style.visibility = "hidden";
+});
+```
+
+### Problem 24: Implementing Infinite Scrolling
+**Problem:** Explain how to implement infinite scrolling for long lists of data in a web page using JavaScript and provide an example.
+
+**Solution:**
+You can load more data as the user scrolls down the page.
+
+```javascript
+const container = document.getElementById("scrollContainer");
+
+container.addEventListener("scroll", function () {
+  if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+    // Load more data
+    fetchMoreData();
+  }
+});
+```
+
+### Problem 25: Creating a Modal Dialog
+**Problem:** Explain how to create a modal dialog box for displaying additional content using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can create a modal by displaying a hidden div when triggered.
+
+```javascript
+const openModalButton = document.getElementById("openModalButton");
+const modal = document.getElementById("modal");
+const closeModalButton = document.getElementById("closeModalButton");
+
+openModalButton.addEventListener("click", function () {
+  modal.style.display = "block";
+});
+
+closeModalButton.addEventListener("click", function () {
+  modal.style.display = "none";
+});
+```
+
+### Problem 26: Manipulating the History API
+**Problem:** Explain how to manipulate the browser's history using the History API in JavaScript and provide an example.
+
+**Solution:**
+You can use the `pushState` and `popstate` events to change and monitor the browser's history.
+
+```javascript
+const backButton = document.getElementById("backButton");
+
+backButton.addEventListener("click", function () {
+  history.pushState(null, null, "new-url.html");
+});
+
+window.addEventListener("popstate", function (event) {
+  alert("Back button pressed!");
+});
+```
+
+### Problem 27: Creating a Sticky Navigation Bar
+**Problem:** Explain how to create a sticky navigation bar that stays fixed at the top of the page as the user scrolls and provide an example.
+
+**Solution:**
+You can use CSS and JavaScript to create a sticky navigation bar.
+
+```javascript
+const navbar = document.getElementById("navbar");
+const sticky = navbar.offsetTop;
+
+window.addEventListener("scroll", function () {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky");
+  } else {
+    navbar.classList.remove("sticky");
+  }
+});
+```
+
+### Problem 28: Filtering and Sorting Data
+**Problem:** Explain how to filter and sort data in a web page using JavaScript and provide an example.
+
+**Solution:**
+You can filter and sort data based on user interactions.
+
+```javascript
+const data = [...]; // Your data array
+const filterButton = document.getElementById("filterButton");
+const sortButton = document.getElementById("sortButton");
+
+filterButton.addEventListener("click", function () {
+  const filteredData = data.filter((item) => /* Filter criteria */);
+  // Display filtered data
+});
+
+sortButton.addEventListener("click", function () {
+  const sortedData = data.sort((a, b) => /* Sort criteria */);
+  // Display sorted data
+});
+```
+
+### Problem 29: Implementing Lazy Loading for Images
+**Problem:** Explain how to implement lazy loading for images on a web page to improve performance and provide an example.
+
+**Solution:**
+You can load images only when they come into the viewport.
+
+```javascript
+const lazyImages = document.querySelectorAll(".lazy-image");
+
+lazyImages.forEach((image) => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        image.src = image.dataset.src;
+        observer.unobserve(image);
+      }
+    });
+  });
+
+  observer.observe(image);
+});
+```
+
+### Problem 30: Creating a Content Slider
+**Problem:** Explain how to create a content slider (carousel) that displays multiple items at once using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can create a content slider by shifting the visible items.
+
+```javascript
+const sliderContainer = document.getElementById("sliderContainer");
+const sliderItems = document.querySelectorAll(".slider-item");
+const prevButton = document.getElementById("prevButton");
+const nextButton = document.getElementById("nextButton");
+
+let currentIndex = 0;
+
+nextButton.addEventListener("click", function () {
+  currentIndex++;
+  if (currentIndex >= sliderItems.length) {
+    currentIndex = 0;
+  }
+  updateSlider();
+});
+
+prevButton.addEventListener("click", function () {
+  currentIndex--;
+  if (currentIndex < 0) {
+    currentIndex = sliderItems.length - 1;
+  }
+  updateSlider();
+});
+
+function updateSlider() {
+  const itemWidth = sliderItems[0].offsetWidth;
+  const translateX = -currentIndex * itemWidth;
+  sliderContainer.style.transform = `translateX(${translateX}px)`;
+}
+```
+
+### Problem 31: Implementing Client-Side Form Validation
+**Problem:** Explain how to perform client-side form validation using JavaScript and provide an example.
+
+**Solution:**
+You can validate user input in forms before submission.
+
+```javascript
+const form = document.getElementById("myForm");
+
+form.addEventListener("submit", function (event) {
+  const inputField = document.getElementById("email");
+  const email = inputField.value;
+
+  if (!isValidEmail(email)) {
+    event.preventDefault(); // Prevent form submission
+    alert("Please enter a valid email address.");
+  }
+});
+
+function isValidEmail(email) {
+  // Implement email validation logic
+  return /\S+@\S+\.\S+/.test(email);
+}
+```
+
+### Problem 32: Creating a Dynamic Dropdown Menu
+**Problem:** Explain how to create a dynamic dropdown menu that loads options from an API using JavaScript and provide an example.
+
+**Solution:**
+You can populate a dropdown dynamically with data fetched from an API.
+
+```javascript
+const dropdown = document.getElementById("myDropdown");
+
+fetch("https://api.example.com/options")
+  .then((response) => response.json())
+  .then((data) => {
+    data.forEach((option) => {
+      const optionElement = document.createElement("option");
+      optionElement.value = option.value;
+      optionElement.textContent = option.label;
+      dropdown.appendChild(optionElement);
+    });
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+### Problem 33: Creating a Progress Bar
+**Problem:** Explain how to create a progress bar that shows the progress of a task using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can update the progress bar as a task progresses.
+
+```javascript
+const progressBar = document.getElementById("progressBar");
+const startButton = document.getElementById("startButton");
+
+startButton.addEventListener("click", function () {
+  let progress = 0;
+  const interval = setInterval(function () {
+    if (progress >= 100) {
+      clearInterval(interval);
+    } else {
+      progress += 1;
+      progressBar.style.width = `${progress}%`;
+    }
+  }, 100);
+});
+```
+
+### Problem 34: Implementing a Context Menu
+**Problem:** Explain how to create a context menu that appears when right-clicking on an element using JavaScript and provide an example.
+
+**Solution:**
+You can show a custom context menu when the user right-clicks on an element.
+
+```javascript
+const contextMenu = document.getElementById("contextMenu");
+const targetElement = document.getElementById("targetElement");
+
+targetElement.addEventListener("contextmenu", function (event) {
+  event.preventDefault();
+  const x = event.clientX;
+  const y = event.clientY;
+  contextMenu.style.left = `${x}px`;
+  contextMenu.style.top = `${y}px`;
+  contextMenu.style.display = "block";
+});
+
+window.addEventListener("click", function () {
+  contextMenu.style.display = "none";
+});
+```
+
+### Problem 35: Implementing a Dark Mode Toggle
+**Problem:** Explain how to implement a dark mode toggle for a web page using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can toggle between light and dark themes.
+
+```javascript
+const toggleButton = document.getElementById("darkModeToggle");
+const body = document.body;
+
+toggleButton.addEventListener("click", function () {
+  body.classList.toggle("dark-mode");
+});
+```
+
+### Problem 36: Creating a Collapsible FAQ Section
+**Problem:** Explain how to create a collapsible FAQ section that expands and collapses answers on user clicks using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can toggle the visibility of answer sections.
+
+```javascript
+const faqItems = document.querySelectorAll(".faq-item");
+
+faqItems.forEach((item) => {
+  const question = item.querySelector(".faq-question");
+  const answer = item.querySelector(".faq-answer");
+
+  question.addEventListener("click", function () {
+    answer.classList.toggle("open");
+  });
+});
+```
+
+### Problem 37: Implementing a Scroll-to-Top Button
+**Problem:** Explain how to create a "scroll to top" button that appears when the user scrolls down and provide an example.
+
+**Solution:**
+You can show a button and scroll to the top of the page when clicked.
+
+```javascript
+const scrollToTopButton = document.getElementById("scrollToTop");
+
+window.addEventListener("scroll", function () {
+  if (window.pageYOffset > 100) {
+    scrollToTopButton.style.display = "block";
+  } else {
+    scrollToTopButton.style.display = "none";
+  }
+});
+
+scrollToTopButton.addEventListener("click", function () {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+```
+
+### Problem 38: Creating a Countdown Timer
+**Problem:** Explain how to create a countdown timer that displays the remaining time in hours, minutes, and seconds using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can update the timer display at regular intervals.
+
+```javascript
+const timerDisplay = document.getElementById("timer");
+const targetDate = new Date("2023-12-31 23:59:59").getTime();
+
+function updateTimer() {
+  const currentDate = new Date().getTime();
+  const timeRemaining = targetDate - currentDate;
+
+  const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+  timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+setInterval(updateTimer, 1000);
+```
+
+### Problem 39: Implementing a Multi-Step Form
+**Problem:** Explain how to create a multi-step form with progress indicators using HTML, CSS, and JavaScript and provide an example.
+
+**Solution:**
+You can show/hide sections of the form based on the user's progress.
+
+```javascript
+const nextButton = document.getElementById("nextButton");
+const prevButton = document.getElementById("prevButton");
+const formSections = document.querySelectorAll(".form-section");
+let currentStep = 0;
+
+nextButton.addEventListener("click", function () {
+  if (currentStep < formSections.length - 1) {
+    formSections[currentStep].classList.remove("active");
+    currentStep++;
+    formSections[currentStep].classList.add("active");
+  }
+});
+
+prevButton.addEventListener("click", function () {
+  if (currentStep > 0) {
+    formSections[currentStep].classList.remove("active");
+    currentStep--;
+    formSections[currentStep].classList.add("active");
+  }
+});
+```
+
+#### Problem 40: Creating a Dynamic Filter
+**Problem:** Explain how to create a dynamic filter for a list of items based on user input using JavaScript and provide an example.
+
+**Solution:**
+You can filter items based on user input and update the displayed list.
+
+```javascript
+const inputFilter = document.getElementById("filterInput");
+const itemList = document.getElementById("itemList");
+
+inputFilter.addEventListener("input", function () {
+  const filter = inputFilter.value.toLowerCase();
+  const items = itemList.querySelectorAll(".item");
+
+  items.forEach((item) => {
+    const itemName = item.textContent.toLowerCase();
+    if (itemName.includes(filter
+
+)) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
+});
+```
+
+## JS BROWSER DOM
 ---
 
-### statements, syntax, variables, keywords, and operators
+1. **Window Object (`window`):**
+   - Represents the browser window or frame.
+   - Provides access to various browser-related features and properties.
+   - Example: `window.location` to access the current URL.
+
+2. **Screen Object (`screen`):**
+   - Represents the user's screen or display.
+   - Provides information about screen dimensions and capabilities.
+   - Example: `screen.width` to get the screen width in pixels.
+
+3. **Location Object (`location`):**
+   - Represents the current URL of the browser.
+   - Allows you to manipulate or navigate to different URLs.
+   - Example: `location.href` to get or set the current URL.
+
+4. **History Object (`history`):**
+   - Represents the browser's navigation history.
+   - Allows you to move forward or backward in the user's history.
+   - Example: `history.back()` to go back one page.
+
+5. **Navigator Object (`navigator`):**
+   - Provides information about the user's browser and system.
+   - Contains properties like the browser name and version.
+   - Example: `navigator.userAgent` to get the user agent string.
+
+6. **Popup Alert (`alert`):**
+   - Displays a small dialog box with a message to the user.
+   - Often used for displaying notifications or simple prompts.
+   - Example: `alert("Hello, World!")` to show a popup message.
+
+7. **Timing Functions:**
+   - JavaScript provides various timing functions to control the execution of code.
+   - `setTimeout`: Executes a function once after a specified delay.
+   - `setInterval`: Repeatedly executes a function at a specified interval.
+   - Example: `setTimeout(function() { alert("Delayed message"); }, 2000);`
+
+### Window, Screen, Location, History, Navigator, Popup Alert, Timing
 ---
 
-### statements, syntax, variables, keywords, and operators
+#### Problem 1: Accessing the Browser Window Object
+**Problem:** Explain how to access and manipulate the properties of the browser window object in JavaScript.
+
+**Solution:**
+You can access the `window` object and its properties.
+
+```javascript
+// Accessing the window object
+const windowObject = window;
+
+// Opening a new browser window
+const newWindow = window.open("https://example.com");
+
+// Closing the current window
+window.close();
+```
+
+#### Problem 2: Getting Screen Information
+**Problem:** Explain how to retrieve information about the user's screen using JavaScript.
+
+**Solution:**
+You can access properties of the `screen` object.
+
+```javascript
+// Getting screen width and height
+const screenWidth = screen.width;
+const screenHeight = screen.height;
+```
+
+#### Problem 3: Manipulating Browser Location
+**Problem:** Explain how to change the URL of the current browser location using JavaScript.
+
+**Solution:**
+You can use the `location` object to manipulate the browser's URL.
+
+```javascript
+// Changing the URL
+location.href = "https://newurl.com";
+
+// Redirecting to another page
+location.replace("https://anotherurl.com");
+```
+
+#### Problem 4: Using Browser History
+**Problem:** Explain how to manipulate the browser's history using JavaScript.
+
+**Solution:**
+You can use the `history` object to navigate through the user's history.
+
+```javascript
+// Moving back one page
+history.back();
+
+// Moving forward one page
+history.forward();
+
+// Moving back or forward multiple steps
+history.go(-2);
+```
+
+#### Problem 5: Accessing Browser Information
+**Problem:** Explain how to access information about the user's browser using JavaScript.
+
+**Solution:**
+You can use the `navigator` object to retrieve browser-related information.
+
+```javascript
+// Getting the browser name and version
+const browserName = navigator.appName;
+const browserVersion = navigator.appVersion;
+```
+
+#### Problem 6: Displaying Popup Alerts
+**Problem:** Explain how to display popup alert dialogs to the user using JavaScript.
+
+**Solution:**
+You can use the `alert` method to show alerts.
+
+```javascript
+// Displaying an alert message
+alert("This is an alert!");
+```
+
+### Problem 7: Using Timing Functions
+**Problem:** Explain how to use JavaScript timing functions like `setTimeout` and `setInterval` to execute code after a delay or at regular intervals.
+
+**Solution:**
+You can use `setTimeout` and `setInterval` for timed operations.
+
+```javascript
+// Execute a function after a delay
+setTimeout(function () {
+  console.log("Delayed execution");
+}, 2000);
+
+// Execute a function at regular intervals
+const intervalId = setInterval(function () {
+  console.log("Repeated execution");
+}, 1000);
+
+// Stop the interval after some time
+setTimeout(function () {
+  clearInterval(intervalId);
+}, 5000);
+```
+
+### Problem 8: Working with Cookies
+**Problem:** Explain how to create, read, and delete cookies in JavaScript.
+
+**Solution:**
+You can use the `document.cookie` property to work with cookies.
+
+```javascript
+// Creating a cookie
+document.cookie = "username=John Doe; expires=Wed, 31 Dec 2023 00:00:00 UTC; path=/";
+
+// Reading a cookie
+const username = document.cookie;
+
+// Deleting a cookie
+document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+```
+
+
+### Problem 9: Opening Links in a New Tab
+**Problem:** Explain how to open links in a new browser tab or window using JavaScript.
+
+**Solution:**
+You can use JavaScript to open links in a new tab or window.
+
+```javascript
+// Open a link in a new tab
+window.open("https://example.com", "_blank");
+
+// Open a link in a new window with specific dimensions
+window.open("https://example.com", "_blank", "width=500,height=300");
+```
+
+### Problem 10: Detecting User's Geolocation
+**Problem:** Explain how to determine the user's geolocation (latitude and longitude) using JavaScript.
+
+**Solution:**
+You can use the `navigator.geolocation` API to obtain the user's geolocation.
+
+```javascript
+if ("geolocation" in navigator) {
+  navigator.geolocation.getCurrentPosition(function (position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+  });
+} else {
+  console.log("Geolocation is not available in this browser.");
+}
+```
+
+### Problem 11: Modifying Browser Document Title
+**Problem:** Explain how to change the title of the browser document dynamically using JavaScript.
+
+**Solution:**
+You can set the `document.title` property to modify the document's title.
+
+```javascript
+// Change the document title
+document.title = "New Page Title";
+```
+
+### Problem 12: Handling Browser Window Resize
+**Problem:** Explain how to detect and respond to changes in the browser window's size using JavaScript.
+
+**Solution:**
+You can add an event listener to the `window` object to handle window resize events.
+
+```javascript
+window.addEventListener("resize", function () {
+  // Handle window resize
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+  console.log(`Window Width: ${windowWidth}, Window Height: ${windowHeight}`);
+});
+```
+
+### Problem 13: Displaying a Confirmation Dialog
+**Problem:** Explain how to display a confirmation dialog to the user before proceeding with an action using JavaScript.
+
+**Solution:**
+You can use the `confirm` method to show a confirmation dialog.
+
+```javascript
+// Display a confirmation dialog
+const userConfirmed = confirm("Are you sure you want to delete this item?");
+
+if (userConfirmed) {
+  // User confirmed, proceed with the action
+} else {
+  // User canceled, do nothing
+}
+```
+
+### Problem 14: Using Local Storage
+**Problem:** Explain how to store and retrieve data in the browser's local storage using JavaScript.
+
+**Solution:**
+You can use the `localStorage` API to store and retrieve data.
+
+```javascript
+// Storing data in local storage
+localStorage.setItem("username", "John");
+
+// Retrieving data from local storage
+const username = localStorage.getItem("username");
+
+// Removing data from local storage
+localStorage.removeItem("username");
+```
+
+### Problem 15: Capturing Keyboard Events
+**Problem:** Explain how to capture and respond to keyboard events (e.g., keypress, keydown, keyup) using JavaScript.
+
+**Solution:**
+You can add event listeners to the `document` or specific elements to capture keyboard events.
+
+```javascript
+// Capture a keypress event
+document.addEventListener("keypress", function (event) {
+  console.log(`Key pressed: ${event.key}`);
+});
+
+// Capture a keydown event
+document.addEventListener("keydown", function (event) {
+  console.log(`Key down: ${event.key}`);
+});
+
+// Capture a keyup event
+document.addEventListener("keyup", function (event) {
+  console.log(`Key up: ${event.key}`);
+});
+```
+
+### Problem 16: Handling Browser Page Reload
+**Problem:** Explain how to handle and confirm page reload requests made by the user.
+
+**Solution:**
+You can add a `beforeunload` event listener to confirm page reload.
+
+```javascript
+window.addEventListener("beforeunload", function (event) {
+  event.preventDefault();
+  event.returnValue = "You have unsaved changes. Are you sure you want to leave?";
+});
+```
+
+### Problem 17: Using Session Storage
+**Problem:** Explain how to store and retrieve session-specific data in the browser's session storage using JavaScript.
+
+**Solution:**
+You can use the `sessionStorage` API to store and retrieve session-specific data.
+
+```javascript
+// Storing data in session storage
+sessionStorage.setItem("theme", "dark");
+
+// Retrieving data from session storage
+const theme = sessionStorage.getItem("theme");
+
+// Removing data from session storage
+sessionStorage.removeItem("theme");
+```
+
+### Problem 18: Customizing Browser Context Menus
+**Problem:** Explain how to customize the browser's context menu (right-click menu) using JavaScript.
+
+**Solution:**
+You can disable or customize the context menu using event listeners.
+
+```javascript
+// Disable the context menu
+document.addEventListener("contextmenu", function (event) {
+  event.preventDefault();
+});
+
+// Customize the context menu
+document.addEventListener("contextmenu", function (event) {
+  const customMenu = document.getElementById("customContextMenu");
+  customMenu.style.display = "block";
+  customMenu.style.left = `${event.pageX}px`;
+  customMenu.style.top = `${event.pageY}px`;
+});
+```
+
+
+### Problem 19: Controlling Fullscreen Mode
+**Problem:** Explain how to programmatically control fullscreen mode for a web page using JavaScript.
+
+**Solution:**
+You can use the `document.fullscreenEnabled`, `document.requestFullscreen()`, and `document.exitFullscreen()` methods to control fullscreen mode.
+
+```javascript
+// Check if fullscreen is supported
+if (document.fullscreenEnabled) {
+  // Request fullscreen mode
+  document.documentElement.requestFullscreen().catch((error) => {
+    console.error(`Fullscreen request failed: ${error}`);
+  });
+
+  // Exit fullscreen mode
+  document.exitFullscreen();
+}
+```
+
+### Problem 20: Handling Browser Back Button
+**Problem:** Explain how to detect and respond to the browser's back button using JavaScript.
+
+**Solution:**
+You can add an event listener to the `popstate` event to handle back button clicks.
+
+```javascript
+window.addEventListener("popstate", function (event) {
+  // Handle back button click
+  console.log("Back button clicked");
+});
+```
+
+### Problem 21: Managing Browser Storage Limits
+**Problem:** Explain how to handle browser storage limits (localStorage and sessionStorage) and gracefully handle storage quota exceeded errors.
+
+**Solution:**
+You can check storage limits and handle quota exceeded errors.
+
+```javascript
+// Check available storage space
+const availableSpace = navigator.storage.estimate().then((estimate) => {
+  console.log(`Available space: ${estimate.quota}`);
+});
+
+// Handle storage quota exceeded error
+try {
+  localStorage.setItem("largeData", bigData);
+} catch (error) {
+  if (error.name === "QuotaExceededError") {
+    console.error("Storage quota exceeded.");
+    // Handle the error gracefully
+  } else {
+    throw error;
+  }
+}
+```
+
+### Problem 22: Detecting Online/Offline Status
+**Problem:** Explain how to detect the online and offline status of the user's device using JavaScript.
+
+**Solution:**
+You can use the `navigator.onLine` property to check the online status.
+
+```javascript
+if (navigator.onLine) {
+  console.log("Online");
+} else {
+  console.log("Offline");
+}
+
+// Listen for online/offline events
+window.addEventListener("online", function () {
+  console.log("Device is now online");
+});
+
+window.addEventListener("offline", function () {
+  console.log("Device is now offline");
+});
+```
+
+### Problem 23: Modifying Browser Scroll Behavior
+**Problem:** Explain how to modify the scroll behavior of the browser using JavaScript.
+
+**Solution:**
+You can use the `window.scroll` and `Element.scroll` methods to control scrolling.
+
+```javascript
+// Scroll to a specific position
+window.scroll({
+  top: 100,
+  behavior: "smooth", // smooth scrolling
+});
+
+// Scroll an element into view
+const element = document.getElementById("myElement");
+element.scrollIntoView({ behavior: "smooth" });
+```
+
+### Problem 24: Controlling Page Printing
+**Problem:** Explain how to control page printing behavior using JavaScript.
+
+**Solution:**
+You can use the `window.print()` method to trigger the print dialog.
+
+```javascript
+// Open the print dialog
+document.getElementById("printButton").addEventListener("click", function () {
+  window.print();
+});
+```
+
+### Problem 25: Listening for Page Visibility Changes
+**Problem:** Explain how to listen for changes in the visibility of the current page/tab using JavaScript.
+
+**Solution:**
+You can use the Page Visibility API to detect when a page becomes visible or hidden.
+
+```javascript
+// Listen for visibility change events
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden) {
+    console.log("Page is hidden");
+  } else {
+    console.log("Page is visible");
+  }
+});
+```
+
+### Problem 26: Customizing Browser Error Messages
+**Problem:** Explain how to customize the default error messages displayed by the browser for certain types of errors, such as 404 (Not Found).
+
+**Solution:**
+You can create custom error pages and set them as the response for specific error codes.
+
+```javascript
+// Create a custom 404 Not Found page
+const custom404Page = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>404 Not Found</title>
+  </head>
+  <body>
+    <h1>404 Not Found</h1>
+    <p>The requested page could not be found.</p>
+  </body>
+  </html>
+`;
+
+// Set the custom 404 page as the response for 404 errors
+const express = require("express");
+const app = express();
+
+app.use((req, res, next) => {
+  res.status(404).send(custom404Page);
+});
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
+```
+
+### Problem 27: Managing Browser Notifications
+**Problem:** Explain how to request and manage browser notifications using JavaScript.
+
+**Solution:**
+You can use the Notification API to request and display notifications.
+
+```javascript
+// Request permission for notifications
+if (Notification.permission !== "granted") {
+  Notification.requestPermission().then(function (permission) {
+    if (permission === "granted") {
+      // Display a notification
+      const notification = new Notification("New Message", {
+        body: "You have a new message.",
+      });
+    }
+  });
+}
+```
+
+### Problem 28: Handling Browser Document Print Events
+**Problem:** Explain how to detect and respond to print events triggered by the user using JavaScript.
+
+**Solution:**
+You can use the `window.onbeforeprint` and `window.onafterprint` events to handle print events.
+
+```javascript
+window.onbeforeprint = function () {
+  // Code to run before printing
+};
+
+window.onafterprint = function () {
+  // Code to run after printing
+};
+```
+
+### Problem 29: Using the Clipboard API
+**Problem:** Explain how to interact with the user's clipboard (copying and pasting) using the Clipboard API in JavaScript.
+
+**Solution:**
+You can use the Clipboard API to manipulate clipboard data.
+
+```javascript
+// Copy text to clipboard
+document.getElementById("copyButton").addEventListener("click", function () {
+  const textToCopy = "This text will be copied to the clipboard.";
+  navigator.clipboard.writeText(textToCopy);
+});
+
+// Paste text from clipboard
+document.getElementById("pasteButton").addEventListener("click", async function () {
+  const clipboardText = await navigator.clipboard.readText();
+  console.log("Pasted text:", clipboardText);
+});
+```
+
+
+## JS JSON
 ---
 
-### statements, syntax, variables, keywords, and operators
+**JSON Characteristics:**
+
+- JSON data is represented as key-value pairs.
+- Data is enclosed in curly braces `{}`.
+- Key-value pairs are separated by commas.
+- Keys are strings enclosed in double quotes `""`.
+- Values can be strings, numbers, objects, arrays, booleans, or `null`.
+- JSON is language-independent, making it ideal for communication between different systems.
+
+**Examples of JSON:**
+
+Here are some examples of JSON data:
+
+1. **Simple JSON Object:**
+
+```json
+{
+  "name": "John",
+  "age": 30,
+  "city": "New York"
+}
+```
+
+2. **JSON Array:**
+
+```json
+[
+  "apple",
+  "banana",
+  "cherry"
+]
+```
+
+3. **Nested JSON Object:**
+
+```json
+{
+  "person": {
+    "name": "Alice",
+    "age": 25
+  },
+  "location": "London"
+}
+```
+
+4. **JSON Array of Objects:**
+
+```json
+[
+  {
+    "name": "Tom",
+    "age": 28
+  },
+  {
+    "name": "Lisa",
+    "age": 22
+  }
+]
+```
+
+**JavaScript Example - Parsing JSON:**
+
+```javascript
+// JSON string
+var jsonString = '{"name": "John", "age": 30, "city": "New York"}';
+
+// Parse JSON into JavaScript object
+var person = JSON.parse(jsonString);
+
+// Accessing values
+console.log(person.name); // Output: John
+console.log(person.age);  // Output: 30
+console.log(person.city); // Output: New York
+```
+
+### Syntax, vs XML, Data Types, Parse, Stringify, Objects, Arrays, Server, PHP, HTML, JSONP
 ---
 
-### statements, syntax, variables, keywords, and operators
+#### Problem 1: Introduction to JSON
+**Problem:** Explain what JSON (JavaScript Object Notation) is and why it is important in web development.
+
+**Solution:**
+JSON is a lightweight data interchange format used to store and exchange data between a server and a web application. It is easy for humans to read and write and easy for machines to parse and generate. JSON is commonly used for data transfer in web APIs.
+
+```javascript
+// JSON example
+{
+  "name": "John Doe",
+  "age": 30,
+  "city": "New York"
+}
+```
+
+#### Problem 2: JSON Syntax
+**Problem:** Describe the syntax rules for writing valid JSON.
+
+**Solution:**
+JSON syntax consists of key-value pairs, where keys are strings enclosed in double quotes and values can be strings, numbers, objects, arrays, booleans, null, or nested JSON objects.
+
+```javascript
+{
+  "name": "Alice",
+  "age": 25,
+  "isStudent": true,
+  "scores": [95, 88, 92],
+  "address": {
+    "street": "123 Main St",
+    "city": "Seattle"
+  }
+}
+```
+
+#### Problem 3: JSON vs XML
+**Problem:** Compare and contrast JSON with XML as data interchange formats in web development.
+
+**Solution:**
+JSON is more compact and easier to read than XML. It is also easier to parse in JavaScript. XML is more suitable for complex data structures and has better support for metadata.
+
+#### Problem 4: JSON Data Types
+**Problem:** Explain the different data types that can be used in JSON.
+
+**Solution:**
+JSON supports the following data types: strings, numbers, objects, arrays, booleans, null.
+
+```javascript
+{
+  "name": "Alice",        // String
+  "age": 25,              // Number
+  "isStudent": true,      // Boolean
+  "scores": [95, 88, 92], // Array
+  "address": null         // Null
+}
+```
+
+#### Problem 5: Parsing JSON
+**Problem:** Describe how to parse a JSON string into a JavaScript object.
+
+**Solution:**
+You can use the `JSON.parse()` method to parse a JSON string into a JavaScript object.
+
+```javascript
+const jsonString = '{"name": "Bob", "age": 28}';
+const parsedData = JSON.parse(jsonString);
+console.log(parsedData.name); // Output: Bob
+```
+
+#### Problem 6: Stringifying JSON
+**Problem:** Explain how to convert a JavaScript object into a JSON string.
+
+**Solution:**
+You can use the `JSON.stringify()` method to convert a JavaScript object into a JSON string.
+
+```javascript
+const data = { name: "Charlie", age: 35 };
+const jsonString = JSON.stringify(data);
+console.log(jsonString); // Output: '{"name":"Charlie","age":35}'
+```
+
+#### Problem 7: Working with JSON Objects
+**Problem:** Describe how to access and manipulate JSON objects in JavaScript.
+
+**Solution:**
+You can access JSON object properties using dot notation or bracket notation.
+
+```javascript
+const person = {
+  "name": "Eve",
+  "age": 22,
+  "city": "San Francisco"
+};
+
+console.log(person.name); // Output: Eve
+person.city = "Los Angeles"; // Modify a property
+```
+
+#### Problem 8: Working with JSON Arrays
+**Problem:** Explain how to work with JSON arrays in JavaScript.
+
+**Solution:**
+JSON arrays are ordered lists of values, and you can access array elements using their index.
+
+```javascript
+const colors = ["red", "green", "blue"];
+console.log(colors[0]); // Output: red
+colors.push("yellow"); // Add an element to the array
+```
+
+#### Problem 9: Setting Up a JSON Server
+**Problem:** Describe how to set up a simple JSON server to serve JSON data for a web application.
+
+**Solution:**
+You can use tools like JSON Server to create a fake REST API from a JSON file.
+
+```javascript
+// Install JSON Server globally
+npm install -g json-server
+
+// Create a JSON file (e.g., db.json)
+// Start JSON Server with the JSON file
+json-server --watch db.json
+```
+
+#### Problem 10: Making JSON Requests with PHP
+**Problem:** Explain how to make JSON requests to a server using PHP and receive JSON responses.
+
+**Solution:**
+In PHP, you can use the `json_encode()` function to convert data into JSON format and `json_decode()` to parse JSON data.
+
+```php
+// PHP server-side code
+$data = array("name" => "David", "age" => 28);
+header("Content-Type: application/json");
+echo json_encode($data);
+```
+
+#### Problem 11: Working with JSON in HTML
+**Problem:** Explain how to work with JSON data in an HTML document using JavaScript.
+
+**Solution:**
+You can use JavaScript to fetch JSON data and display it in an HTML document.
+
+```html
+<!-- HTML -->
+<div id="output"></div>
+
+<script>
+  // JavaScript
+  fetch("data.json")
+    .then((response) => response.json())
+    .then((data) => {
+      const outputDiv = document.getElementById("output");
+      outputDiv.textContent = `Name: ${data.name}, Age: ${data.age}`;
+    });
+</script>
+```
+
+#### Problem 12: Implementing JSONP for Cross-Domain Requests
+**Problem:** Describe how to implement JSONP (JSON with Padding) for making cross-domain requests in JavaScript.
+
+**Solution:**
+You can use JSONP to overcome cross-origin restrictions in web browsers.
+
+```javascript
+function handleResponse(data) {
+  console.log(data);
+}
+
+const script = document.createElement("script");
+script.src = "https://example.com/data?callback=handleResponse";
+document.body.appendChild(script);
+```
+
+#### Problem 13: Handling Invalid JSON Data
+**Problem:** Explain how to handle and gracefully recover from invalid JSON data in JavaScript.
+
+**Solution:**
+You can use a try-catch block to handle JSON parsing errors.
+
+```javascript
+try {
+  const invalidJson = "This is not valid JSON";
+  const parsedData = JSON.parse(invalidJson);
+} catch (error) {
+  console.error("JSON parsing error:", error.message);
+}
+```
+
+#### Problem 14: Fetching JSON Data from an API
+**Problem:** Describe how to fetch JSON data from a remote API using the Fetch API in JavaScript.
+
+**Solution:**
+You can use the Fetch API to make HTTP requests and retrieve JSON data from an API.
+
+```javascript
+fetch("https://api.example.com/data")
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
+```
+
+#### Problem 15: Validating JSON Data
+**Problem:** Explain how to validate JSON data to ensure it meets specific criteria in JavaScript.
+
+**Solution:**
+You can validate JSON data by checking its structure and values.
+
+```javascript
+const jsonData = {
+  name: "Alice",
+  age: 30,
+};
+
+if (typeof jsonData.name === "string" && jsonData.age >= 18) {
+  console.log("Valid JSON data");
+} else {
+  console.error("Invalid JSON data");
+}
+```
+
+#### Problem 16: Converting JSON to CSV
+**Problem:** Describe how to convert JSON data into a CSV (Comma-Separated Values) format in JavaScript.
+
+**Solution:**
+You can write custom code to convert JSON to CSV or use libraries like `json2csv`.
+
+```javascript
+const json2csv = require("json2csv").Parser;
+
+const jsonData = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 30 },
+];
+
+const jsonParser = new json2csv();
+const csvData = jsonParser.parse(jsonData);
+
+console.log(csvData);
+```
+
+#### Problem 17: Sorting JSON Data
+**Problem:** Explain how to sort JSON data based on a specific property in JavaScript.
+
+**Solution:**
+You can use the `Array.sort()` method to sort JSON data.
+
+```javascript
+const jsonData = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 30 },
+  { name: "Charlie", age: 22 },
+];
+
+jsonData.sort((a, b) => a.age - b.age);
+
+console.log(jsonData);
+```
+
+#### Problem 18: Filtering JSON Data
+**Problem:** Describe how to filter JSON data to retrieve specific elements based on certain criteria.
+
+**Solution:**
+You can use the `Array.filter()` method to filter JSON data.
+
+```javascript
+const jsonData = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 30 },
+  { name: "Charlie", age: 22 },
+];
+
+const filteredData = jsonData.filter((item) => item.age >= 25);
+
+console.log(filteredData);
+```
+
+#### Problem 19: Modifying JSON Data
+**Problem:** Explain how to modify JSON data by adding, updating, or removing properties.
+
+**Solution:**
+You can directly manipulate JSON objects in JavaScript.
+
+```javascript
+const jsonData = { name: "Eve", age: 28 };
+
+// Add a new property
+jsonData.city = "San Francisco";
+
+// Update an existing property
+jsonData.age = 29;
+
+// Remove a property
+delete jsonData.age;
+
+console.log(jsonData);
+```
+
+#### Problem 20: Combining JSON Objects
+**Problem:** Describe how to combine multiple JSON objects into a single object in JavaScript.
+
+**Solution:**
+You can use the `Object.assign()` method to merge JSON objects.
+
+```javascript
+const object1 = { a: 1, b: 2 };
+const object2 = { b: 3, c: 4 };
+const combinedObject = Object.assign({}, object1, object2);
+
+console.log(combinedObject);
+```
+
+#### Problem 21: Validating JSON Schema
+**Problem:** Explain how to validate JSON data against a specific JSON schema in JavaScript.
+
+**Solution:**
+You can use libraries like `ajv` to validate JSON data against a JSON schema.
+
+```javascript
+const Ajv = require("ajv");
+const ajv = new Ajv();
+
+const schema = {
+  type: "object",
+  properties: {
+    name: { type: "string" },
+    age: { type: "number" },
+  },
+  required: ["name", "age"],
+};
+
+const jsonData = { name: "Alice", age: 30 };
+
+const validate = ajv.compile(schema);
+const isValid = validate(jsonData);
+
+if (isValid) {
+  console.log("JSON data is valid");
+} else {
+  console.error("JSON data is invalid:", validate.errors);
+}
+```
+
+#### Problem 22: Pretty Printing JSON
+**Problem:** Describe how to format JSON data for human readability in JavaScript.
+
+**Solution:**
+You can use the `JSON.stringify()` method with spacing to pretty-print JSON.
+
+```javascript
+const jsonData = { name: "Eve", age: 28 };
+
+const prettyJson = JSON.stringify(jsonData, null, 2);
+
+console.log(prettyJson);
+```
+
+#### Problem 23: Parsing Dates in JSON
+**Problem:** Explain how to parse and serialize date values in JSON correctly.
+
+**Solution:**
+You can use custom functions or libraries like `date-fns` to handle date parsing and serialization.
+
+```javascript
+const date = new Date();
+const jsonData = { date: date.toISOString() };
+
+// Parse the date from JSON
+const parsedDate = new Date(jsonData.date);
+
+console.log(parsedDate);
+```
+
+#### Problem 24: Using JSON with Promises
+**Problem:** Describe how to work with JSON data using Promises in JavaScript.
+
+**Solution:**
+You can use Promises to fetch and process JSON data asynchronously.
+
+```javascript
+function fetchData() {
+  return fetch("https://api.example.com/data")
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+}
+
+fetchData().then((jsonData) => {
+  console.log(jsonData);
+});
+```
+
+#### Problem 25: Handling Nested JSON
+**Problem:** Explain how to work with nested JSON structures and access nested properties.
+
+**Solution:**
+You can access nested properties using dot notation or bracket notation.
+
+```javascript
+const jsonData = {
+  user: {
+    name: "Frank",
+    age: 35,
+  },
+};
+
+console.log(jsonData.user.name); // Output: Frank
+```
+
+#### Problem 26: Serializing Functions in JSON
+**Problem:** Describe how to serialize and deserialize JavaScript functions in JSON.
+
+**Solution:**
+You can't directly serialize functions in JSON. Instead, pass function names or use custom serialization and deserialization.
+
+```javascript
+// Serialize a function name
+const jsonData = { action: "myFunction" };
+
+// Deserialize and execute the function
+const actionFunction = window[jsonData.action];
+if (typeof actionFunction === "function") {
+  actionFunction();
+}
+```
+
+#### Problem 27: Generating JSON Data Randomly
+**Problem:** Explain how to generate random JSON data for testing and simulation purposes.
+
+**Solution:**
+You can use libraries like `faker.js` to generate random JSON data.
+
+```javascript
+const faker = require("faker");
+
+const randomData = {
+  name: faker.name.firstName(),
+  email: faker.internet.email(),
+  age: faker.datatype.number({ min: 18, max: 80 }),
+};
+
+console.log(randomData);
+```
+
+#### Problem 28: Parsing JSON from External Files
+**Problem:** Describe how to parse JSON data stored in external files using JavaScript.
+
+**Solution:**
+You can use the `fetch` API or other methods to load JSON data from external files.
+
+```javascript
+// Using fetch to load JSON data from a file
+fetch("data.json")
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error("Error loading JSON:", error);
+  });
+```
+
+#### Problem 29: Creating JSON-based Configurations
+**Problem:** Explain how to use JSON files for configuration settings in a JavaScript application.
+
+**Solution:**
+You can store configuration settings in a JSON file and read them into your application.
+
+```json
+// config.json
+{
+  "apiUrl": "https://api.example.com",
+  "apiKey": "your-api-key"
+}
+```
+
+```javascript
+// Read configuration from JSON file
+const config = require("./config.json");
+
+console.log(config.apiUrl);
+```
+
+#### Problem 30: Handling Large JSON Data Efficiently
+**Problem:** Describe strategies for handling large JSON data efficiently in JavaScript.
+
+**Solution:**
+You can use streaming or pagination techniques to handle large JSON data without loading it all at once.
+
+```javascript
+// Stream large JSON data
+const fs = require("fs");
+const readStream = fs.createReadStream("large-data.json");
+
+readStream.on("data", (chunk) => {
+  // Process each chunk of data
+});
+```
+
+## JS jquery methods
 ---
 
-### statements, syntax, variables, keywords, and operators
+1. **`$(document).ready()`**:
+   - Ensures that code within it is executed when the document is fully loaded.
+   - Example:
+     ```javascript
+     $(document).ready(function() {
+       // Your code here
+     });
+     ```
+
+2. **`$(selector).click()`**:
+   - Attaches a click event handler to the selected element(s).
+   - Example:
+     ```javascript
+     $("button").click(function() {
+       alert("Button clicked!");
+     });
+     ```
+
+3. **`$(selector).addClass()`**:
+   - Adds one or more CSS classes to the selected element(s).
+   - Example:
+     ```javascript
+     $("p").addClass("highlight");
+     ```
+
+4. **`$(selector).removeClass()`**:
+   - Removes one or more CSS classes from the selected element(s).
+   - Example:
+     ```javascript
+     $("p").removeClass("highlight");
+     ```
+
+5. **`$(selector).css()`**:
+   - Sets or retrieves CSS properties of the selected element(s).
+   - Example:
+     ```javascript
+     $("div").css("background-color", "yellow");
+     ```
+
+6. **`$(selector).fadeIn()`** and **`$(selector).fadeOut()`**:
+   - Animates the opacity of the selected element(s) to make them appear or disappear gradually.
+   - Example:
+     ```javascript
+     $("p").fadeIn();
+     $("p").fadeOut();
+     ```
+
+7. **`$(selector).html()`**:
+   - Sets or retrieves the HTML content of the selected element(s).
+   - Example:
+     ```javascript
+     $("div").html("<p>New content</p>");
+     ```
+
+8. **`$(selector).text()`**:
+   - Sets or retrieves the text content of the selected element(s).
+   - Example:
+     ```javascript
+     $("p").text("New text");
+     ```
+
+9. **`$(selector).append()`** and **`$(selector).prepend()`**:
+   - Adds content to the end or beginning of the selected element(s).
+   - Example:
+     ```javascript
+     $("ul").append("<li>New item</li>");
+     ```
+
+10. **`$(selector).on()`**:
+    - Attaches one or more event handlers to selected elements.
+    - Example:
+      ```javascript
+      $("p").on("click", function() {
+        alert("Paragraph clicked!");
+      });
+      ```
+
+### serializeArray, serialize,FormData, JSON Data, Plain Text Data, XML Data, & Custom Data
 ---
+
+
+#### Problem 1: Using `serializeArray` to Encode Form Data
+**Problem:** Explain how to use the `serializeArray` method in jQuery to encode form data for an AJAX request.
+
+**Solution:**
+You can use `serializeArray` to serialize form data into an array of objects, which can then be used in an AJAX request.
+
+```javascript
+// HTML form
+<form id="myForm">
+  <input type="text" name="name" value="John">
+  <input type="email" name="email" value="john@example.com">
+</form>
+
+// JavaScript
+const formData = $("#myForm").serializeArray();
+console.log(formData);
+```
+
+#### Problem 2: Serializing Form Data with `serialize`
+**Problem:** Describe how to use the `serialize` method in jQuery to serialize form data as a URL-encoded string.
+
+**Solution:**
+You can use `serialize` to encode form data as a URL-encoded string for use in an AJAX request.
+
+```javascript
+// HTML form
+<form id="myForm">
+  <input type="text" name="name" value="Alice">
+  <input type="email" name="email" value="alice@example.com">
+</form>
+
+// JavaScript
+const formData = $("#myForm").serialize();
+console.log(formData);
+```
+
+#### Problem 3: Sending Form Data with `FormData`
+**Problem:** Explain how to use the `FormData` object to send form data in an AJAX request.
+
+**Solution:**
+You can use `FormData` to construct a set of key/value pairs representing form fields and their values.
+
+```javascript
+// HTML form
+<form id="myForm">
+  <input type="text" name="name" value="Bob">
+  <input type="email" name="email" value="bob@example.com">
+</form>
+
+// JavaScript
+const formData = new FormData(document.getElementById("myForm"));
+
+$.ajax({
+  url: "/submit",
+  type: "POST",
+  data: formData,
+  processData: false, // Prevent jQuery from processing the data
+  contentType: false, // Let the server handle the content type
+  success: function (response) {
+    console.log("Success:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 4: Sending JSON Data in an AJAX Request
+**Problem:** Describe how to send JSON data in the request body of an AJAX POST request.
+
+**Solution:**
+You can use the `JSON.stringify` method to convert a JavaScript object to a JSON string and send it in an AJAX request.
+
+```javascript
+const jsonData = { name: "Charlie", age: 30 };
+
+$.ajax({
+  url: "/submit",
+  type: "POST",
+  data: JSON.stringify(jsonData),
+  contentType: "application/json", // Set the content type to JSON
+  success: function (response) {
+    console.log("Success:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 5: Receiving Plain Text Data in an AJAX Response
+**Problem:** Explain how to receive plain text data in the response of an AJAX request.
+
+**Solution:**
+You can specify the `dataType` option as "text" to receive plain text data.
+
+```javascript
+$.ajax({
+  url: "/data",
+  type: "GET",
+  dataType: "text", // Receive plain text data
+  success: function (response) {
+    console.log("Text Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 6: Receiving XML Data in an AJAX Response
+**Problem:** Describe how to receive XML data in the response of an AJAX request.
+
+**Solution:**
+You can specify the `dataType` option as "xml" to receive XML data.
+
+```javascript
+$.ajax({
+  url: "/data.xml",
+  type: "GET",
+  dataType: "xml", // Receive XML data
+  success: function (response) {
+    console.log("XML Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 7: Custom Data Serialization in AJAX Requests
+**Problem:** Explain how to customize data serialization in AJAX requests, e.g., sending data in a custom format.
+
+**Solution:**
+You can use the `dataFilter` option to specify a function that processes the data before it is passed to the success handler.
+
+```javascript
+$.ajax({
+  url: "/data",
+  type: "GET",
+  data: { name: "David", age: 25 },
+  dataFilter: function (data, dataType) {
+    // Customize data serialization here
+    return "Customized: " + data;
+  },
+  success: function (response) {
+    console.log("Customized Data:",
+
+ response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 8: Sending and Receiving Binary Data
+**Problem:** Describe how to send and receive binary data in an AJAX request.
+
+**Solution:**
+You can use the `dataType` option as "binary" to handle binary data.
+
+```javascript
+$.ajax({
+  url: "/binary-data",
+  type: "GET",
+  dataType: "binary", // Receive binary data
+  processData: false, // Prevent jQuery from processing the data
+  success: function (response) {
+    // Process binary data here
+    console.log("Binary Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 9: Handling AJAX Errors
+**Problem:** Explain how to handle AJAX errors, such as network failures or server errors.
+
+**Solution:**
+You can use the `error` callback to handle AJAX errors.
+
+```javascript
+$.ajax({
+  url: "/data",
+  type: "GET",
+  success: function (response) {
+    console.log("Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error.statusText);
+  },
+});
+```
+
+#### Problem 10: Handling AJAX Timeouts
+**Problem:** Describe how to handle AJAX timeouts when a request takes too long to complete.
+
+**Solution:**
+You can set the `timeout` option to specify the maximum time for a request to complete and handle timeouts in the `error` callback.
+
+```javascript
+$.ajax({
+  url: "/slow-api",
+  type: "GET",
+  timeout: 5000, // Set a 5-second timeout
+  success: function (response) {
+    console.log("Data:", response);
+  },
+  error: function (error) {
+    if (error.statusText === "timeout") {
+      console.error("Request timed out");
+    } else {
+      console.error("Error:", error.statusText);
+    }
+  },
+});
+```
+
+#### Problem 11: Sending Cookies in an AJAX Request
+**Problem:** Explain how to send cookies in an AJAX request using jQuery.
+
+**Solution:**
+You can set the `xhrFields` option to include cookies in the request.
+
+```javascript
+$.ajax({
+  url: "/data",
+  type: "GET",
+  xhrFields: {
+    withCredentials: true, // Include cookies in the request
+  },
+  success: function (response) {
+    console.log("Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 12: Handling AJAX Success with Deferred Objects
+**Problem:** Describe how to handle AJAX success using jQuery Deferred objects.
+
+**Solution:**
+You can use Deferred objects to handle the success and failure of asynchronous operations.
+
+```javascript
+const ajaxRequest = $.ajax({
+  url: "/data",
+  type: "GET",
+});
+
+ajaxRequest.done(function (response) {
+  console.log("Success:", response);
+});
+
+ajaxRequest.fail(function (error) {
+  console.error("Error:", error);
+});
+```
+
+#### Problem 13: Uploading Files with AJAX Using `FormData`
+**Problem:** Explain how to upload files with AJAX using the `FormData` object in jQuery.
+
+**Solution:**
+You can use `FormData` to upload files in an AJAX request.
+
+```javascript
+// HTML form with file input
+<form id="fileForm">
+  <input type="file" name="file" id="fileInput">
+</form>
+
+// JavaScript
+const fileInput = document.getElementById("fileInput");
+const file = fileInput.files[0];
+
+const formData = new FormData();
+formData.append("file", file);
+
+$.ajax({
+  url: "/upload",
+  type: "POST",
+  data: formData,
+  contentType: false, // Let the server handle the content type
+  processData: false, // Prevent jQuery from processing the data
+  success: function (response) {
+    console.log("File uploaded:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 14: Handling Cross-Origin AJAX Requests
+**Problem:** Explain how to handle cross-origin AJAX requests using jQuery.
+
+**Solution:**
+You can use the `crossDomain` option and set the server's CORS headers to allow cross-origin requests.
+
+```javascript
+$.ajax({
+  url: "https://example.com/api/data",
+  type: "GET",
+  crossDomain: true, // Enable cross-origin requests
+  success: function (response) {
+    console.log("Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 15: Sending Custom Headers in AJAX Requests
+**Problem:** Describe how to send custom headers in AJAX requests using jQuery.
+
+**Solution:**
+You can use the `headers` option to send custom headers in the request.
+
+```javascript
+$.ajax({
+  url: "/data",
+  type: "GET",
+  headers: {
+    Authorization: "Bearer Token123", // Custom header
+  },
+  success: function (response) {
+    console.log("Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 16: Handling Redirects in AJAX Requests
+**Problem:** Explain how to handle redirects in AJAX requests using jQuery.
+
+**Solution:**
+You can use the `xhr` object's `getResponseHeader` method to check the response headers and handle redirects.
+
+```javascript
+$.ajax({
+  url: "/redirect",
+  type: "GET",
+  success: function (response, textStatus, xhr) {
+    if (xhr.getResponseHeader("X-Redirected") === "true") {
+      console.log("Request was redirected.");
+    } else {
+      console.log("Data:", response);
+    }
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 17: Using Promises with AJAX
+**Problem:** Describe how to use Promises with jQuery AJAX requests.
+
+**Solution:**
+You can use the `$.ajax` function with `.then()` and `.catch()` to work with Promises.
+
+```javascript
+$.ajax({
+  url: "/data",
+  type: "GET",
+})
+  .then(function (response) {
+    console.log("Data:", response);
+  })
+  .catch(function (error) {
+    console.error("Error:", error);
+  });
+```
+
+#### Problem 18: Handling AJAX Caching
+**Problem:** Explain how to handle AJAX caching in jQuery to prevent duplicate requests.
+
+**Solution:**
+You can use the `cache` option to control whether the request is cached.
+
+```javascript
+$.ajax({
+  url: "/data",
+  type: "GET",
+  cache: false, // Disable caching
+  success: function (response) {
+    console.log("Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 19: Sending and Receiving Binary Data with `Blob`
+**Problem:** Describe how to send and receive binary data using `Blob` in jQuery.
+
+**Solution:**
+You can use the `Blob` object to handle binary data in AJAX requests.
+
+```javascript
+$.ajax({
+  url: "/binary-data",
+  type: "GET",
+  responseType: "blob", // Receive binary data as a Blob
+  success: function (response) {
+    // Process binary data here
+    console.log("Binary Data:", response);
+  },
+  error: function (error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+#### Problem 20: Handling Concurrent AJAX Requests
+**Problem:** Explain how to manage concurrent AJAX requests using jQuery, such as ensuring one request finishes before another starts.
+
+**Solution:**
+You can use `.then()` and `.catch()` to chain AJAX requests and control their execution order.
+
+```javascript
+$.ajax({
+  url: "/first",
+  type: "GET",
+})
+  .then(function (response1) {
+    console.log("First Request:", response1);
+    return $.ajax({
+      url: "/second",
+      type: "GET",
+    });
+  })
+  .then(function (response2) {
+    console.log("Second Request:", response2);
+  })
+  .catch(function (error) {
+    console.error("Error:", error);
+  });
+```
 
 ### statements, syntax, variables, keywords, and operators
 ---
