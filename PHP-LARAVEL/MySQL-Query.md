@@ -1938,6 +1938,15 @@ VALUES
    - Maximum Length: Up to 4,294,967,295 bytes (varies with character set).
    - Example: Storing very long textual data, like books or legal documents.
 
+For example, in ASCII:
+
+The letter 'A' is represented as 0x41 (hexadecimal) or 65 (decimal), which is one byte.
+
+The digit '1' is represented as 0x31 (hexadecimal) or 49 (decimal), also one byte.
+
+In ASCII, each character is assigned a unique numeric value within the range of 0 to 127 (7 bits), and most of them can be represented with a single byte.
+
+
 Now, let's create a sample table with all these string data types and insert data using a single query:
 
 ```sql
@@ -1987,7 +1996,8 @@ VALUES
 
 
 
-
+## RECAP OF MYSQL
+---
 ###  To create Database.
 ```bash
 CREATE DATABASE Database_name;
@@ -1998,7 +2008,7 @@ CREATE DATABASE Database_name;
     CREATE TABLE worker_info (
     id INT NOT NULL PRIMARY KEY AUTO_INCREAMENT,
     name VARCHAR(50) ,
-    birth_date DATE CHECK(birth_date <= '200-02-30'), // This field must be above the check time.
+    birth_date DATE CHECK(birth_date <= '2023-02-30'), // This field must be above the check time.
     phone VARCHAR(15), 
     gender VARCHAR(1),
     description text
@@ -2030,20 +2040,21 @@ To Query by SQL Command
 5. SELECT name, price,Quantity FROM product WHERE Quantity BETWEEN 15 AND 25
 6. SELECT name, price,Quantity FROM product WHERE price NOT BETWEEN 700 AND 1500
 7. SELECT name, price,Quantity FROM product WHERE name LIKE "ma%___";
-8. SELECT name, price,Quantity FROM product WHERE price NOT LIKE "%5%0";
-9. SELECT name, price,Quantity FROM product WHERE price LIKE "%3%0" // 430,350,380
+
+8. SELECT name, price,Quantity FROM product WHERE price NOT LIKE "%5%0"; //  "50" or "150," or '15340' as both of these prices have "5" followed by "0" in them.
+
+9. SELECT name, price,Quantity FROM product WHERE price LIKE "%3%0" // 430, or 350 or 380
 ```
 * Regular Expression in SQL Query.
  ^, $, | , ""
 ```bash
-1. SELECT * FROM `product` WHERE name REGEXP "^t|t$" 
-and other 
+1. SELECT * FROM `product` WHERE name REGEXP "^t|t$"  //  Tomato, potato, table , Blanket, T-shirt
 
-REGEXP "^[st]h" // starting must be s/t with "h"
- "^b[nai]" // starting must be "b" with n/a/i 
-"b[nai]$" // finishing must be "b" with n/a/i
-"an$" // Ending Must be  with "an"
-"^an" // finishing must be with "an"
+REGEXP "^[st]h" // starting must be s/t with "h"  // thin, shell, shadow
+ "^b[nai]" // starting must be "b" with n/a/i // Banana
+"b[nai]$" // Ending must be "b" with n/a/i // Banana, Pineapple, Magenta
+"an$" // Ending Must be  with "an" // Japan, Ban, Khan
+"^an" // Starting must be with "an" // Answer, Ant
 ```
 * ORDER BY , DISTINCT, NULL, NOT NULL
 ```bash
