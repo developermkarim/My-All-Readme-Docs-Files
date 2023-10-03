@@ -115,7 +115,9 @@ Grant SELECT and INSERT privileges on the `employees` table in the `company` dat
 
 ```sql
 GRANT SELECT, INSERT ON company.employees TO 'john'@'localhost';
+GRANT SELECT, INSERT ON mydatabase.users TO 'webuser'@'codewithmakim.com';
 ```
+the user webuser from codewithmakim.com would have permission to read data from and insert data into the users table in the mydatabase database.
 
 **REVOKE Statement:**
 
@@ -218,7 +220,12 @@ Certainly! Below are some advanced MySQL `SELECT` statements with various condit
    ```sql
    SELECT customers.customer_name, orders.order_date
    FROM customers
-   FULL OUTER JOIN orders ON customers.customer_id = orders.customer_id;
+   LEFT JOIN orders ON customers.customer_id = orders.customer_id
+   UNION
+      SELECT customers.customer_name, orders.order_date
+   FROM customers
+   RIGHT JOIN orders ON customers.customer_id = orders.customer_id
+   ;
    ```
 
 **5. SELF JOIN:**
@@ -246,7 +253,7 @@ Certainly! Below are some advanced MySQL `SELECT` statements with various condit
    SELECT customer_name
    FROM customers
    WHERE EXISTS (
-       SELECT 1
+       SELECT *
        FROM orders
        WHERE customers.customer_id = orders.customer_id
    );
