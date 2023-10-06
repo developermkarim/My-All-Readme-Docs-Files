@@ -72,10 +72,13 @@ SQL (Structured Query Language) is a powerful domain-specific language used for 
 
 9. **ALTER INDEX**: Modifies an existing index.
 
-   ```sql
-   ALTER INDEX index_name
-   RENAME TO new_index_name;
-   ```
+```sql
+-- First, drop the existing index
+DROP INDEX name_index ON table_name;
+
+-- Then, create a new index with the desired name
+CREATE INDEX new_name_index ON table_name (column_name);
+```
 
 10. **TRUNCATE TABLE**: Removes all rows from a table but retains the table structure.
 
