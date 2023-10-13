@@ -3120,6 +3120,50 @@ if (preg_match($pattern, $email)) {
       ```php
       $pattern = '/\.(jpg|jpeg|png|gif|pdf)$/i';
       ```
+Certainly! `preg_match()`, `preg_match_all()`, and `preg_replace()` are PHP functions that are used for working with regular expressions.
+
+21. **preg_match()**:
+
+   `preg_match()` is used to perform a regular expression match on a string. It returns `true` if the pattern matches anywhere in the string, and `false` if it doesn't. You can also capture matched portions of the string using capture groups.
+
+   ```php
+   $pattern = '/apple/';
+   $text = 'I love apples and oranges.';
+
+   if (preg_match($pattern, $text)) {
+       echo 'Match found!';
+   } else {
+       echo 'No match found.';
+   }
+   ```
+
+22. **preg_match_all()**:
+
+   `preg_match_all()` is used to find all matches of a pattern in a string. It returns the number of matches found and stores all matches in an array.
+
+   ```php
+   $pattern = '/apple/';
+   $text = 'I love apples and applesauce.';
+
+   if (preg_match_all($pattern, $text, $matches)) {
+       echo 'Matches found: ' . count($matches[0]);
+   } else {
+       echo 'No matches found.';
+   }
+   ```
+
+23. **preg_replace()**:
+
+   `preg_replace()` is used to perform a regular expression search and replace on a string. It allows you to find a pattern in the string and replace it with another string.
+
+   ```php
+   $pattern = '/apple/';
+   $replacement = 'banana';
+   $text = 'I love apples and apple pie.';
+
+   $newText = preg_replace($pattern, $replacement, $text);
+   echo $newText;
+   ```
 
 #### **Explain the RegEx**
 ---
@@ -3254,3 +3298,766 @@ Explanation:
 /<[^>]*>/
 ```
    - `<[^>]*>`: Matches HTML tags within the input.
+
+### **PHP FORM WITH VALIDATE**
+---
+Certainly! PHP provides a variety of `FILTER_VALIDATE_*` filter constants that you can use for filtering and validating different types of data. Here are some of the commonly used `FILTER_VALIDATE_*` constants:
+
+1. `FILTER_VALIDATE_EMAIL`: Validates an email address.
+2. `FILTER_VALIDATE_URL`: Validates a URL.
+3. `FILTER_VALIDATE_IP`: Validates an IP address.
+4. `FILTER_VALIDATE_INT`: Validates an integer.
+5. `FILTER_VALIDATE_FLOAT`: Validates a floating-point number.
+6. `FILTER_VALIDATE_BOOLEAN`: Validates a boolean value (true or false).
+7. `FILTER_VALIDATE_REGEXP`: Validates a string against a regular expression.
+
+Here's how you can use these constants for filtering and validation:
+
+```php
+<?php
+$input_data = array(
+    "email" => "example@example.com",
+    "url" => "https://www.example.com",
+    "ip" => "192.168.1.1",
+    "integer" => "42",
+    "float" => "3.14",
+    "boolean" => "true",
+    "custom_string" => "Hello, World!"
+);
+
+foreach ($input_data as $key => $value) {
+    switch ($key) {
+        case 'email':
+            if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                echo "Valid email address: $value<br>";
+            } else {
+                echo "Invalid email address: $value<br>";
+            }
+            break;
+
+        case 'url':
+            if (filter_var($value, FILTER_VALIDATE_URL)) {
+                echo "Valid URL: $value<br>";
+            } else {
+                echo "Invalid URL: $value<br>";
+            }
+            break;
+
+        case 'ip':
+            if (filter_var($value, FILTER_VALIDATE_IP)) {
+                echo "Valid IP address: $value<br>";
+            } else {
+                echo "Invalid IP address: $value<br>";
+            }
+            break;
+
+        case 'integer':
+            if (filter_var($value, FILTER_VALIDATE_INT)) {
+                echo "Valid integer: $value<br>";
+            } else {
+                echo "Invalid integer: $value<br>";
+            }
+            break;
+
+        case 'float':
+            if (filter_var($value, FILTER_VALIDATE_FLOAT)) {
+                echo "Valid floating-point number: $value<br>";
+            } else {
+                echo "Invalid floating-point number: $value<br>";
+            }
+            break;
+
+        case 'boolean':
+            if (filter_var($value, FILTER_VALIDATE_BOOLEAN)) {
+                echo "Valid boolean value: $value<br>";
+            } else {
+                echo "Invalid boolean value: $value<br>";
+            }
+            break;
+
+        case 'custom_string':
+            $pattern = '/^Hello,/';
+            if (filter_var($value, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => $pattern))) !== false) {
+                echo "Valid string (matches regex): $value<br>";
+            } else {
+                echo "Invalid string (does not match regex): $value<br>";
+            }
+            break;
+
+        default:
+            echo "Unknown input: $key<br>";
+    }
+}
+?>
+
+```
+
+## **PHP OOPS**
+---
+
+**1. PHP OOP (Object-Oriented Programming):**
+Object-Oriented Programming is a programming paradigm that is widely used in PHP to create organized and reusable code. It's based on the concept of "objects," which are instances of classes. In PHP, OOP helps in structuring your code and making it more maintainable.
+
+**2. PHP Classes/Objects:**
+In PHP, a class is a blueprint or template for creating objects. Objects are instances of classes. Here's an example of a simple class and object in PHP:
+
+```php
+class Car {
+    public $brand;
+    public $model;
+
+    function startEngine() {
+        echo "Engine started.";
+    }
+}
+
+$myCar = new Car();
+$myCar->brand = "Toyota";
+$myCar->model = "Camry";
+$myCar->startEngine();
+```
+
+In this example, `Car` is a class, and `$myCar` is an object created from that class.
+
+**3. PHP Constructor:**
+A constructor is a special method in a class that is automatically called when an object is created. It's used to initialize object properties. Here's how you define a constructor in PHP:
+
+```php
+class Car {
+    public $brand;
+    public $model;
+
+    function __construct($brand, $model) {
+        $this->brand = $brand;
+        $this->model = $model;
+    }
+}
+
+$myCar = new Car("Toyota", "Camry");
+```
+
+**4. PHP Destructor:**
+A destructor is a special method that is called when an object is destroyed or goes out of scope. It's used for cleanup tasks. Here's how you define a destructor in PHP:
+
+```php
+class Car {
+    public $brand;
+    public $model;
+
+    function __construct($brand, $model) {
+        $this->brand = $brand;
+        $this->model = $model;
+    }
+
+    function __destruct() {
+        echo "Car object destroyed.";
+    }
+}
+
+$myCar = new Car("Toyota", "Camry");
+unset($myCar); // This will trigger the destructor.
+```
+
+**5. PHP Access Modifiers:**
+Access modifiers control the visibility and accessibility of class properties and methods. PHP supports three main access modifiers:
+
+- `public`: The property or method is accessible from anywhere.
+- `protected`: The property or method is accessible within the class and its subclasses.
+- `private`: The property or method is only accessible within the class.
+
+Here's an example:
+
+```php
+class MyClass {
+    public $publicVar;
+    protected $protectedVar;
+    private $privateVar;
+
+    public function publicMethod() {
+        // Accessible from anywhere
+    }
+
+    protected function protectedMethod() {
+        // Accessible within the class and subclasses
+    }
+
+    private function privateMethod() {
+        // Accessible only within the class
+    }
+}
+```
+
+Certainly, let's continue exploring Object-Oriented Programming (OOP) concepts in PHP, focusing on inheritance and constants.
+
+**1. Inheritance in PHP:**
+Inheritance is a fundamental concept in OOP that allows you to create a new class based on an existing one. The new class inherits properties and methods from the parent class. In PHP, you can achieve inheritance using the `extends` keyword. Here's an example:
+
+```php
+class Vehicle {
+    protected $brand;
+
+    public function setBrand($brand) {
+        $this->brand = $brand;
+    }
+}
+
+class Car extends Vehicle {
+    private $model;
+
+    public function setModel($model) {
+        $this->model = $model;
+    }
+
+    public function getDetails() {
+        return "Brand: $this->brand, Model: $this->model";
+    }
+}
+
+$myCar = new Car();
+$myCar->setBrand("Toyota");
+$myCar->setModel("Camry");
+echo $myCar->getDetails();
+```
+
+In this example, the `Car` class extends the `Vehicle` class, inheriting the `brand` property and the `setBrand` method. It also defines its own property (`model`) and methods.
+
+**2. OOP Constants in PHP:**
+In PHP, constants are used to define values that cannot be changed once they are set. Constants can be useful for defining configuration settings or other values that should remain constant throughout the execution of your script. You can define class constants using the `const` keyword within a class. Here's an example:
+
+```php
+class MathOperations {
+    const PI = 3.14159;
+    const EULER = 2.71828;
+
+    public function calculateCircleArea($radius) {
+        return self::PI * $radius * $radius;
+    }
+}
+
+echo MathOperations::PI; // Accessing the constant directly
+$calculator = new MathOperations();
+echo $calculator::EULER; // Accessing the constant through an object
+
+$circleArea = $calculator->calculateCircleArea(5);
+```
+
+In this example, we've defined two constants, `PI` and `EULER`, within the `MathOperations` class. You can access these constants using the `::` operator.
+
+Certainly, let's delve deeper into various aspects of PHP Object-Oriented Programming (OOP) and provide more detailed explanations along with complex professional code examples for different OOP concepts. We'll cover classes, objects, inheritance, encapsulation, and abstraction.
+
+**1. Classes and Objects:**
+A class is a blueprint for creating objects. It defines properties (variables) and methods (functions). Here's a detailed example:
+
+```php
+class Person {
+    private $name;
+    private $age;
+
+    public function __construct($name, $age) {
+        $this->name = $name;
+        $this->age = $age;
+    }
+
+    public function greet() {
+        return "Hello, I'm {$this->name} and I'm {$this->age} years old.";
+    }
+}
+
+$john = new Person("John", 30);
+echo $john->greet();
+```
+
+In this example, we've defined a `Person` class with properties and a constructor method. We create a `Person` object, `$john`, and call the `greet` method.
+
+**2. Inheritance:**
+Inheritance allows you to create a new class based on an existing one. Here's an extended example:
+
+```php
+class Student extends Person {
+    private $studentID;
+
+    public function __construct($name, $age, $studentID) {
+        parent::__construct($name, $age);
+        $this->studentID = $studentID;
+    }
+
+    public function study() {
+        return "{$this->name} is studying with student ID {$this->studentID}.";
+    }
+}
+
+$jane = new Student("Jane", 25, "S12345");
+echo $jane->greet();
+echo $jane->study();
+```
+
+In this case, the `Student` class inherits from the `Person` class and adds its own properties and methods.
+
+**3. Encapsulation:**
+Encapsulation is about restricting access to certain parts of an object. Here's an example using encapsulation:
+
+```php
+class BankAccount {
+    private $balance = 0;
+
+    public function deposit($amount) {
+        if ($amount > 0) {
+            $this->balance += $amount;
+        }
+    }
+
+    public function getBalance() {
+        return $this->balance;
+    }
+}
+
+$account = new BankAccount();
+$account->deposit(100);
+echo "Current balance: $" . $account->getBalance();
+```
+
+In this code, the `balance` property is private, and access to it is controlled through the `deposit` and `getBalance` methods.
+
+**4. Abstraction:**
+Abstraction involves defining the structure of a class but not its implementation. Here's an example using abstract classes and methods:
+
+```php
+abstract class Shape {
+    abstract public function getArea();
+}
+
+class Circle extends Shape {
+    private $radius;
+
+    public function __construct($radius) {
+        $this->radius = $radius;
+    }
+
+    public function getArea() {
+        return pi() * pow($this->radius, 2);
+    }
+}
+
+$circle = new Circle(5);
+echo "Circle Area: " . $circle->getArea();
+```
+
+In this example, `Shape` is an abstract class with an abstract method `getArea`, and `Circle` is a concrete class that extends `Shape` and implements `getArea`.
+
+Certainly, let's explore advanced Object-Oriented Programming (OOP) concepts in PHP with detailed explanations and examples.
+
+**1. Polymorphism:**
+Polymorphism allows objects of different classes to be treated as objects of a common base class. This can be achieved through method overriding. Here's an example:
+
+```php
+class Animal {
+    public function makeSound() {
+        return "Some generic sound";
+    }
+}
+
+class Dog extends Animal {
+    public function makeSound() {
+        return "Bark";
+    }
+}
+
+class Cat extends Animal {
+    public function makeSound() {
+        return "Meow";
+    }
+}
+
+$animals = [new Dog(), new Cat()];
+foreach ($animals as $animal) {
+    echo $animal->makeSound() . PHP_EOL;
+}
+```
+
+In this example, `Animal` is the base class, and `Dog` and `Cat` are derived classes. They override the `makeSound` method to provide their own behavior.
+
+**2. Interfaces:**
+Interfaces define a contract for classes, specifying which methods must be implemented. Here's an example of using an interface:
+
+```php
+interface Shape {
+    public function calculateArea();
+}
+
+class Circle implements Shape {
+    private $radius;
+
+    public function __construct($radius) {
+        $this->radius = $radius;
+    }
+
+    public function calculateArea() {
+        return pi() * pow($this->radius, 2);
+    }
+}
+
+$circle = new Circle(5);
+echo "Circle Area: " . $circle->calculateArea();
+```
+
+In this code, the `Shape` interface defines the `calculateArea` method that the `Circle` class must implement.
+
+**3. Traits:**
+Traits are a way to reuse methods in multiple classes. They're like code snippets that can be "included" in multiple classes. Here's an example:
+
+```php
+trait Loggable {
+    public function log($message) {
+        echo "Logged: $message";
+    }
+}
+
+class User {
+    use Loggable;
+}
+
+$user = new User();
+$user->log("User logged in");
+```
+
+In this example, the `Loggable` trait provides a `log` method, and the `User` class uses the trait to gain that method.
+
+**4. Abstract Classes:**
+Abstract classes are classes that cannot be instantiated and are used as a blueprint for other classes. Here's an example:
+
+```php
+abstract class DatabaseConnection {
+    abstract public function connect();
+}
+
+class MySqlConnection extends DatabaseConnection {
+    public function connect() {
+        return "Connected to MySQL";
+    }
+}
+
+$db = new MySqlConnection();
+echo $db->connect();
+```
+
+In this code, `DatabaseConnection` is an abstract class with an abstract `connect` method. The `MySqlConnection` class extends it and provides the implementation for the `connect` method.
+
+Certainly! Below, I'll provide a complete example of an abstract class and an interface in PHP and then explain the key differences between them.
+
+**1. Abstract Class:**
+An abstract class is a class that cannot be instantiated and may contain abstract methods that are meant to be implemented in derived (child) classes. Here's your example with additional explanations:
+
+```php
+<?php
+abstract class ParentClass {
+    // Abstract methods to be implemented by child classes
+    abstract public function someMethod1();
+    abstract public function someMethod2($name, $color);
+    abstract public function someMethod3() : string;
+
+    // Regular method with implementation
+    public function commonMethod() {
+        return "This is a common method in the abstract class.";
+    }
+}
+
+// Child class that extends the abstract class
+class ChildClass extends ParentClass {
+    public function someMethod1() {
+        return "Implemented someMethod1";
+    }
+
+    public function someMethod2($name, $color) {
+        return "Implemented someMethod2 with $name and $color";
+    }
+
+    public function someMethod3(): string {
+        return "Implemented someMethod3";
+    }
+}
+
+// Instantiate the child class
+$child = new ChildClass();
+
+// Call the abstract methods and common method
+echo $child->someMethod1() . "\n";
+echo $child->someMethod2("Apple", "Red") . "\n";
+echo $child->someMethod3() . "\n";
+echo $child->commonMethod() . "\n";
+?>
+```
+**Advanced Type Example Of abstract**
+
+```php
+// Abstract class with abstract and non-abstract methods
+abstract class Vehicle {
+    protected $fuelType;
+    protected $numWheels;
+
+    public function __construct($fuelType, $numWheels) {
+        $this->fuelType = $fuelType;
+        $this->numWheels = $numWheels;
+    }
+
+    // Abstract method to calculate the mileage
+    abstract public function calculateMileage();
+
+    // Non-abstract method
+    public function getDetails() {
+        return "Fuel Type: $this->fuelType, Number of Wheels: $this->numWheels";
+    }
+}
+
+// Concrete classes that extend the abstract class
+class Car extends Vehicle {
+    private $brand;
+
+    public function __construct($fuelType, $brand) {
+        parent::__construct($fuelType, 4);
+        $this->brand = $brand;
+    }
+
+    public function calculateMileage() {
+        // In a real application, you'd calculate mileage based on various factors
+        return "Mileage of the $this->brand car is 30 miles per gallon.";
+    }
+}
+
+class Motorcycle extends Vehicle {
+    private $make;
+
+    public function __construct($fuelType, $make) {
+        parent::__construct($fuelType, 2);
+        $this->make = $make;
+    }
+
+    public function calculateMileage() {
+        // In a real application, you'd calculate mileage based on various factors
+        return "Mileage of the $this->make motorcycle is 50 miles per gallon.";
+    }
+}
+
+// Instantiate objects and demonstrate abstract class usage
+$car = new Car("Gasoline", "Toyota");
+$motorcycle = new Motorcycle("Petrol", "Harley-Davidson");
+
+echo "Car Details: " . $car->getDetails() . "<br>";
+echo $car->calculateMileage() . "<br><br>";
+
+echo "Motorcycle Details: " . $motorcycle->getDetails() . "<br>";
+echo $motorcycle->calculateMileage();
+?>
+```
+
+In this example, we have an abstract class `Vehicle` with abstract and non-abstract methods. Two concrete classes, `Car` and `Motorcycle`, extend the abstract class and provide their own implementations of the `calculateMileage()` method. The example also demonstrates constructor usage and object instantiation. It represents a simplified model of a vehicle hierarchy in a professional PHP code style.
+
+**2. Interface:**
+An interface is a contract specifying a set of methods that a class must implement. It does not provide any method implementations. Here's an example:
+
+```php
+<?php
+interface MyInterface {
+    public function method1();
+    public function method2($param);
+}
+
+// Class implementing the interface
+class MyClass implements MyInterface {
+    public function method1() {
+        return "Implemented method1";
+    }
+
+    public function method2($param) {
+        return "Implemented method2 with $param";
+    }
+}
+
+// Instantiate the class
+$myObject = new MyClass();
+
+// Call the methods
+echo $myObject->method1() . "\n";
+echo $myObject->method2("Hello") . "\n";
+?>
+```
+
+**Difference between Abstract Class and Interface:**
+
+1. **Abstract Class:**
+   - Can have both abstract and regular (concrete) methods with implementations.
+   - Can have properties (variables).
+   - You can use an abstract class to provide some common functionality.
+   - A class can extend only one abstract class.
+
+2. **Interface:**
+   - Contains only method signatures (no method implementations).
+   - Cannot have properties.
+   - Used to define a contract that classes must adhere to.
+   - A class can implement multiple interfaces.
+
+In summary, abstract classes allow you to define a base class with some common methods and properties while also forcing derived classes to implement certain methods. Interfaces, on the other hand, define a contract of methods that implementing classes must provide but do not allow for method implementation or properties. When deciding between using an abstract class or an interface, consider the specific needs of your project and whether you want to provide some default behavior in the base class or just define a contract for implementing classes.
+
+
+Certainly, let's explore advanced-level PHP concepts, including Traits, Static Methods, Static Properties, Namespaces, and Iterables, with detailed information and examples.
+
+**1. PHP Traits:**
+Traits allow you to reuse methods in multiple classes without inheritance. Traits are like code snippets that can be "included" in classes. Here's an advanced example:
+
+```php
+trait Logging {
+    public function log($message) {
+        echo "Logged: $message";
+    }
+}
+
+class User {
+    use Logging;
+
+    public function performAction() {
+        $this->log("Performed an action");
+    }
+}
+
+$user = new User();
+$user->performAction(); // Calls the log method from the trait
+```
+
+In this example, the `Logging` trait provides a `log` method that the `User` class uses.
+
+**2. PHP Static Methods:**
+Static methods belong to the class, not an instance. They can be called on the class itself. Here's an advanced example:
+
+```php
+class MathUtils {
+    public static function add($a, $b) {
+        return $a + $b;
+    }
+}
+
+$result = MathUtils::add(5, 3); // Call the static method
+```
+
+Static methods are accessed using the `::` operator.
+
+**3. PHP Static Properties:**
+Static properties belong to the class, not an instance. They can be accessed without creating an object. Here's an advanced example:
+
+```php
+class Counter {
+    public static $count = 0;
+
+    public function increment() {
+        self::$count++;
+    }
+}
+
+$counter1 = new Counter();
+$counter2 = new Counter();
+
+$counter1->increment();
+$counter2->increment();
+
+echo "Total count: " . Counter::$count; // Access the static property
+```
+
+Static properties are accessed using the `::` operator, just like static methods.
+
+**4. PHP Namespaces:**
+Namespaces help organize your code by avoiding naming conflicts. They are crucial in larger PHP projects. Here's an advanced example:
+
+```php
+namespace MyCompany\Products;
+
+class Product {
+    public function getPrice() {
+        return 100;
+    }
+}
+```
+
+In this example, we define the `Product` class within the `MyCompany\Products` namespace.
+
+**5. PHP Iterables:**
+Iterables are data structures that can be iterated over with `foreach`. They can be arrays, objects implementing the `Traversable` interface, and more. Here's an advanced example:
+
+```php
+function iterate(iterable $data) {
+    foreach ($data as $item) {
+        echo $item . " ";
+    }
+}
+
+$array = [1, 2, 3];
+iterate($array);
+
+class CustomIterable implements \IteratorAggregate {
+    public function getIterator() {
+        return new ArrayIterator([4, 5, 6]);
+    }
+}
+
+$custom = new CustomIterable();
+iterate($custom);
+```
+
+#### **PHP Iterations**
+---
+- The `MyIterator` class implements the `Iterator` interface.
+- It has a constructor that accepts an array as the data source.
+- The `current()` method returns the element at the current position.
+- The `key()` method checks if the key (position) is of an acceptable type (integer, float, boolean, or string), and if not, it throws an exception.
+- The `next()` method moves the internal pointer to the next element.
+- The `rewind()` method resets the internal pointer to the beginning.
+- The `valid()` method checks if the internal pointer is within the valid range.
+
+```php
+<?php
+
+class MyIterator implements Iterator {
+    private $data;
+    private $position;
+
+    public function __construct($data) {
+        $this->data = $data;
+        $this->position = 0;
+    }
+
+    public function current() {
+        return $this->data[$this->position];
+    }
+
+    public function key() {
+        // Ensure that the key is of an acceptable type
+        if (is_int($this->position) || is_float($this->position) || is_bool($this->position) || is_string($this->position)) {
+            return $this->position;
+        } else {
+            throw new Exception("Key is not of an acceptable type.");
+        }
+    }
+
+    public function next() {
+        $this->position++;
+    }
+
+    public function rewind() {
+        $this->position = 0;
+    }
+
+    public function valid() {
+        // Check if the internal pointer is within the valid range
+        return isset($this->data[$this->position]);
+    }
+}
+
+$data = [1, "apple", 3.14, true, "banana"];
+$iterator = new MyIterator($data);
+
+foreach ($iterator as $key => $value) {
+    echo "Key: $key, Value: $value<br>";
+}
+
+?>
+```
+
+
+
