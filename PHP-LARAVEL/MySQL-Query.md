@@ -118,7 +118,11 @@ Grant SELECT and INSERT privileges on the `employees` table in the `company` dat
 
 ```sql
 GRANT SELECT, INSERT ON company.employees TO 'john'@'localhost';
-GRANT SELECT, INSERT ON mydatabase.users TO 'webuser'@'codewithmakim.com';
+GRANT SELECT, INSERT ON mydatabase.users TO 'webuser'@'codewithmakim.com'; // db_user = webuser and domain = codewithmakim.com
+
+ // To Give all Privileges 
+GRANT ALL PRIVILEGES ON codermkarim_food_order.* TO 'codermkarim_food_order'@'codewithkarim.com';
+
 ```
 the user webuser from codewithmakim.com would have permission to read data from and insert data into the users table in the mydatabase database.
 
@@ -261,6 +265,15 @@ Certainly! Below are some advanced MySQL `SELECT` statements with various condit
        WHERE customers.customer_id = orders.customer_id
    );
    ```
+## Result
+| customer_name |
+|--------------|
+| Customer A   |
+| Customer B   |
+| Customer C   |
+| ...          |
+
+ the main query returns the customer_name of customers who meet the condition specified in the subquery, i.e., the customers who have placed orders.
 
 **8. Subquery with IN:**
    - Use a subquery to filter results based on a list of values.

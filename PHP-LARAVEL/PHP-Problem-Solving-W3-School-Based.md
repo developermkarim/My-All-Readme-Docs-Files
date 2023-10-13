@@ -6,7 +6,7 @@ PHP is considered a loosely typed language because it does not require explicit 
 
 For example, in a strongly typed language like C++ or Java, you must declare the data type of a variable explicitly:
 
-```cpp
+```php
 int age = 30; // Explicitly declaring age as an integer
 ```
 
@@ -60,15 +60,18 @@ function createAndPrintVariable($varName, $value) {
 }
 
 createAndPrintVariable("myVar", "Hello, World!");
+// Hello, World!
 ```
 
 **Problem 4 - PHP echo Statement:**
 Create a PHP script that uses the `echo` statement to display a series of numbers from 1 to 10 in a list format.
 
 ```php
+
 for ($i = 1; $i <= 10; $i++) {
     echo "<li>$i</li>";
 }
+
 ```
 
 ## data types, variables, and the difference between echo and print
@@ -78,7 +81,7 @@ Certainly! Let's dive into the details of the `echo` and `print` statements in P
 **`echo` Statement:**
 The `echo` statement is a language construct in PHP that is used to output one or more strings. It's commonly used for displaying content on a web page. Here are some key points about `echo`:
 
-- `echo` can output multiple values separated by commas.
+- `echo` and print can output multiple values separated by commas. but echo is more commonly used for this purpose in practice.
 - It does not have a return value; it simply displays content.
 - `echo` is slightly faster than `print`.
 
@@ -146,6 +149,10 @@ function testScope() {
     echo $localVar;
     global $globalVar;
     echo $globalVar;
+
+    // I'm local
+    // I'm global
+
 }
 
 testScope();
@@ -167,9 +174,50 @@ echo $result;
 Explain implicit and explicit type conversion in PHP. Provide an example where you convert an integer to a string explicitly.
 
 ```php
-$intVar = 42;
-$strVar = (string)$intVar;
-echo gettype($strVar); // Output: string
+$original = "42";
+
+echo "Original Type: " . gettype($original) . PHP_EOL;
+// Original Type: string
+
+// Explicit type casting
+$intVal = (int)$original;
+echo "Int Type: " . gettype($intVal) . ", Value: $intVal" . PHP_EOL;
+// Int Type: integer, Value: 42
+
+$floatVal = (float)$original;
+echo "Float Type: " . gettype($floatVal) . ", Value: $floatVal" . PHP_EOL;
+// Float Type: double, Value: 42
+
+$boolVal = (bool)$original;
+echo "Boolean Type: " . gettype($boolVal) . ", Value: " . ($boolVal ? 'true' : 'false') . PHP_EOL;
+// Boolean Type: boolean, Value: true
+
+$stringVal = (string)$original;
+echo "String Type: " . gettype($stringVal) . ", Value: $stringVal" . PHP_EOL;
+// String Type: string, Value: 42
+
+// Automatic type conversion
+$number = 42;
+$stringNumber = "42";
+
+$sum = $number + $stringNumber;
+echo "Sum Type: " . gettype($sum) . ", Value: $sum" . PHP_EOL;
+// Sum Type: integer, Value: 84
+
+$concatenation = $number . $stringNumber;
+echo "Concatenation Type: " . gettype($concatenation) . ", Value: $concatenation" . PHP_EOL;
+// Concatenation Type: string, Value: 4242
+
+$arrayConversion = (array)$original;
+echo "Array Type: " . gettype($arrayConversion) . PHP_EOL;
+// Array Type: array
+
+$objectConversion = (object)$original;
+echo "Object Type: " . gettype($objectConversion) . PHP_EOL;
+// Object Type: object
+
+`PHP_EOL` constant, which represents the end of a line character (either "\n" on Unix/Linux or "\r\n" on Windows).
+
 ```
 
 **Problem 6 - PHP `echo` vs `print`:**
@@ -256,13 +304,19 @@ echo $result ? "Palindrome" : "Not a Palindrome"; // Output: Palindrome
 Write a PHP function to count the number of words in a given string.
 
 ```php
-function countWords($str) {
-    $words = explode(' ', $str);
-    return count($words);
-}
+function wordCount($words){
 
-$result = countWords("This is a sample sentence.");
-echo $result; // Output: 5
+    $separate_words = explode(' ',$words);
+
+    $words_array = [];
+    echo count($separate_words) . '<br>'; 
+    $limit_words = count($separate_words) > 6 ? array_slice($separate_words,0,5) : $separate_words;
+
+    echo implode(' ', $limit_words);
+}
+wordCount("A Quick brown fox jumps over the lazy dog");
+ // Output: 9 
+ // Output: A Quick brown fox jumps
 ```
 
 **Problem 4 - Remove Whitespace:**
@@ -289,18 +343,66 @@ $result = replaceSubstring("Hello, world!", "world", "PHP");
 echo $result; // Output: Hello, PHP!
 ```
 
-**Problem 6 - Extract Email Addresses:**
+**Problem 6 - Extract User Details:**
 Create a PHP function to extract and display all email addresses from a given string.
 
+Simple example
 ```php
-function extractEmails($str) {
-    preg_match_all("/[\w\.-]+@[\w\.-]+/", $str, $matches);
-    return $matches[0];
+// Input text
+$text = "Contact us at contact@example.com or support@php.com. Please email john.doe@example.com for more information.";
+
+// Regular expression pattern to match email addresses
+$emailPattern = "/[\w\.-]+@[\w\.-]+/";
+
+// Perform the regular expression match and store the results in the $matches array
+preg_match_all($emailPattern, $text, $matches);
+
+// $matches[0] contains all the matched email addresses
+$emailAddresses = $matches[0];
+
+// Print the extracted email addresses
+foreach ($emailAddresses as $email) {
+    echo $email . "<br>";
 }
 
-$string = "Contact us at contact@example.com or support@php.com.";
-$emails = extractEmails($string);
-print_r($emails); // Output: Array([0] => contact@example.com [1] => support@php.com)
+```
+
+```php
+function extractUserDetails($str) {
+    // Regular expression patterns to match numbers, usernames, names, and emails
+    $numberPattern = "/\d+/"; //  `\d` matches any digit (0-9).
+    $usernamePattern = "/@([a-zA-Z0-9_]+)/"; //`@` matches the "@" character literally.
+    $namePattern = "/[A-Za-z]+ [A-Za-z]+/";
+    $emailPattern = "/[\w\.-]+@[\w\.-]+/"; // matches one or more word characters (letters, digits, or underscores), dots, or hyphens. This part matches the username part of an email address.
+
+    preg_match_all($numberPattern, $str, $numbers);  // stores them in the $numbers array.
+    preg_match_all($usernamePattern, $str, $usernames); // stores them in the $usernames array.
+    preg_match_all($namePattern, $str, $names); // stores them in the $names array.
+    preg_match_all($emailPattern, $str, $emails);  // stores them in the $emails array.
+
+    $userDetails = [
+        'numbers' => $numbers[0],
+        'usernames' => $usernames[1], // Note the use of [1] to get the captured username part
+        'names' => $names[0],
+        'emails' => $emails[0],
+    ];
+
+//	Optional. The variable used in this parameter will be populated with an array containing all of the matches that were found
+
+    return $userDetails;
+}
+
+$string = "Contact user123 at contact@example.com or support@php.com. John Doe's email is john.doe@example.com.";
+$userDetails = extractUserDetails($string);
+print_r($userDetails);
+
+Array (
+    [numbers] => Array ( [0] => 123 )
+    [usernames] => Array ( [0] => user123 )
+    [names] => Array ( [0] => John Doe )
+    [emails] => Array ( [0] => contact@example.com [1] => support@php.com [2] => john.doe@example.com )
+)
+
 ```
 
 **Problem 7 - Uppercase First Letter of Words:**
@@ -3259,24 +3361,23 @@ Certainly! Here are 10 more complex if-else problems and solutions in PHP withou
 **Problem 29: Check if a Year is a Magic Year**
 - **Problem:** Write a PHP program to check if a year is a magic year (a year whose day multiplied by month equals the last two digits of the year).
 - **Solution:**
-  ```php
+
+```php
   $year = 2021;
   $day = 10;
   $month = 2;
   
- 
-
  if ($day * $month == $year % 100) {
       echo "Magic Year";
   } else {
       echo "Not a Magic Year";
   }
-  ```
+```
 
 **Problem 30: Check if a Year is a Happy Year**
 - **Problem:** Write a PHP program to check if a year is a happy year (a year whose sum of squares of digits is a prime number).
 - **Solution:**
-  ```php
+```php
   function isPrime($num) {
       if ($num <= 1) {
           return false;
@@ -3304,7 +3405,62 @@ Certainly! Here are 10 more complex if-else problems and solutions in PHP withou
   } else {
       echo "Not a Happy Year";
   }
-  ```
+```
+**Problem 31: check different conditions with if**
+- **Problem:**  is_ functions and prints whether they meet the specified condition. You can see how each function works for different data types and conditions in one code view section.
+- **Solution:**
+```php
+$variable1 = null;
+$variable2 = [1, 2, 3];
+$variable3 = "Hello, world!";
+$variable4 = true;
+$variable5 = 42;
+$variable6 = 3.14;
+$variable7 = "123";
+
+if (is_null($variable1)) {
+    echo "Variable 1 is null.<br>";
+} else {
+    echo "Variable 1 is not null.<br>";
+}
+
+if (is_array($variable2)) {
+    echo "Variable 2 is an array.<br>";
+} else {
+    echo "Variable 2 is not an array.<br>";
+}
+
+if (is_string($variable3)) {
+    echo "Variable 3 is a string.<br>";
+} else {
+    echo "Variable 3 is not a string.<br>";
+}
+
+if (is_bool($variable4)) {
+    echo "Variable 4 is a boolean.<br>";
+} else {
+    echo "Variable 4 is not a boolean.<br>";
+}
+
+if (is_int($variable5)) {
+    echo "Variable 5 is an integer.<br>";
+} else {
+    echo "Variable 5 is not an integer.<br>";
+}
+
+if (is_float($variable6)) {
+    echo "Variable 6 is a floating-point number.<br>";
+} else {
+    echo "Variable 6 is not a floating-point number.<br>";
+}
+
+if (is_numeric($variable7)) {
+    echo "Variable 7 is numeric.<br>";
+} else {
+    echo "Variable 7 is not numeric.<br>";
+}
+```
+
 ## Swhich Case
 ---
 
@@ -10141,6 +10297,61 @@ foreach ($filteredFiles as $file) {
     echo "$file\n";
 }
 ```
+
+Overview for file
+It seems like you mentioned a function called `fileattime()`, but there is no built-in PHP function by that name. However, I can provide you with more file-related functions in PHP:
+
+1. **File Attributes and Information:**
+   - `filemtime()`: Returns the last modification time of a file.
+   - `fileatime()`: Returns the last access time of a file.
+   - `filectime()`: Returns the creation time of a file.
+   - `filesize()`: Returns the size of a file in bytes.
+
+   ```php
+   $file = "example.txt";
+   echo "Last Modified: " . date("F d Y H:i:s.", filemtime($file));
+   echo "Last Accessed: " . date("F d Y H:i:s.", fileatime($file));
+   echo "Created: " . date("F d Y H:i:s.", filectime($file));
+   echo "File Size: " . filesize($file) . " bytes";
+   ```
+
+2. **File and Directory Manipulation:**
+   - `rename()`: Renames a file or directory.
+   - `copy()`: Copies a file.
+   - `mkdir()`: Creates a directory.
+   - `rmdir()`: Removes a directory.
+
+   ```php
+   rename("oldfile.txt", "newfile.txt");
+   copy("source.txt", "destination.txt");
+   mkdir("new_directory");
+   rmdir("empty_directory");
+   ```
+
+3. **File Permissions:**
+   - `chmod()`: Changes file permissions.
+
+   ```php
+   chmod("file.txt", 0644); // Set read and write permissions for owner, read-only for others
+   ```
+
+4. **File Locking:**
+   - `flock()`: Provides file locking.
+
+   ```php
+   $file = fopen("example.txt", "w");
+   if (flock($file, LOCK_EX)) {
+       // Exclusive lock acquired
+       fwrite($file, "Locked text");
+       flock($file, LOCK_UN); // Release the lock
+   } else {
+       echo "Unable to acquire lock.";
+   }
+   fclose($file);
+   ```
+
+These are additional file-related functions in PHP that you can use for various file operations, including getting file attributes, manipulating files and directories, managing permissions, and file locking.
+
 
 These problems and solutions cover a range of file handling scenarios in PHP and should be helpful for PHP developers at different skill levels preparing for interviews or competitive programming challenges.
 
