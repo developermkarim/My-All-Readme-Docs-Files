@@ -20,6 +20,7 @@
     echo "<br>";
 /*      error_reporting(E_WARNING);
 echo $undefinedVariable;  */
+
 $server_name = $_SERVER['PHP_SELF'];
 echo "Server name: $server_name";echo "<br>";
 
@@ -34,6 +35,10 @@ echo 'server Request Method : ' . $_SERVER['REQUEST_METHOD'];echo "<br>";
 echo 'server Name : ' . $_SERVER['SERVER_NAME'];echo "<br>";
 echo 'User agent for browser address : ' . $_SERVER['HTTP_USER_AGENT'];echo "<br>";
 
+echo "FILE NAME WITHOUT EXTENSION IS " . pathinfo("mkarim.jpg",PATHINFO_FILENAME) . PHP_EOL .', FILE EXTENSION IS ' . pathinfo('mkarim.jpg',PATHINFO_EXTENSION) . ', FILE PATH DIR '. pathinfo('images/mkarim.jpg',PATHINFO_DIRNAME); /* PATHINFO_FILENAME . PATHINFO_EXTENSION; */
+echo "<br>";
+
+printf(pathinfo('images/mkarim.jpg',PATHINFO_ALL));
     ?>
 
 </body>

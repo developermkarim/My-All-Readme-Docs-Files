@@ -2229,7 +2229,7 @@ Creating custom constants in PHP is a good practice for maintaining consistency 
 
 ```php
 // case-insensitive constant name
-define("GREETING", "Welcome to W3Schools.com!", true); // trying to case-sensitive true.
+define("GREETING", "Welcome to W3Schools.com!", true); // trying to case-insensitive true.
 echo greeting; // "Welcome to W3Schools.com!
 
 // case-sensitive constant name
@@ -3364,11 +3364,18 @@ Certainly, here are some more user-defined functions in PHP, each with a differe
    ```php
    function isSecurePassword($password) {
        $minLength = 8;
-       $containsSpecialChar = preg_match('/[!@#\$%\^&\*]/', $password);
+       $containsSpecialChar = preg_match('/[!@#\$%\^&\*]/', $password); // The preg_match function searches for the pattern in the string. It returns 1 if a match is found and 0 if no match is found.
        return strlen($password) >= $minLength && $containsSpecialChar;
-   }
-   ```
 
+      //  the backslash (\) is used as an escape character before certain special characters to match them literally. %, ^, and & are special characters.
+      // For example, \$ means "match the dollar sign character ($) literally.
+   }
+         // Example usage
+        $password1 = "MyP@ssw0rd"; // Meets both criteria . return true . 
+        $password2 = "WeakPassword"; // Doesn't contain a special character . return false
+        $password3 = "Short1!";      // Doesn't meet the minimum length. return false
+        isSecurePassword($password1);
+   ```
 21. **Custom URL Slug Function:**
    - A function that generates SEO-friendly URL slugs from strings.
 
@@ -3377,7 +3384,10 @@ Certainly, here are some more user-defined functions in PHP, each with a differe
        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string));
        return $slug;
    }
+   generateSlug("Hello, World! 123");
+   // Output: "hello-world-123"
    ```
+**Note** `preg_replace('/[^A-Za-z0-9-]+/', '-', $string)` uses a regular expression to replace any characters that are not in the set of A-Z, a-z, 0-9, and hyphens with hyphens.
 
 22. **Data Validation Function:**
    - A function to validate an email address.
@@ -3387,6 +3397,91 @@ Certainly, here are some more user-defined functions in PHP, each with a differe
        return filter_var($email, FILTER_VALIDATE_EMAIL);
    }
    ```
+
+### **FILE pathinfo() AND ALL Constants for file**
+---
+Certainly, `pathinfo()` is a useful function in PHP that can be used to extract information about a file path. Here are some of the constants that are commonly used with `pathinfo()` along with code examples and their definitions:
+
+1. `PATHINFO_DIRNAME`: Retrieves the directory name of the file path.
+
+   Example:
+   ```php
+   $path = '/var/www/html/example/file.txt';
+   $dirname = pathinfo($path, PATHINFO_DIRNAME);
+   echo $dirname; // Outputs: /var/www/html/example
+   ```
+
+2. `PATHINFO_BASENAME`: Retrieves the file name with extension.
+
+   Example:
+   ```php
+   $path = '/var/www/html/example/file.txt';
+   $basename = pathinfo($path, PATHINFO_BASENAME);
+   echo $basename; // Outputs: file.txt
+   ```
+
+3. `PATHINFO_EXTENSION`: Retrieves the file extension.
+
+   Example:
+   ```php
+   $path = '/var/www/html/example/file.txt';
+   $extension = pathinfo($path, PATHINFO_EXTENSION);
+   echo $extension; // Outputs: txt
+   ```
+
+4. `PATHINFO_FILENAME`: Retrieves the file name without the extension.
+
+   Example:
+   ```php
+   $path = '/var/www/html/example/mkarim.jpg';
+   $filename = pathinfo($path, PATHINFO_FILENAME);
+   echo $filename; // Outputs: mkarim
+   ```
+
+5. `PATHINFO_ALL`: Returns an associative array containing all available elements.
+
+   Example:
+   ```php
+   $path = '/var/www/html/example/file.txt';
+   $info = pathinfo($path, PATHINFO_ALL);
+   print_r($info);
+   // Outputs:
+   // Array (
+   //     [dirname] => /var/www/html/example
+   //     [basename] => file.txt
+   //     [extension] => txt
+   //     [filename] => file
+   // )
+   ```
+
+6. `PATHINFO_CNAME`: Returns the canonicalized absolute pathname.
+
+   Example:
+   ```php
+   $path = '/var/www/html/example/file.txt';
+   $canonicalPath = pathinfo($path, PATHINFO_CNAME);
+   echo $canonicalPath; // Outputs: /var/www/html/example/file.txt
+   ```
+
+7. `PATHINFO_MTIME`: Returns the file's last modification time.
+
+   Example:
+   ```php
+   $path = '/var/www/html/example/file.txt';
+   $modificationTime = pathinfo($path, PATHINFO_MTIME);
+   echo $modificationTime; // Outputs a Unix timestamp
+   ```
+
+8. `PATHINFO_OWNER`: Returns the owner of the file.
+
+   Example:
+   ```php
+   $path = '/var/www/html/example/file.txt';
+   $fileOwner = pathinfo($path, PATHINFO_OWNER);
+   echo $fileOwner; // Outputs the owner of the file
+   ```
+
+
 ### **PHP ARRAY AND ITS METHODS**
 ---
 
