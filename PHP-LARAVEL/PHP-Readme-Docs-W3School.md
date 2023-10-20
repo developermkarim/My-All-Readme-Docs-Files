@@ -1393,8 +1393,6 @@ echo "Float Precision: $precision\n";
 // Output: Float Precision: 15 (This may vary depending on your PHP configuration)
 ```
 
-   - The output may vary depending on your PHP configuration. It typically represents the number of decimal digits that can be rounded into a float and back without precision loss.
-
 **5. Float Epsilon:**
    - PHP_FLOAT_EPSILON is useful for dealing with very small differences in float calculations:
 
@@ -1817,43 +1815,6 @@ In this code:
    ```php
    $sql = "SELECT * FROM table_name ORDER BY RAND()";
    ```
-
-These professional use cases for `rand()` and `floor(rand())` can be applied in various scenarios, including web development, data generation, and statistical modeling. They provide flexibility and randomness in your applications and experiments.
-
-#### **PHP Predefined Constants For Math**
----
-PHP provides several important predefined math constants that can be used in various projects. Here are some of the most commonly used ones with code examples:
-
-1. **`M_PI`**: Represents the mathematical constant Pi (π), which is approximately 3.1415926535898.
-
-   Example:
-   ```php
-   $circleArea = M_PI * pow($radius, 2);
-   ```
-
-2. **`M_E`**: Represents the mathematical constant Euler's number (e), which is approximately 2.718281828459.
-
-   Example:
-   ```php
-   $continuousCompoundedInterest = $principal * pow(M_E, $rate * $time);
-   ```
-
-3. **`M_LN2`**: Natural logarithm of 2, which is approximately 0.69314718055995.
-
-   Example:
-   ```php
-   $halfLife = $M_LN2 / $decayConstant;
-   ```
-
-4. **`M_LN10`**: Natural logarithm of 10, which is approximately 2.302585092994.
-
-   Example:
-   ```php
-   $logBase10 = log($number) / M_LN10;
-   ```
-
-These constants are valuable in mathematical and scientific calculations within PHP projects. They help ensure accuracy when working with mathematical formulas, particularly when you need to perform calculations related to circles, exponential growth or decay, logarithmic transformations, and more.
-
 ### **PHP CONSTANTS**
 ---
 Certainly, I can provide professional code examples for each of the important PHP constants and explain their usage. Let's go through each of them:
@@ -1913,16 +1874,114 @@ Certainly, I can provide professional code examples for each of the important PH
    ```
 
 **4. Error Reporting Constants:**
-   - `E_ERROR`, `E_WARNING`, `E_NOTICE`: Error reporting levels used with the `error_reporting()` function.
-   - `E_ALL`: Reports all PHP errors and warnings.
+---
+Sure, let's cover the different types of errors in PHP, show how to use `error_reporting`, and provide code examples for each error type. I'll also provide their definitions and when they occur.
 
-   ```php
-   // Setting error reporting to display all errors and warnings
-   error_reporting(E_ALL);
+1. **`E_ERROR`:**
 
-   // Example error triggering
-   $undefined_var = $nonexistent_var;
-   ```
+Definition: Critical errors that should not be ignored. They halt script execution.
+
+Example:
+
+```php
+// Triggering an E_ERROR
+error_reporting(E_ERROR); // Hide this error Warning: Undefined variable $undefinedVariable in D:\XAMPP\htdocs\All-Readme-Doc-Files\Testing-Files\php-problem-solving.php on line 19
+
+echo $undefinedVariable; // This will result in an E_ERROR and terminate the script
+```
+
+2. **`E_WARNING`:**
+
+Definition: Non-fatal errors that don't stop script execution but should be addressed.
+
+Example:
+
+```php
+// Triggering an E_WARNING
+error_reporting(E_WARNING);
+$file = 'nonexistent_file.txt';
+$handle = fopen($file, 'r'); // This will trigger an E_WARNING, but the script continues to run
+```
+
+**3. `E_PARSE`:**
+
+Definition: Parse errors occur during script compilation. They halt script execution.
+
+Example:
+
+```php
+// Triggering an E_PARSE
+error_reporting(E_PARSE);
+echo "This is a parse error" // Missing a semicolon, this will result in an E_PARSE error
+```
+
+ **4. `E_NOTICE`:**
+
+Definition: Non-critical issues, typically related to uninitialized variables or undefined constants.
+
+Example:
+
+```php
+// Triggering an E_NOTICE
+error_reporting(E_NOTICE);
+$uninitializedVar; // This will trigger an E_NOTICE, but the script continues to run
+echo $uninitializedVar; // It will display a notice about using an uninitialized variable
+```
+
+ 5. **`E_STRICT`:**
+
+Definition: Run-time notices. These are not actual errors but provide additional information about potential issues in your code.
+
+Example:
+
+```php
+// Triggering an E_STRICT
+error_reporting(E_STRICT);
+class Example {
+    public function test() {}
+}
+$example = new Example();
+$example->nonExistentMethod(); // This will trigger an E_STRICT notice
+```
+
+ 6.**`E_DEPRECATED` and `E_USER_DEPRECATED`:**
+
+Definition: Deprecation errors indicate that certain functions, classes, or features are outdated and should not be used. `E_USER_DEPRECATED` is used for user-generated deprecation errors.
+
+Example:
+
+```php
+// Triggering an E_DEPRECATED and E_USER_DEPRECATED
+error_reporting(E_DEPRECATED | E_USER_DEPRECATED);
+function oldFunction() {}
+oldFunction(); // This will trigger an E_DEPRECATED error
+trigger_error("This is a user-generated deprecation error", E_USER_DEPRECATED);
+```
+
+7. **`E_USER_ERROR`, `E_USER_WARNING`, and `E_USER_NOTICE`:**
+
+Definition: User-generated errors, warnings, and notices that you can trigger in your code.
+
+Example:
+
+```php
+// Triggering user-generated errors
+error_reporting(E_USER_ERROR | E_USER_WARNING | E_USER_NOTICE);
+trigger_error("This is a user-generated error", E_USER_ERROR);
+trigger_error("This is a user-generated warning", E_USER_WARNING);
+trigger_error("This is a user-generated notice", E_USER_NOTICE);
+```
+8. **`error_reporting(0)`:**
+`error_reporting(0)` to turn off error reporting in PHP:
+
+```php
+// Disable error reporting
+error_reporting(0);
+
+// Your PHP code here
+// Errors, warnings, and notices will not be displayed or logged
+```
+These are the common PHP error types. You can set the `error_reporting` level in your script to control which types of errors you want to handle and display. Handling errors appropriately is essential for maintaining the reliability and quality of your code.
 
 **5. Predefined Variables:**
    - `$GLOBALS`: A global array containing references to all variables in the global scope.
@@ -2166,6 +2225,18 @@ These additional PHP constants cover a wide range of areas, from stream handling
 ---
 Creating custom constants in PHP is a good practice for maintaining consistency and reusability in your projects. You can define custom constants using the `define()` function. Here are some custom constants you can consider for professional PHP projects:
 
+**Note :**Unlike variables, constants are automatically global across the entire script.By default It is Case-sensitive is false `define(name, value, case-insensitive)`.
+
+```php
+// case-insensitive constant name
+define("GREETING", "Welcome to W3Schools.com!", true); // trying to case-sensitive true.
+echo greeting; // "Welcome to W3Schools.com!
+
+// case-sensitive constant name
+define("GREETING", "Welcome to W3Schools.com!"); // trying to case-sensitive true.
+echo GREETING; // "Welcome to W3Schools.com!
+
+```
 1. **Database Configuration Constants:**
    ```php
    define('DB_HOST', 'localhost');
@@ -3563,15 +3634,232 @@ Certainly! PHP Superglobals are a set of predefined global arrays that provide e
 
 2. **$_SERVER**: Contains information about the server and the execution environment.
 
+Certainly! Here are the `$_SERVER` variables with their definitions, as provided in the previous responses, along with the code examples and expected output:
+
+1. **`$_SERVER['HTTP_USER_AGENT']`**:
+   - Definition: Contains the user agent string of the browser making the request.
+   
    ```php
-   echo $_SERVER['SERVER_NAME']; // Server name (e.g., localhost)
+   $userAgent = $_SERVER['HTTP_USER_AGENT'];
+   echo "User Agent: " . $userAgent;
    ```
+
+   Output (example):
+   ```
+   User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36
+   ```
+
+2. **`$_SERVER['SERVER_NAME']`**:
+   - Definition: The name of the server host under which the current script is executing.
+   
+   ```php
+   $serverName = $_SERVER['SERVER_NAME'];
+   echo "Server Name: " . $serverName;
+   ```
+
+   Output (example):
+   ```
+   Server Name: www.example.com
+   ```
+
+3. **`$_SERVER['REQUEST_METHOD']`**:
+   - Definition: The request method used to access the page (e.g., GET, POST).
+   
+   ```php
+   $requestMethod = $_SERVER['REQUEST_METHOD'];
+   echo "Request Method: " . $requestMethod;
+   ```
+
+   Output (example):
+   ```
+   Request Method: GET
+   ```
+
+4. **`$_SERVER['HTTP_REFERER']`**:
+   - Definition: The URL of the page from which the request came (if any).
+   
+   ```php
+   $referer = $_SERVER['HTTP_REFERER'];
+   echo "Referring Page: " . $referer;
+   ```
+
+   Output (example):
+   ```
+   Referring Page: https://www.refererpage.com/
+   ```
+
+5. **`$_SERVER['REMOTE_ADDR']`**:
+   - Definition: The IP address of the client making the request.
+   
+   ```php
+   $clientIP = $_SERVER['REMOTE_ADDR'];
+   echo "Client IP Address: " . $clientIP;
+   ```
+
+   Output (example):
+   ```
+   Client IP Address: 192.168.0.1
+   ```
+
+6. **`$_SERVER['SERVER_PORT']`**:
+   - Definition: The port on which the server is listening for requests (usually 80 for HTTP, 443 for HTTPS).
+   
+   ```php
+   $serverPort = $_SERVER['SERVER_PORT'];
+   echo "Server Port: " . $serverPort;
+   ```
+
+   Output (example):
+   ```
+   Server Port: 80
+   ```
+
+7. **`$_SERVER['HTTP_HOST']`**:
+   - Definition: Contains the hostname from the Host HTTP header.
+   
+   ```php
+   $host = $_SERVER['HTTP_HOST'];
+   echo "HTTP Host: " . $host;
+   ```
+
+   Output (example):
+   ```
+   HTTP Host: www.example.com
+   ```
+
+8. **`$_SERVER['QUERY_STRING']`**:
+   - Definition: The query string, if any, via which the page was accessed.
+   
+   ```php
+   $queryString = $_SERVER['QUERY_STRING'];
+   echo "Query String: " . $queryString;
+   ```
+
+   Output (example):
+   ```
+   Query String: id=123&page=about
+   ```
+
+9. **`$_SERVER['REQUEST_URI']`**:
+   - Definition: The URI (Uniform Resource Identifier) used to access the page.
+   
+   ```php
+   $requestURI = $_SERVER['REQUEST_URI'];
+   echo "Request URI: " . $requestURI;
+   ```
+
+   Output (example):
+   ```
+   Request URI: /myapp/page.php
+   ```
+
+10. **`$_SERVER['HTTPS']`**:
+    - Definition: Indicates whether the request was made over a secure (HTTPS) connection.
+   
+    ```php
+    $isHTTPS = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? true : false;
+    echo "Is HTTPS: " . ($isHTTPS ? "Yes" : "No");
+    ```
+
+    Output (example):
+    ```
+    Is HTTPS: No
+    ```
 
 3. **$_REQUEST**: Contains data from HTTP requests (GET, POST, and COOKIE).
 
-   ```php
-   echo $_REQUEST['username']; // Accessing username from a form submission
+Certainly, here are concise code examples for `$_REQUEST` with different input sources:
+
+1. **HTML Form with GET method:**
+
+   ```html
+   <form method="GET">
+       <input type="text" name="name" value="John">
+       <input type="submit" value="Submit">
+   </form>
    ```
+
+   PHP to Retrieve `$_REQUEST`:
+
+   ```php
+   $name = $_REQUEST['name'] ?? null;
+   echo "Name: " . $name;
+   ```
+
+2. **HTML Form with POST method:**
+
+   ```html
+   <form method="POST">
+       <input type="text" name="email" value="example@example.com">
+       <input type="submit" value="Submit">
+   </form>
+   ```
+
+   PHP to Retrieve `$_REQUEST`:
+
+   ```php
+   $email = $_REQUEST['email'] ?? null;
+   echo "Email: " . $email;
+   ```
+
+3. **Combining GET and POST Parameters:**
+
+   HTML Form:
+
+   ```html
+   <form method="POST">
+       <input type="text" name="username" value="user123">
+       <input type="submit" value="Submit">
+   </form>
+   ```
+
+   URL (GET request):
+
+   ```
+   http://example.com/page.php?lang=en
+   ```
+
+   PHP to Retrieve `$_REQUEST`:
+
+   ```php
+   $username = $_REQUEST['username'] ?? null;
+   echo "Username: " . $username;
+
+   $language = $_REQUEST['lang'] ?? null;
+   echo "Language: " . $language;
+   ```
+
+4. **Cookies:**
+
+   Set a cookie in a previous request:
+
+   ```php
+   setcookie("user", "Alice", time() + 3600, "/");
+   ```
+
+   PHP to Retrieve `$_REQUEST`:
+
+   ```php
+   $user = $_REQUEST['user'] ?? null;
+   echo "User: " . $user;
+   ```
+
+5. **Combining GET, POST, and Cookies:**
+
+   PHP to Retrieve `$_REQUEST`:
+
+   ```php
+   $name = $_REQUEST['name'] ?? null;
+   echo "Name: " . $name;
+
+   $email = $_REQUEST['email'] ?? null;
+   echo "Email: " . $email;
+
+   $user = $_REQUEST['user'] ?? null;
+   echo "User: " . $user;
+   ```
+
+`$_REQUEST` can be useful when you need to accept input from both GET and POST methods or when handling cookies. However, it's important to use it with caution, especially in situations where it's crucial to know the source of the data.
 
 4. **$_GET**: Holds data sent through the URL with a GET request.
 
@@ -3600,9 +3888,32 @@ Certainly! PHP Superglobals are a set of predefined global arrays that provide e
 
 8. **$_FILES**: Contains information about file uploads.
 
-   ```php
-   $file_name = $_FILES['file']['name']; // Accessing the uploaded file's name
-   ```
+```php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_FILES['fileToUpload'])) {
+        $file = $_FILES['fileToUpload'];
+
+        // File details
+        $fileName = $file['name'];
+        $fileType = $file['type'];
+        $fileSize = $file['size'];
+        $fileTempLocation = $file['tmp_name'];
+        $fileError = $file['error'];
+
+        echo "File Name: " . $fileName . "<br>";
+        echo "File Type: " . $fileType . "<br>";
+        echo "File Size: " . $fileSize . " bytes<br>";
+        echo "Temporary Location: " . $fileTempLocation . "<br>";
+        echo "Error Code: " . $fileError;
+    }
+}
+
+File Name: my_file.jpg
+File Type: image/jpeg
+File Size: 123456 bytes
+Temporary Location: /tmp/php/php1a2b3c
+Error Code: 0
+```
 
 9. **$_ENV**: Provides access to environment variables.
 
@@ -3715,13 +4026,13 @@ Certainly, I can provide you with a brief overview of common PHP regular express
 8. **Quantifiers**:
    - Match 3 to 5 digits:
      ```php
-     $pattern = '/\d{3,5}/';
+     $pattern = '/\d{3,5}/'; // 3 to 5
      ```
 
 9. **Escape Special Characters**:
    - Match a period (.) in a string:
      ```php
-     $pattern = '/\./';
+     $pattern = '/\./'; // .
      ```
 
 10. **Email Validation**:
@@ -3729,8 +4040,6 @@ Certainly, I can provide you with a brief overview of common PHP regular express
       ```php
       $pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/';
       ```
-
-Here's a basic example of using regular expressions in PHP to validate an email address:
 
 ```php
 $email = "example@email.com";
@@ -3771,7 +4080,21 @@ if (preg_match($pattern, $email)) {
     - Match an IPv4 address:
       ```php
       $pattern = '/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/';
+      Or
+      $pattern = '/\b\d{1,3}\.\d{4}\.\d{2,}\.\d{1,3}\b/';
       ```
+ **Components of Regular Expression**
+ - `\d{4}`: This matches exactly four digits, representing the second part of an IP address (e.g., 192.168).
+
+- `\.`: Another period separator.
+
+- `\d{2,}`: This matches at least two digits, representing the third part of the IP address (e.g., 168).
+
+- `\.`: Another period separator.
+
+- `\d{1,3}`: This matches one to three digits, representing the final part of the IP address (e.g., 1 or 255).
+
+- `\b`: Another word boundary anchor to ensure the IP address is a whole word.
 
 16. **Extracting Text Between Delimiters**:
     - Extract text between square brackets:
@@ -3889,6 +4212,212 @@ Regular expressions (regex) are composed of various elements, including metachar
    For example:
    - `/pattern/i` would match "Pattern," "pattern," "PaTtErN," etc.
    - `/^start/m` would match "start" at the beginning of each line in a multiline string.
+
+#### **All Components of Regular Expressions**
+---
+Certainly, here are the additional components of regular expressions explained briefly, along with code examples:
+
+1. **`^`: Start of Line Anchor**
+   - Description: Matches the start of a line or string.
+   - Example:
+     ```regex
+     ^Hello
+     ```
+     This pattern matches "Hello" only if it appears at the start of a line.
+
+2. **`$`: End of Line Anchor**
+   - Description: Matches the end of a line or string.
+   - Example:
+     ```regex
+     World$
+     ```
+     This pattern matches "World" only if it appears at the end of a line.
+
+3. **`|`: Alternation (OR)**
+   - Description: Matches one of the alternatives separated by the vertical bar.
+   - Example:
+     ```regex
+     cat|dog
+     ```
+     This pattern matches either "cat" or "dog."
+
+4. **`*`: Zero or More Occurrences**
+   - Description: Matches zero or more occurrences of the preceding element.
+   - Example:
+     ```regex
+     ab*c
+     ```
+     This pattern matches "ac," "abc," "abbc," and so on.
+
+5. **`?`: Zero or One Occurrence**
+   - Description: Matches zero or one occurrence of the preceding element.
+   - Example:
+     ```regex
+     colou?r
+     ```
+     This pattern matches "color" or "colour."
+
+6. **`+`: One or More Occurrences**
+   - Description: Matches one or more occurrences of the preceding element.
+   - Example:
+     ```regex
+     \d+
+     ```
+     This pattern matches one or more digits.
+
+7. **`{n}`: Exactly `n` Occurrences**
+   - Description: Matches exactly `n` occurrences of the preceding element.
+   - Example:
+     ```regex
+     \b\w{3}\b
+     ```
+     This pattern matches three-letter words.
+
+8. **`{n,}`: At Least `n` Occurrences**
+   - Description: Matches `n` or more occurrences of the preceding element.
+   - Example:
+     ```regex
+     \d{2,}
+     ```
+     This pattern matches at least two digits.
+
+9. **`{n,m}`: Between `n` and `m` Occurrences**
+   - Description: Matches between `n` and `m` occurrences of the preceding element.
+   - Example:
+     ```regex
+     \d{3,5}
+     ```
+     This pattern matches three to five digits.
+
+10. **`\1`, `\2`, etc.: Backreferences**
+    - Description: Refers to previously captured groups in the pattern.
+    - Example:
+      ```regex
+      (\w+)\s+\1
+      ```
+      This pattern matches repeated words like "hello hello."
+
+11. **`(?: ...)`: Non-Capturing Group**
+    - Description: Groups a pattern but does not capture the match.
+    - Example:
+      ```regex
+      (?:Mr|Ms)\. \w+
+      ```
+      This pattern matches "Mr. Smith" or "Ms. Johnson" but captures only the name.
+
+12. **`(?= ...)`: Positive Lookahead**
+    - Description: Asserts that a pattern must occur, but it doesn't consume characters.
+    - Example:
+      ```regex
+      \d{3}(?=-)
+      ```
+      This pattern matches three digits followed by a hyphen but doesn't include the hyphen in the match.
+
+13. **`(?! ...)`: Negative Lookahead**
+    - Description: Asserts that a pattern must not occur at a certain position.
+    - Example:
+      ```regex
+      \d{3}(?!-)
+      ```
+      This pattern matches three digits that are not followed by a hyphen.
+
+14. **`(?<= ...)`: Positive Lookbehind**
+    - Description: Asserts that a pattern must precede the main pattern.
+    - Example:
+      ```regex
+      (?<=@)\w+
+      ```
+      This pattern matches the username part of an email address.
+
+15. **`(?<! ...)`: Negative Lookbehind**
+    - Description: Asserts that a pattern must not precede the main pattern.
+    - Example:
+      ```regex
+      (?<!un)\w+
+      ```
+      This pattern matches words that don't start with "un."
+
+16. **`(?:x|y)`: Grouping for Alternatives**
+    - Description: Groups alternatives within a pattern.
+    - Example:
+      ```regex
+      (cat|dog) food
+      ```
+      This pattern matches "cat food" or "dog food."
+
+
+17. **`\b`: Word Boundary Anchor**
+   - Description: Ensures that the matched pattern is a whole word, not part of a larger word.
+   - Example:
+     ```regex
+     \bword\b
+     ```
+     This pattern matches the word "word" as a whole word, not as part of other words like "password."
+
+18. **`\d`: Digit Character**
+   - Description: Matches a single digit (0-9).
+   - Example:
+     ```regex
+     \d{4}
+     ```
+     This pattern matches exactly four digits.
+
+19. **`\w`: Word Character**
+   - Description: Matches a word character (alphanumeric character plus underscore).
+   - Example:
+     ```regex
+     \w+
+     ```
+     This pattern matches one or more word characters.
+
+20. **`\s`: Whitespace Character**
+   - Description: Matches whitespace characters (spaces, tabs, line breaks).
+   - Example:
+     ```regex
+     \s+
+     ```
+     This pattern matches one or more whitespace characters.
+
+21. **`.`: Any Character (Wildcard)**
+   - Description: Matches any single character (except a newline).
+   - Example:
+     ```regex
+     .
+     ```
+     This pattern matches any character.
+
+22. **`[abc]`: Character Class**
+   - Description: Matches any one character listed in the square brackets.
+   - Example:
+     ```regex
+     [aeiou]
+     ```
+     This pattern matches any vowel.
+
+23. **`[0-9]`: Range of Characters**
+   - Description: Matches any character within the specified range.
+   - Example:
+     ```regex
+     [A-Za-z]
+     ```
+     This pattern matches any uppercase or lowercase letter.
+
+24. **`[a-zA-Z0-9]`: Alphanumeric Characters**
+   - Description: Matches any alphanumeric character.
+   - Example:
+     ```regex
+     \w+
+     ```
+     This pattern matches one or more word characters, including letters and digits.
+
+25. **`[a-z]+@[a-z]+\.[a-z]+`: Basic Email Pattern**
+   - Description: Matches a basic email address pattern.
+   - Example:
+     ```regex
+     \w+@\w+\.\w+
+     ```
+     This pattern matches "username@example.com" format email addresses.
+
 
 #### **FUll Pattern Explanations**
 ---
@@ -4073,6 +4602,201 @@ foreach ($input_data as $key => $value) {
 ?>
 
 ```
+
+### **PHP SCRIPT ERRORS**
+---
+I'd be happy to help you identify and understand different types of errors in PHP scripts. PHP errors typically fall into four main categories:
+
+1. **Syntax Errors:**
+   - These errors occur due to incorrect syntax in your code. They prevent the script from running. Here's a sample with a syntax error:
+
+   ```php
+    Error: `Parse error: syntax error, unexpected '}' in file.php on line 3`
+   <?php
+   echo "Hello, World"
+   ?>
+   ```
+
+   Solution: You are missing a semicolon at the end of the `echo` statement. Correct it like this:
+
+   ```php
+   <?php
+   echo "Hello, World";
+   ?>
+   ```
+
+2. **Runtime Errors:**
+   - These errors occur while the script is executing, such as division by zero or attempting to access an undefined variable.
+
+   Sample:
+
+   ```php
+   Error: `Warning: Division by zero in file.php on line 3`
+
+   $num = 5;
+   $result = $num / 0;
+   ```
+
+   Solution: You need to check if the denominator is zero before performing the division.
+
+   ```php
+   $num = 5;
+   if ($num != 0) {
+       $result = $num / 0;
+   } else {
+       echo "Division by zero is not allowed.";
+   }
+   ```
+
+3. **Logical Errors:**
+   - These errors don't generate any error messages but lead to incorrect program output. They can be challenging to identify.
+
+   Sample:
+
+```php
+function calculateTotal($items) {
+    $total = 0;
+    foreach ($items as $item) {
+        $total += $item->price; // Logical error: should multiply price by quantity
+    }
+    return $total;
+}
+
+   ```
+
+   Solution: The logical error here is that the discount should be subtracted from the total. Correct it like this:
+
+   ```php
+   $finalPrice = $total - $discount;
+   ```
+
+4. **Warning and Notices:**
+   - These are less severe errors that do not stop the script but can indicate issues. For example, using an uninitialized variable.
+
+   Sample:
+
+   ```php
+   $message = $undefinedVariable;
+   ```
+
+   Solution: Initialize the variable or check if it's set before using it to avoid notices.
+
+   ```php
+   if (isset($undefinedVariable)) {
+       $message = $undefinedVariable;
+   } else {
+       $message = "Variable is not set.";
+   }
+   ```
+
+
+5. **Fatal Errors:**
+   - These are critical errors that terminate the script. Common causes include calling an undefined function or class, or using an include/require statement with a missing file.
+   
+   Sample:
+   ```php
+   Error: Fatal error: require(): Failed opening required 'non_existent_file.php' (include_path='...') in yourscript.php on line X
+
+   require_once('missing_file.php');
+   ```
+
+   Solution: Ensure that the file you are including or requiring exists. Use conditional statements to handle missing files gracefully.
+
+6. **E_NOTICE:**
+   - E_NOTICE is a non-fatal error that typically occurs when you attempt to use a variable that has not been defined.
+   
+   Sample:
+   ```php
+   $x = $undefinedVariable + 5;
+   ```
+
+   Solution: Always initialize variables before using them to avoid E_NOTICE errors.
+
+7. **E_WARNING:**
+   - E_WARNING is a non-fatal error that occurs when you attempt to perform operations that are likely to cause problems, such as opening a file that doesn't exist.
+   
+   Sample:
+   ```php
+   $file = fopen('non_existent_file.txt', 'r');
+   ```
+
+   Solution: Check if the file exists before opening it to avoid E_WARNING errors.
+
+8. **E_ERROR:**
+   - E_ERROR is a fatal error that occurs when a critical error is encountered, like running out of memory. It terminates the script.
+   
+   Sample:
+   ```php
+   $largeArray = range(1, PHP_INT_MAX);
+   ```
+
+   Solution: To avoid running out of memory, handle large datasets with pagination or by processing data in smaller chunks.
+
+9. **Custom Errors and Exceptions:**
+   - You can define your custom errors and exceptions for more specific error handling. This allows you to create detailed error messages and handle them appropriately.
+
+   Sample:
+   ```php
+   class CustomException extends Exception {
+       public function errorMessage() {
+           return "Custom Exception: " . $this->getMessage();
+       }
+   }
+   
+   try {
+       throw new CustomException("This is a custom exception.");
+   } catch (CustomException $e) {
+       echo $e->errorMessage();
+   }
+   ```
+
+   Solution: Define custom error classes and handle them using try-catch blocks to provide detailed error messages.
+10. **Database Errors:**
+   - These occur when there are issues with database connections or queries. They often involve complex troubleshooting.
+
+   Sample:
+   ```php
+   
+   Error: `Warning: mysqli_query(): (42S02/1146): Table 'yourdb.non_existent_table' doesn't exist`
+
+   $conn = mysqli_connect("localhost", "username", "password", "mydb");
+   $result = mysqli_query($conn, "SELECT * FROM non_existing_table");
+   ```
+
+   Explanation: The table "non_existing_table" doesn't exist in the database.
+
+   Solution: Ensure the table exists or handle the error gracefully, like checking if the query was successful.
+
+11. **Security Vulnerabilities:**
+   - These errors can lead to security breaches. For example, SQL injection or unvalidated user inputs.
+
+   Sample:
+   ```php
+   $input = $_GET['user_input'];
+   $sql = "SELECT * FROM users WHERE username = '$input'";
+   ```
+
+   Explanation: This code is susceptible to SQL injection attacks.
+
+   Solution: Use prepared statements to prevent SQL injection.
+   ```php
+   $input = $_GET['user_input'];
+   $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :input");
+   $stmt->execute(['input' => $input]);
+   ```
+12. **HTTP Errors:**
+
+   When making HTTP requests, you may receive HTTP status codes indicating the outcome of the request.
+
+   Example:
+   ```php
+   $response = file_get_contents("http://example.com/non_existent_page");
+   if ($response === false) {
+       echo "HTTP Request Failed: " . $http_response_header[0];
+   }
+   ```
+
+   Error: `HTTP Request Failed: HTTP/1.1 404 Not Found`
 
 ### **OOP IN PHP**
 ---
