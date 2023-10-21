@@ -151,9 +151,82 @@ function ProductImage($image_source,$width,$height)
     imagedestroy($myimage);
 }
 
-$isResizeImage = ProductImage('show-product.jpeg',400,450);
+/* $isResizeImage = ProductImage('show-product.jpeg',400,450);
 if ($isResizeImage == true) {
     echo 'Image processing and resizing successful.';
 } else {
     echo 'Image processing and resizing failed.';
-}
+} */
+
+echo "<br>";
+
+
+function imageResize($image_source, $width, $height){
+    $image_info = getimagesize($image_source);
+    $mime_type = $image_info['mime'];
+
+    switch ($mime_type) {
+        case 'image/jpeg':
+            $myimage = imagecreatefromjpeg($image_source);
+            break;
+        case 'image/png':
+            $myimage = imagecreatefrompng($image_source);
+            break;
+        case 'image/webp':
+            $myimage = imagecreatefromwebp($image_source);
+            break;
+        case 'image/gif':
+            $myimage = imagecreatefromgif($image_source);
+            break;
+        default:
+            // Unsupported image format
+            return false;
+    }
+
+    $resized = imagescale($myimage, $width, $height);
+
+    // Determine the output format based on the input format
+    $output_extension = pathinfo($image_source, PATHINFO_EXTENSION);
+
+    switch ($output_extension) {
+        case 'jpeg':
+            imagejpeg($resized, 'myimage.jpg');
+            break;
+        case 'png':
+            imagepng($resized, 'myimage.png');
+            break;
+        case 'webp':
+            imagewebp($resized, 'myimage.webp');
+            break;
+        case 'gif':
+            imagegif($resized, 'myimage.gif');
+            break;
+        default:
+            // Unsupported output format
+            return false;
+    }
+    imagedestroy($myimage);
+    imagedestroy($resized);
+    
+        }
+
+    imageResize("show-product.jpeg", 350, 400);
+
+
+    function hasspassword($password)
+    {
+      return   password_hash($password,PASSWORD_DEFAULT);
+    };
+       echo hasspassword('mkarim');echo "<br>";
+    
+
+    function varifypassword($password)
+    {
+         if(password_verify($password,'$2y$10$zIEhxbesFJjs7xX9OuPgjuHckqY8Weks3.4aroGtgNifWFqWigXsG')){
+            return "password is ok";
+         }else{
+            return "password is not ok";
+         }
+    };
+
+    echo varifypassword('mkarim');

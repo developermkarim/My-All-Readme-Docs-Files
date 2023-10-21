@@ -2996,7 +2996,6 @@ Sure, I can provide you with a guide to the most important PHP loops, including 
        echo "Iteration $i<br>";
    }
    ```
-
 **4. Foreach Loop:**
    - The foreach loop is designed for iterating over arrays and objects.
 
@@ -3052,6 +3051,7 @@ for ($i = 1; $i <= 100; $i++) {
    foreach ($person as $key => $value) {
        echo "$key: $value<br>";
    }
+
    ```
 
 **2. Nested Loops:**
@@ -3343,56 +3343,62 @@ if (file_put_contents($filename, $dataToWrite) !== false) {
     }
 
     // All Types of Image
-    function imageResize($image_source, $width, $height){
-    $image_info = getimagesize($image_source);
-    $mime_type = $image_info['mime'];
+    function ProductImage($image_source,$width,$height)
+    {
+        $myImageInfo = getimagesize($image_source);
+        $image_mime = $myImageInfo['mime'];
 
-    switch ($mime_type) {
-        case 'image/jpeg':
-            $myimage = imagecreatefromjpeg($image_source);
-            break;
-        case 'image/png':
-            $myimage = imagecreatefrompng($image_source);
-            break;
-        case 'image/webp':
-            $myimage = imagecreatefromwebp($image_source);
-            break;
-        case 'image/gif':
-            $myimage = imagecreatefromgif($image_source);
-            break;
-        default:
-            // Unsupported image format
-            return false;
-    }
-
-    $resized = imagescale($myimage, $width, $height);
-
-    // Determine the output format based on the input format
-    $output_extension = pathinfo($image_source, PATHINFO_EXTENSION);
-
-    switch ($output_extension) {
-        case 'jpeg':
-            imagejpeg($resized, 'myimage.jpg');
-            break;
-        case 'png':
-            imagepng($resized, 'myimage.png');
-            break;
-        case 'webp':
-            imagewebp($resized, 'myimage.webp');
-            break;
-        case 'gif':
-            imagegif($resized, 'myimage.gif');
-            break;
-        default:
-            // Unsupported output format
-            return false;
-    }
-    imagedestroy($myimage);
-    imagedestroy($resized);
-    
+        switch($image_mime){
+            case 'image/jpeg':
+                $myimage = imagecreatefromjpeg($image_source);
+                break;
+            case 'image/jpg':
+                $myimage = imagecreatefrompng($image_source);
+                break;
+            case 'image/gif':
+                $myimage = imagecreatefromgif($image_source);
+                break;
+            case "image/webp":
+                break;
+                $myimage = imagecreatefromwebp($image_source);
+                default;
+                return false;        
         }
 
-    imageResize("show-product.jpeg", 350, 400);
+        $resized  = imagescale($myimage,$width,$height);
+
+        $image_ext = pathinfo($image_source,PATHINFO_EXTENSION);
+        $prefix = 'product-';
+        $unique_image = uniqid($prefix,true);
+        $optimize_image = str_replace('.','',$unique_image);
+        $main_image = substr($optimize_image,0,20); // (string $string, int $offset, int|null $length)
+        switch($image_ext){
+            case "jpeg":
+                imagejpeg($resized, $main_image .'.'. $image_ext);
+                break;
+            case 'png':
+                imagepng($resized,$main_image . '.' . $image_ext);
+                break;
+            case 'webp':
+                imagewebp($resized,$main_image . '.' . $image_ext);
+                break;
+            case 'gif':
+                imagegif($resized, $main_image . '.' . $image_ext);
+                break;
+                default;
+                return false;
+        }
+
+        imagedestroy($resized);
+        imagedestroy($myimage);
+    }
+
+    /* $isResizeImage = ProductImage('show-product.jpeg',400,450);
+    if ($isResizeImage == true) {
+        echo 'Image processing and resizing successful.';
+    } else {
+        echo 'Image processing and resizing failed.';
+    } */
 
     ```
 
@@ -3401,13 +3407,14 @@ if (file_put_contents($filename, $dataToWrite) !== false) {
 
     ```php
     function hashPassword($password) {
-        return password_hash($password, PASSWORD_BCRYPT);
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 
     function verifyPassword($password, $hashedPassword) {
         return password_verify($password, $hashedPassword);
     }
     ```
+    **Note** `PASSWORD_DEFAULT` is a constant that represents the default hashing algorithm, currently `PASSWORD_BCRYPT`, which is secure and recommended. Using `PASSWORD_DEFAULT` future-proofs your code for potential algorithm updates.
 
 14. **Email Sending Functions:**
     - Functions for sending emails using the `mail` function or libraries like PHPMailer.
@@ -3700,11 +3707,20 @@ print_r($result);
 
 **7. Array Slicing:**
    - Extract a portion of an array.
+    array_slice(array $array, int $offset, int $length = null, bool $preserve_keys = false)
+
    - Common methods: `array_slice()`.
    
    ```php
    $fruits = ["apple", "banana", "cherry", "date"];
    $subset = array_slice($fruits, 1, 2); // Extract "banana" and "cherry"
+
+   $array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    // Extract a slice starting from index 2 (3rd element) with a length of 4 elements
+    $slice = array_slice($array, 2, 4);
+
+    print_r($slice);
    ```
 
 **8. Merging Arrays:**
@@ -3724,16 +3740,29 @@ print_r($result);
    ```php
    $languages = ["PHP", "JavaScript", "Python"];
    $found = in_array("JavaScript", $languages); // Check if "JavaScript" is in the array
+
+   $person = ['name' => 'John', 'age' => 30, 'city' => 'New York'];
+    $result = array_key_exists('age', $person); // $result is true
+
    ```
 
 **10. Combining Arrays:**
    - Create new arrays by combining existing ones.
+   The `array_combine()` function in PHP is used to create an associative array by using one array for keys and another array for values.
    - Common methods: `array_combine()`, `array_merge()`.
 
    ```php
    $keys = ["a", "b", "c"];
    $values = [1, 2, 3];
    $combined = array_combine($keys, $values); // Creates an associative array
+
+    Array
+    (
+        [a] => 1
+        [b] => 2
+        [c] => 3
+    )
+
    ```
 
 **Professional Code Example:**
@@ -3761,12 +3790,44 @@ print_r($youngEmployeeNames);
 ```
 
 **11. Array Chunking:**
-   - Split an array into chunks of a specified size.
-   - Common method: `array_chunk()`.
+   - Split an array into chunks of a specified size.The array_chunk() function in PHP is used to split an array into chunks of a specified size. It can be particularly useful when you want to process a large array in smaller, more manageable portions
+   - Common method: `array_chunk($array, $size, $preserve_keys = false)`
+
    
    ```php
    $numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
    $chunks = array_chunk($numbers, 3); // Splits the array into chunks of 3 elements
+
+    $fruits = ["apple", "banana", "cherry", "date", "elderberry", "fig", "grape", "honeydew"];
+    $chunks = array_chunk($fruits, 3);
+
+    print_r($chunks);
+   ```
+   <!-- Output Here -->
+   ```php
+        Array
+        (
+            [0] => Array
+                (
+                    [0] => apple
+                    [1] => banana
+                    [2] => cherry
+                )
+
+            [1] => Array
+                (
+                    [0] => date
+                    [1] => elderberry
+                    [2] => fig
+                )
+
+            [2] => Array
+                (
+                    [0] => grape
+                    [1] => honeydew
+                )
+        )
+
    ```
 
 **12. Array Flattening:**
