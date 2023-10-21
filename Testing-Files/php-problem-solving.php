@@ -41,5 +41,8 @@ echo "<br>";
 printf(pathinfo('images/mkarim.jpg',PATHINFO_ALL));
     ?>
 
+
+
+
 </body>
 </html>

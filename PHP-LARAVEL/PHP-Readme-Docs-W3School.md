@@ -3196,9 +3196,29 @@ Certainly, I can provide you with an overview of user-defined PHP functions alon
    ```
 
 7. **Callbacks and Higher-Order Functions:**
-   - Functions can be passed as arguments to other functions.
+Certainly, here are some definitions for terms related to higher-order functions in PHP:
 
+1. **Higher-Order Function**: A higher-order function is a function that can accept other functions as arguments or return functions as its result. In PHP, this enables you to write more flexible and modular code.
+
+2. **Callback Function**: A callback function is a function that is passed as an argument to another function. The receiving function can then execute or "call back" the callback function at an appropriate time.
+
+3. **Anonymous Function (Closure)**: Anonymous functions, also known as closures, are functions without a specified name. They are often used as callback functions when you don't need to reuse the function elsewhere in your code.
+
+4. **First-Class Functions**: PHP treats functions as first-class citizens, which means you can assign them to variables, pass them as arguments, and return them from other functions. This is a fundamental feature for working with higher-order functions.
+
+5. **Callable**: Callable is a data type in PHP that includes any valid PHP callable structure. It can be used to indicate that a variable or parameter is expected to contain a function or method.
+
+6. **Array Map**: `array_map` is a built-in PHP function that applies a given callback function to each element of an array and returns a new array with the results.
+
+   Example:
    ```php
+   $numbers = [1, 2, 3, 4, 5];
+   $squared = array_map(function ($n) {
+       return $n * $n;
+   }, $numbers);
+   ```
+
+```php
    function operate($a, $b, $callback) {
        return $callback($a, $b);
    }
@@ -3206,7 +3226,26 @@ Certainly, I can provide you with an overview of user-defined PHP functions alon
    $result = operate(5, 3, function($x, $y) {
        return $x - $y;
    }); // $result will be 2
-   ```
+
+   function calculate($num1, $num2, $operation) {
+    return $operation($num1, $num2);
+}
+
+function add($a, $b) {
+    return $a + $b;
+}
+
+function subtract($a, $b) {
+    return $a - $b;
+}
+
+// Using the higher-order function
+$result1 = calculate(5, 3, 'add');
+$result2 = calculate(8, 2, 'subtract');
+
+echo "Result 1: $result1<br>";
+echo "Result 2: $result2<br>";
+```
 
 8. **Namespacing Functions:**
    - You can define functions within namespaces to avoid naming conflicts.
@@ -3250,15 +3289,47 @@ Certainly, here are some more user-defined functions in PHP, each with a differe
 11. **File Handling Functions:**
    - Functions for reading and writing files.
 
-   ```php
-   function readFileContents($filename) {
-       return file_get_contents($filename);
-   }
+Certainly, I can provide shorter definitions and code examples for `file_get_contents` and `file_put_contents` in PHP:
 
-   function writeFileContents($filename, $data) {
-       file_put_contents($filename, $data);
-   }
-   ```
+1. `file_get_contents`:
+   - **Definition**: `file_get_contents` is used to read the entire content of a file into a string.
+   - **Example**:
+
+```php
+$content = file_get_contents('example.txt');
+echo $content;
+
+// ANOTHER
+$fileContent = file_get_contents('file.txt');
+
+if ($fileContent !== false) {
+    echo $fileContent; // Display the contents of the file
+} else {
+    echo 'Failed to read the file.';
+}
+
+```
+
+2. `file_put_contents`:
+   - **Definition**: `file_put_contents` is used to write data to a file.
+   - **Example**:
+
+```php
+$data = "This is some data to write to the file.";
+file_put_contents('output.txt', $data);
+
+// ANOTHER
+$dataToWrite = "This is some text to write to the file.";
+$filename = 'newfile.txt';
+
+if (file_put_contents($filename, $dataToWrite) !== false) {
+    echo 'Data written to ' . $filename;
+} else {
+    echo 'Failed to write to the file.';
+}
+
+```
+
 
 12. **Image Processing Functions:**
     - Functions for image manipulation using libraries like GD or Imagick.
@@ -3270,6 +3341,59 @@ Certainly, here are some more user-defined functions in PHP, each with a differe
         imagejpeg($resized, 'resized.jpg');
         imagedestroy($image);
     }
+
+    // All Types of Image
+    function imageResize($image_source, $width, $height){
+    $image_info = getimagesize($image_source);
+    $mime_type = $image_info['mime'];
+
+    switch ($mime_type) {
+        case 'image/jpeg':
+            $myimage = imagecreatefromjpeg($image_source);
+            break;
+        case 'image/png':
+            $myimage = imagecreatefrompng($image_source);
+            break;
+        case 'image/webp':
+            $myimage = imagecreatefromwebp($image_source);
+            break;
+        case 'image/gif':
+            $myimage = imagecreatefromgif($image_source);
+            break;
+        default:
+            // Unsupported image format
+            return false;
+    }
+
+    $resized = imagescale($myimage, $width, $height);
+
+    // Determine the output format based on the input format
+    $output_extension = pathinfo($image_source, PATHINFO_EXTENSION);
+
+    switch ($output_extension) {
+        case 'jpeg':
+            imagejpeg($resized, 'myimage.jpg');
+            break;
+        case 'png':
+            imagepng($resized, 'myimage.png');
+            break;
+        case 'webp':
+            imagewebp($resized, 'myimage.webp');
+            break;
+        case 'gif':
+            imagegif($resized, 'myimage.gif');
+            break;
+        default:
+            // Unsupported output format
+            return false;
+    }
+    imagedestroy($myimage);
+    imagedestroy($resized);
+    
+        }
+
+    imageResize("show-product.jpeg", 350, 400);
+
     ```
 
 13. **User Authentication Functions:**

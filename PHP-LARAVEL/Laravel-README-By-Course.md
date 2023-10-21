@@ -1377,7 +1377,7 @@ axios.get(`${apiUrl}/api/user/12`)
      ```php
      // routes/web.php
      Route::prefix('admin')->group(function () {
-         Route::get('/dashboard', 'AdminController@index');
+         Route::get('/dashboard', 'AdminController@index'); // 'http://localhost:8000/admin/dashboard
          // More admin routes
      });
      ```
@@ -1393,7 +1393,7 @@ axios.get(`${apiUrl}/api/user/12`)
      Route::get('/post/{post}', 'PostController@show');
 
      // app/Http/Controllers/PostController.php
-     public function show(Post $post)
+     public function show(Post $post) // Post is model. Route Model binding returns just single data base on primary key.
      {
          // $post is automatically injected based on the {post} parameter
          return view('posts.show', compact('post'));
@@ -1446,26 +1446,6 @@ axios.get(`${apiUrl}/api/user/12`)
      // Generates routes for creating, updating, and deleting comments related to posts.
      ```
 
-#### 14. **Route Middleware Groups:**
-   - You can create custom middleware groups to apply multiple middleware to a group of routes.
-   - Example: Creating a custom middleware group for admin routes.
-
-     ```php
-     // app/Http/Kernel.php
-     protected $middlewareGroups = [
-         'admin' => [
-             'auth',
-             'admin.check',
-         ],
-     ];
-
-     // routes/web.php
-     Route::middleware(['admin'])->group(function () {
-         Route::get('/admin/dashboard', 'AdminController@index');
-         // More admin routes
-     });
-     ```
-
 #### 15. **Optional Parameters:**
    - You can make route parameters optional by providing default values.
    - Example: Using optional parameters to handle different search scenarios.
@@ -1493,38 +1473,6 @@ Certainly! Here are some more advanced routing concepts and techniques in Larave
          return view('posts.show', compact('post'));
      }
      ```
-
-#### 9. **Route Model Binding with Custom Resolvers:**
-   - You can use custom resolvers to specify how a model should be retrieved from the database.
-   - Example: Using a custom resolver to fetch a `User` model by a unique field other than `id`.
-
-     ```php
-     // app/Providers/RouteServiceProvider.php
-     public function boot()
-     {
-         parent::boot();
-
-         Route::bind('user', function ($value) {
-             return User::where('username', $value)->firstOrFail();
-         });
-     }
-
-     // routes/web.php
-     Route::get('/user/{user}', 'UserController@show');
-
-     // The {user} parameter is resolved based on the 'username' field.
-     ```
-
-#### 10. **Route Prefixes with Middleware:**
-    - Combine route prefixes with middleware to create dynamic routes with specific middleware applied.
-    - Example: Creating route groups with prefixes and middleware for user roles.
-
-      ```php
-      // routes/web.php
-      Route::prefix('admin')->middleware('admin')->group(function () {
-          Route::get('/dashboard', 'AdminController@index');
-      });
-      ```
 
 #### 11. **Nested Middleware Groups:**
     - You can nest middleware groups within other groups to create complex middleware arrangements.
@@ -1559,18 +1507,6 @@ Certainly! Here are some more advanced routing concepts and techniques in Larave
 
       This can significantly improve the performance of your application by reducing the time needed to register routes.
 
-#### 13. **Route Model Binding with Closure:**
-    - You can use a closure-based route to bind a model based on a custom logic.
-    - Example: Binding a `User` model based on a custom logic.
-
-      ```php
-      // routes/web.php
-      Route::get('/user/{user}', function (User $user) {
-          return view('user.profile', compact('user'));
-      })->where('user', '^(?!admin).*'); // Exclude 'admin' usernames
-      ```
-Certainly, let's explore some additional advanced routing concepts in Laravel:
-
 #### 14. **Route Resource Naming:**
    - You can customize the resource naming conventions when defining resource routes.
    - Example: Customizing the resource route names for a `Product` resource.
@@ -1582,8 +1518,6 @@ Certainly, let's explore some additional advanced routing concepts in Laravel:
          'store' => 'products.save',
      ]);
      ```
-
-     In this example, you've customized the route names for the create and store actions.
 
 #### 15. **Route Model Binding with Explicit Binding:**
    - You can use explicit binding to manually specify how a model should be bound to a route.
@@ -1612,29 +1546,18 @@ Certainly, let's explore some additional advanced routing concepts in Laravel:
      // routes/api.php
      Route::apiResource('products', 'ProductApiController');
      ```
+```plaintext
++-----------+-----------------------+-----------------------+-------------------+---------------------+--------------+
+| Method    | URI                   | Name                  | Action            | Controller          |
++-----------+-----------------------+-----------------------+-------------------+---------------------+--------------+
+| GET|HEAD  | api/products          | products.index       | index             | ProductApiController | index        |
+| POST      | api/products          | products.store       | store             | ProductApiController | store        |
+| GET|HEAD  | api/products/{product} | products.show        | show              | ProductApiController | show         |
+| PUT|PATCH | api/products/{product} | products.update      | update            | ProductApiController | update       |
+| DELETE    | api/products/{product} | products.destroy     | destroy           | ProductApiController | destroy      |
++-----------+-----------------------+-----------------------+-------------------+---------------------+--------------+
+```
 
-#### 17. **Route Model Binding with Implicit Binding:**
-   - Laravel provides implicit model binding where route parameters match the model's route key name.
-   - Example: Using implicit binding for a `Product` model by its default key `id`.
-
-     ```php
-     // routes/web.php
-     Route::get('/product/{product}', 'ProductController@show');
-
-     // The {product} parameter is automatically bound to a Product model.
-     ```
-
-#### 18. **Route Model Binding with Custom Keys:**
-   - You can specify custom route keys for model binding, allowing you to bind models using different attributes.
-   - Example: Using a custom route key for a `Coupon` model.
-
-     ```php
-     // app/Coupon.php
-     protected $routeKey = 'code';
-
-     // routes/web.php
-     Route::get('/coupon/{coupon}', 'CouponController@show');
-     ```
 
 #### 19. **Subdomain Routing:**
    - Laravel supports subdomain routing, enabling you to define routes based on subdomains.
@@ -1677,7 +1600,7 @@ Certainly, let's explore some additional advanced routing concepts in Laravel:
      });
      ```
 
-#### Route controller, Prefix, name Prefix and Middleware together
+#### **Route controller, Prefix, name Prefix and Middleware together**
 ---
 To assign controller, Prefix, name Prefix and Middleware to all routes within a group.We can assigned the methods by chaning operator(->) after the first static method(added with ::). you may use the middleware method before defining the group. Middleware are executed in the order they are listed in the array.['auth','admin'].
 
@@ -1697,13 +1620,7 @@ abort_if(!isset($address),404);
 return view('student.data',['my_data'=>$address]);
 });
 ```
-#### Route Caching
-When deploying your application to production, you should take advantage of Laravel's route cache. Using the route cache will drastically decrease the amount of time it takes to register all of your application's routes. To generate a route cache, execute the route:cache Artisan command:
-
-```bash
-php artisan route:cache
-```
-After running this command, your cached routes file will be loaded on every request. Remember, if you add any new routes you will need to generate a fresh route cache. Because of this, you should only run the route:cache command during your project's deployment.
+Remember, if you add any new routes you will need to generate a fresh route cache. Because of this, you should only run the route:cache command during your project's deployment.
 
 You may use the route:clear command to clear the route cache:
 
@@ -1713,24 +1630,19 @@ php artisan route:clear
 
 ## Middleware
 ---
+Middleware acts as a bridge between a request and a response. It is a type of filtering mechanism.
 
-Middleware in Laravel is a series of filters or layers through which an HTTP request passes. Each middleware performs a specific task, such as authentication, logging, or data manipulation. Middleware is executed in a sequential order defined in your application, allowing you to process requests at various stages of the HTTP request lifecycle.
+Laravel includes a middleware that verifies whether the user of the application is authenticated or not. If the user is authenticated, it redirects to the home page otherwise, if not, it redirects to the login page.
 
 #### Middleware & Responses
 ---
 Of course, a middleware can perform tasks before or after passing the request deeper into the application. For example, the following middleware would perform some task before the request is handled by the application:
 ```bash
-<?php
- 
-namespace App\Http\Middleware;
- 
-use Closure;
- 
 class BeforeMiddleware
 {
     public function handle($request, Closure $next)
     {
-        // Perform action
+      # Perform action
  
         return $next($request);
     }
@@ -1738,7 +1650,7 @@ class BeforeMiddleware
 ```
 Here are some key aspects of middleware in Laravel:
 
-### CREATE MIDDLEWARE
+### **CREATE MIDDLEWARE**
 ---
 #### 1. **Middleware Creation:**
    - You can create custom middleware using Artisan commands or manually in the `app/Http/Middleware` directory.
@@ -1864,7 +1776,7 @@ Here are some key aspects of middleware in Laravel:
      ```
      Certainly! Let's create a SubscriptionMiddleware as an example. This middleware will check if a user has an active subscription to access certain routes. Here are the steps:
 
-#### Step 1: Create the Middleware
+#### Step 1: **Create the Middleware**
 
 1. **Generate the Middleware:**
    - Use the Artisan command to create the middleware. Replace `SubscriptionMiddleware` with the desired middleware name:
