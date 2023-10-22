@@ -229,4 +229,8 @@ function imageResize($image_source, $width, $height){
          }
     };
 
-    echo varifypassword('mkarim');
+    echo varifypassword('mkarim'); echo "<br>";
+
+    echo "php server : " . $_SERVER['PHP_SELF'];
+
+    

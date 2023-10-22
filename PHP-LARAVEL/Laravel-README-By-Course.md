@@ -1831,6 +1831,7 @@ Here are some key aspects of middleware in Laravel:
        'subscription' => \App\Http\Middleware\SubscriptionMiddleware::class,
    ];
    ```
+ 
 
 #### Step 3: Apply the Middleware to Routes
 
@@ -1848,6 +1849,45 @@ Here are some key aspects of middleware in Laravel:
    ```
 
    In this example, the `'subscription'` middleware is applied to all routes within the group, ensuring that only users with an active subscription can access them.
+
+   **2. Use The Middleware In Controller**
+    you can apply middleware directly within a controller class using the $middleware property. This allows you to specify middleware that should be executed for all methods within that controller. Here's a code example:
+  ```php
+  namespace App\Http\Controllers;
+    use Illuminate\Http\Request;
+    class MyController extends Controller
+    {
+       // Middleware applied to all methods in this controller.
+        protected $middleware = [
+            'auth', // Example middleware
+            'log.requests', // Another example middleware
+        ];
+          /**
+     * Constructor method where you can define middleware for specific methods.
+     */
+    public function __construct()
+    {
+        $this->middleware('custom_middleware')->only('specificMethod'); // applying not for all methods but just for this 'specificMethod'
+        $this->middleware('custom_middleware')->except('specificMethod'); // applying for all methods witout this 'specificMethod'
+
+         $this->middleware('custom_middleware'); // applying For all methods
+
+    }
+
+        public function index()
+    {
+        // Middleware 'auth' and 'log.requests' will be applied to this method.
+        return view('welcome');
+    }
+
+    public function specificMethod()
+    {
+        // Middleware 'auth', 'log.requests', and 'custom_middleware' will be applied to this method.
+        return view('specific_view');
+    }
+
+    }
+    ```
 
 #### Step 4: Implement Subscription Logic in the User Model
 
@@ -1867,15 +1907,15 @@ Here are some key aspects of middleware in Laravel:
  **Notes :**  Customize this method to fit your subscription model and logic.
 
 
-### CSRF Protection in Laravel:
+### **CSRF Protection in Laravel:**
 ---
-Cross-Site Request Forgery (CSRF) is an attack that tricks a user into executing unwanted actions on a web application without their knowledge or consent. Laravel provides built-in CSRF protection to mitigate this threat.
+**CSRF (Cross-Site Request Forgery)** in Laravel is a security feature that helps protect your web application from malicious actions. It ensures that requests made to your application come from a legitimate source. Laravel generates unique tokens for each user session, and these tokens are added to forms. When a form is submitted, Laravel checks if the token matches the one generated for that session, preventing unauthorized or forged requests. This helps keep your application secure from cross-site request forgery attacks.
 
 Here are the key aspects of CSRF protection in Laravel:
 
 #### 1. **CSRF Tokens:**
    - Laravel generates unique CSRF tokens for each user session.
-   - These tokens are included in forms as hidden fields or can be added to AJAX requests.
+   - These tokens are included in forms as hidden fields or can be added to AJAX requests. 
    - Tokens are used to verify that the incoming request was made from your application and not from a malicious source.
 
 #### 2. **Middleware:**
@@ -1886,9 +1926,19 @@ Here are the key aspects of CSRF protection in Laravel:
    - You can use the `@csrf` Blade directive to generate a hidden input field containing the CSRF token.
    - Include this directive in your forms to ensure CSRF protection.
 
+   ```php
+     @csrf 
+      # or
+    <input type="hidden" name="csrf" value="crsf_token()"/> 
+   ```
+
 #### 4. **AJAX Requests:**
    - When making AJAX requests, you should include the CSRF token in the request headers or data.
    - Laravel provides a JavaScript variable, `csrf_token`, which you can use to fetch the token.
+
+**Crsf View in Image How it Woks**
+![alt text](https://i.ibb.co/34ccjhP/Anti-Cross-Site-Request-Forgery-Diagram.png)
+![alt text](https://i.ibb.co/xCrhCWm/cross-site-request-forgery-example.png)
 
 ### Example Usage in Blade Views:
 
@@ -1942,7 +1992,7 @@ In this AJAX request example:
 
 This ensures that the AJAX request is protected against CSRF attacks.
 
-### CSRF & XSRF
+### **Using CSRF & XSRF**
 ---
 Certainly, let's dive deeper into CSRF (Cross-Site Request Forgery) and XSRF (Cross-Site Request Forgery) protection in Laravel, including more advanced aspects and use cases.
 

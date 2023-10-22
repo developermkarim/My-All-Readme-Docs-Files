@@ -21,28 +21,19 @@
 /*      error_reporting(E_WARNING);
 echo $undefinedVariable;  */
 
-$server_name = $_SERVER['PHP_SELF'];
-echo "Server name: $server_name";echo "<br>";
-
-echo 'server post : ' . $_SERVER['SERVER_PORT'];echo "<br>";
-echo 'server https :' . $_SERVER['HTTPS'];echo "<br>";
-echo 'server query URL : ' . $_SERVER['QUERY_URI'];echo "<br>";
-echo 'server query string : ' . $_SERVER['QUERY_STRING'];echo "<br>";
-echo 'server host : ' . $_SERVER['HTTP_HOST'];echo "<br>";
-echo 'server Client IP Address : ' . $_SERVER['REMOTE_ADDR'];echo "<br>";
-echo 'server HTTP REFERER : ' . $_SERVER['HTTP_REFERER'];echo "<br>";
-echo 'server Request Method : ' . $_SERVER['REQUEST_METHOD'];echo "<br>";
-echo 'server Name : ' . $_SERVER['SERVER_NAME'];echo "<br>";
-echo 'User agent for browser address : ' . $_SERVER['HTTP_USER_AGENT'];echo "<br>";
 
 echo "FILE NAME WITHOUT EXTENSION IS " . pathinfo("mkarim.jpg",PATHINFO_FILENAME) . PHP_EOL .', FILE EXTENSION IS ' . pathinfo('mkarim.jpg',PATHINFO_EXTENSION) . ', FILE PATH DIR '. pathinfo('images/mkarim.jpg',PATHINFO_DIRNAME); /* PATHINFO_FILENAME . PATHINFO_EXTENSION; */
 echo "<br>";
 
-printf(pathinfo('images/mkarim.jpg',PATHINFO_ALL));
-    ?>
+printf(pathinfo('images/mkarim.jpg',PATHINFO_ALL));echo "<br>";
+
+$setcookine = setcookie('user','Alice',time() + 3600,'/');
+if($setcookine)
+echo "cookie set";
+else
+echo "Sorry, cookie not set";
 
 
-
-
+?>
 </body>
 </html>
