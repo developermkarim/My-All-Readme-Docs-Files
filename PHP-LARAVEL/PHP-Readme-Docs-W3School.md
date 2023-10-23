@@ -7993,3 +7993,885 @@ Creating an automatically expiring session that redirects the user to the home o
 
    Make sure your login page sets the session variables when a user logs in. This might include setting the user's ID, username, or other relevant information in the session.
 
+### **PHP FILTERS**
+---
+Certainly, here's a comprehensive guide to PHP filters, covering different filter types and how they are used in professional applications.
+
+### PHP Filters
+
+PHP filters provide a convenient way to validate and sanitize data coming from various sources, such as user input, form submissions, and external data. Filters help ensure data quality, security, and consistency in your applications.
+
+#### 1. Validation Filters
+
+Validation filters are used to check if data meets specific criteria, like being an email address, URL, or an integer.
+
+- **`FILTER_VALIDATE_EMAIL`**: Validates an email address.
+  ```php
+  $email = "john@example.com";
+  if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      echo "Valid email address";
+  }
+  ```
+
+- **`FILTER_VALIDATE_URL`**: Validates a URL.
+  ```php
+  $url = "https://www.example.com";
+  if (filter_var($url, FILTER_VALIDATE_URL)) {
+      echo "Valid URL";
+  }
+  ```
+
+- **`FILTER_VALIDATE_INT`**: Validates an integer.
+  ```php
+  $number = "42";
+  if (filter_var($number, FILTER_VALIDATE_INT)) {
+      echo "Valid integer";
+  }
+  ```
+
+#### 2. Sanitization Filters
+
+Sanitization filters clean or sanitize data to make it safe for various uses.
+
+- **`FILTER_SANITIZE_STRING`**: Removes tags and special characters from a string.
+  ```php
+  $input = "<p>Hello, World!</p>";
+  $cleaned = filter_var($input, FILTER_SANITIZE_STRING);
+  echo $cleaned; // Outputs "Hello, World!"
+  ```
+
+- **`FILTER_SANITIZE_EMAIL`**: Removes invalid characters from an email address.
+  ```php
+  $dirtyEmail = "my.email@example.c@..";
+  $cleanedEmail = filter_var($dirtyEmail, FILTER_SANITIZE_EMAIL);
+  echo $cleanedEmail; // Outputs "my.email@example.com"
+  ```
+
+- **`FILTER_SANITIZE_NUMBER_INT`**: Removes all characters except digits.
+  ```php
+  $dirtyNumber = "42abc123";
+  $cleanedNumber = filter_var($dirtyNumber, FILTER_SANITIZE_NUMBER_INT);
+  echo $cleanedNumber; // Outputs "42123"
+  ```
+
+#### 3. Custom Filters
+
+You can also create custom filter functions to meet specific validation or sanitization requirements.
+
+```php
+// Custom filter function to check if a string contains "PHP"
+function customFilter($value) {
+    return strpos($value, "PHP") !== false;
+}
+
+$input = "I love PHP programming";
+if (filter_var($input, FILTER_CALLBACK, ["options" => "customFilter"])) {
+    echo "Contains 'PHP'";
+}
+```
+
+In this example, a custom filter function (`customFilter`) checks if the input contains "PHP."
+
+#### 4. Filter Options
+
+For some filters, you can specify options to customize their behavior. For example, `FILTER_VALIDATE_INT` can accept options like `min_range` and `max_range` to validate within a specific range.
+
+```php
+$options = [
+    "options" => ["min_range" => 1, "max_range" => 100]
+];
+
+$number = "42";
+if (filter_var($number, FILTER_VALIDATE_INT, $options)) {
+    echo "Valid integer between 1 and 100";
+}
+```
+
+#### 5. Filter Flags
+
+Filter flags can modify the behavior of filters. For example, `FILTER_SANITIZE_EMAIL` has the `FILTER_FLAG_EMAIL_UNICODE` flag for handling internationalized email addresses.
+
+```php
+$email = "jörn@example.com";
+$cleanedEmail = filter_var($email, FILTER_SANITIZE_EMAIL, FILTER_FLAG_EMAIL_UNICODE);
+echo $cleanedEmail;
+```
+
+#### 6. `FILTER_VALIDATE_IP`
+
+- **Definition**: Validates an IP address.
+
+```php
+$ip = "192.168.1.1";
+if (filter_var($ip, FILTER_VALIDATE_IP)) {
+    echo "Valid IP address";
+}
+```
+
+This filter checks if the provided string is a valid IP address.
+
+#### 7. `FILTER_VALIDATE_BOOLEAN`
+
+- **Definition**: Validates a boolean value.
+
+```php
+$value = "true";
+if (filter_var($value, FILTER_VALIDATE_BOOLEAN)) {
+    echo "Valid boolean value";
+}
+```
+
+This filter checks if the provided string represents a valid boolean value (e.g., "1", "true", "on").
+
+#### 8. `FILTER_SANITIZE_FULL_SPECIAL_CHARS`
+
+- **Definition**: Removes or encodes all special characters in a string.
+
+```php
+$input = "<script>alert('Hello, World!')</script>";
+$cleanedInput = filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+echo $cleanedInput; // Outputs "&lt;script&gt;alert(&#039;Hello, World!&#039;)&lt;/script&gt;"
+```
+
+This filter encodes special characters to their HTML entities, making it safe for output in web pages.
+
+#### 9. `FILTER_FLAG_PATH_REQUIRED`
+
+- **Definition**: Requires a valid path (URL).
+
+```php
+$url = "https://www.example.com";
+if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
+    echo "Valid URL with path";
+}
+```
+
+This flag requires the URL to have a path (e.g., "https://www.example.com/path").
+
+#### 10. `FILTER_FLAG_IPV6`
+
+- **Definition**: Validates an IPv6 address.
+
+```php
+$ipv6 = "2001:0db8:85a3:0000:0000:8a2e:0370:7334";
+if (filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+    echo "Valid IPv6 address";
+}
+```
+
+This flag specifies that the IP address should be in IPv6 format.
+
+#### 11. `FILTER_FLAG_EMAIL_HOST`
+
+- **Definition**: Validates the email address host part.
+
+```php
+$email = "john@example.com";
+if (filter_var($email, FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_HOST)) {
+    echo "Valid email host";
+}
+```
+
+This flag checks the validity of the email host part (e.g., "example.com").
+
+#### 12. `FILTER_FLAG_EMAIL_UNICODE`
+
+- **Definition**: Allows Unicode characters in email addresses.
+
+```php
+$email = "jörn@example.com";
+if (filter_var($email, FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE)) {
+    echo "Valid email with Unicode characters";
+}
+```
+
+This flag allows Unicode characters in email addresses.
+
+#### 13. `FILTER_VALIDATE_DOMAIN`
+
+- **Definition**: Validates a domain name.
+
+```php
+$domain = "example.com";
+if (filter_var($domain, FILTER_VALIDATE_DOMAIN)) {
+    echo "Valid domain name";
+}
+```
+
+This filter checks if the provided string is a valid domain name.
+
+#### 14. `FILTER_VALIDATE_FLOAT`
+
+- **Definition**: Validates a floating-point number.
+
+```php
+$floatValue = "3.14";
+if (filter_var($floatValue, FILTER_VALIDATE_FLOAT)) {
+    echo "Valid floating-point number";
+}
+```
+
+This filter validates floating-point numbers, including both integer and decimal values.
+
+#### 15. `FILTER_SANITIZE_MAGIC_QUOTES`
+
+- **Definition**: Apply the `addslashes` function to the data.
+
+```php
+$input = "It's a test";
+$cleanedInput = filter_var($input, FILTER_SANITIZE_MAGIC_QUOTES);
+echo $cleanedInput; // Outputs "It\\'s a test"
+```
+
+This filter adds slashes to special characters, similar to the `addslashes()` function.
+
+#### 16. `FILTER_FLAG_STRIP_LOW`
+
+- **Definition**: Strip characters with ASCII value less than 32.
+
+```php
+$input = "Hello\nWorld";
+$cleanedInput = filter_var($input, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+echo $cleanedInput; // Outputs "HelloWorld"
+```
+
+This flag strips control characters with ASCII values less than 32.
+
+#### 17. `FILTER_FLAG_STRIP_HIGH`
+
+- **Definition**: Strip characters with ASCII value greater than 127.
+
+```php
+$input = "Hello\x80World";
+$cleanedInput = filter_var($input, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+echo $cleanedInput; // Outputs "HelloWorld"
+```
+
+This flag strips characters with ASCII values greater than 127.
+
+#### 18. `FILTER_VALIDATE_REGEXP`
+
+- **Definition**: Validates a value against a regular expression.
+
+```php
+$value = "ABC123";
+$pattern = "/^[A-Z0-9]+$/";
+if (filter_var($value, FILTER_VALIDATE_REGEXP, ["options" => ["regexp" => $pattern]])) {
+    echo "Valid value matching the pattern";
+}
+```
+
+This filter allows you to validate a value using a custom regular expression.
+
+### **FILTER FUNCTIONS**
+---
+Certainly, let's explore additional PHP filter functions along with code examples for professional use.
+
+#### 19. `filter_has_var()`
+
+- **Definition**: Checks if a variable of a specified type exists in the request.
+
+```php
+if (filter_has_var(INPUT_POST, 'email')) {
+    echo "The 'email' variable exists in the POST request.";
+} else {
+    echo "The 'email' variable does not exist in the POST request.";
+}
+```
+Output:
+```
+The 'email' variable exists in the POST request.
+```
+
+This function checks if the 'email' variable exists in the POST request.
+
+#### 20. `filter_id()`
+
+- **Definition**: Returns the filter ID of a named filter.
+
+```php
+$filterName = 'FILTER_SANITIZE_EMAIL';
+$filterId = filter_id($filterName);
+echo "Filter ID for $filterName is $filterId.";
+```
+Output:
+```
+Filter ID for FILTER_SANITIZE_EMAIL is 517.
+```
+
+This function retrieves the filter ID for a named filter.
+
+#### 21. `filter_input()`
+
+- **Definition**: Gets an external variable (e.g., from form input) and optionally filters it.
+
+```php
+$email = filter_input(INPUT_GET, 'user_email', FILTER_VALIDATE_EMAIL);
+if ($email !== null) {
+    echo "Valid email: $email";
+} else {
+    echo "Invalid email or not provided.";
+}
+```
+Output (when 'user_email' is provided and valid):
+```
+Valid email: user@example.com
+```
+
+Output (when 'user_email' is not provided or invalid):
+```
+Invalid email or not provided.
+```
+
+This function retrieves and filters the 'user_email' variable from the GET request as an email.
+
+#### 22. `filter_input_array()`
+
+- **Definition**: Gets external variables (e.g., from form input) as an associative array and filters them.
+
+```php
+$inputArray = filter_input_array(INPUT_POST, [
+    'name' => FILTER_SANITIZE_STRING,
+    'age' => ['filter' => FILTER_VALIDATE_INT, 'options' => ['min_range' => 18]]
+]);
+
+echo "Filtered data:";
+print_r($inputArray);
+```
+Output:
+```
+Filtered data:
+Array
+(
+    [name] => John Doe
+    [age] => 25
+)
+```
+
+This function retrieves and filters an array of input variables.
+
+#### 23. `filter_list()`
+
+- **Definition**: Returns an array of available filter names.
+
+```php
+$filters = filter_list();
+echo "Available filters: ";
+print_r($filters);
+```
+Output (a list of available filters, abbreviated for brevity):
+```
+Available filters: 
+Array
+(
+    [0] => int
+    [1] => boolean
+    [2] => float
+    [3] => validate_regexp
+    [4] => validate_url
+    ...
+    [123] => hex2bin
+)
+
+This function lists all available filter names.
+
+#### 24. `filter_var_array()`
+
+- **Definition**: Filters an array of variables according to a set of filter rules.
+
+```php
+$data = [
+    'email' => 'john@example.com',
+    'age' => '25',
+];
+
+$options = [
+    'email' => FILTER_VALIDATE_EMAIL,
+    'age' => ['filter' => FILTER_VALIDATE_INT, 'options' => ['min_range' => 18]]
+];
+
+$filteredData = filter_var_array($data, $options);
+
+echo "Filtered data:";
+print_r($filteredData);
+```
+Output:
+```
+Filtered data:
+Array
+(
+    [email] => john@example.com
+    [age] => 25
+)
+```
+
+This function filters an array of variables according to specified rules.
+
+### **PHP Callbacks**
+---
+In PHP, callback functions are powerful tools for defining custom behavior in your projects. There are several ways to create and use callback functions. Here are various types of callback functions with code examples for professional use:
+
+#### 1. Anonymous Functions
+
+Anonymous functions, also known as closures, are functions without a name. They are useful when you need a small, one-time function.
+
+```php
+$greet = function ($name) {
+    return "Hello, $name!";
+};
+
+echo $greet("John"); // Outputs: Hello, John!
+```
+
+#### 2. Named Functions
+
+Named functions are traditional functions with a name. You can pass the function name as a callback.
+
+```php
+function greet($name) {
+    return "Hello, $name!";
+}
+
+$callback = "greet";
+echo $callback("Alice"); // Outputs: Hello, Alice
+```
+
+#### 3. Callbacks as Arguments
+
+Passing functions as arguments to other functions is a common use case.
+
+```php
+function processData($data, $callback) {
+    return $callback($data);
+}
+
+$result = processData("Sarah", function ($name) {
+    return "Hi, $name!";
+});
+
+echo $result; // Outputs: Hi, Sarah!
+```
+
+#### 4. Using Built-in Functions
+
+PHP provides built-in functions that accept callback functions, like `array_map()` and `array_filter()`.
+
+```php
+$numbers = [1, 2, 3, 4, 5];
+$double = function ($num) {
+    return $num * 2;
+};
+
+$doubledNumbers = array_map($double, $numbers);
+print_r($doubledNumbers);
+```
+
+#### 5. Object Methods
+
+You can use object methods as callbacks.
+
+```php
+class Math {
+    public function square($num) {
+        return $num * $num;
+    }
+}
+
+$math = new Math();
+$callback = [$math, 'square'];
+echo $callback(4); // Outputs: 16
+```
+
+#### 6. Static Methods
+
+Static methods can be used as callbacks.
+
+```php
+class Formatter {
+    public static function format($text) {
+        return strtoupper($text);
+    }
+}
+
+$callback = ['Formatter', 'format'];
+echo $callback("hello"); // Outputs: HELLO
+```
+
+#### 7. Callbacks with Custom Classes
+
+You can create classes for custom callback functions.
+
+```php
+class MyCallback {
+    public function call($name) {
+        return "Howdy, $name!";
+    }
+}
+
+$myCallback = new MyCallback();
+$callback = [$myCallback, 'call'];
+echo $callback("James"); // Outputs: Howdy, James!
+```
+
+#### 8. Combining Callbacks
+
+You can combine callbacks with `call_user_func()`.
+
+```php
+function addOne($num) {
+    return $num + 1;
+}
+
+function double($num) {
+    return $num * 2;
+}
+
+$combinedCallback = function ($num, $callbacks) {
+    foreach ($callbacks as $callback) {
+        $num = call_user_func($callback, $num);
+    }
+    return $num;
+};
+
+$result = $combinedCallback(5, [ 'addOne', 'double' ]);
+echo $result; // Outputs: 12
+```
+
+These are various ways to use callback functions in PHP for professional projects. Callbacks are essential for building flexible and modular code, enabling you to define custom behavior as needed.
+
+### **PHP JSON**
+---
+Certainly, let's create a comprehensive guide on PHP JSON encoding and decoding. JSON is a widely used data interchange format in professional applications, making it essential to understand how to work with it effectively.
+
+#### PHP JSON Encoding
+
+JSON encoding is the process of converting PHP data structures (arrays and objects) into a JSON string. It is useful when you want to send data to other applications or services in a structured format.
+
+##### Encoding PHP Arrays
+
+You can use the `json_encode()` function to encode PHP arrays into JSON:
+
+```php
+$data = [
+    "name" => "John",
+    "age" => 30,
+    "city" => "New York"
+];
+
+$json = json_encode($data);
+echo $json;
+```
+
+Output:
+```json
+{"name":"John","age":30,"city":"New York"}
+```
+
+##### Encoding PHP Objects
+
+Objects can also be encoded into JSON:
+
+```php
+class Person {
+    public $name = "Alice";
+    public $age = 25;
+}
+
+$person = new Person();
+$json = json_encode($person);
+echo $json;
+```
+
+Output:
+```json
+{"name":"Alice","age":25}
+```
+
+##### Encoding Options
+
+You can use options for pretty-printing JSON or handling special characters:
+
+```php
+$data = [
+    "name" => "John",
+    "age" => 30,
+    "city" => "New York"
+];
+
+$json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+echo $json;
+```
+
+#### PHP JSON Decoding
+
+JSON decoding is the process of converting a JSON string back into PHP data structures, making it easier to work with in your PHP application.
+
+##### Decoding JSON Strings
+
+You can use the `json_decode()` function to decode JSON strings into PHP data structures:
+
+```php
+$json = '{"name":"Alice","age":25}';
+$data = json_decode($json);
+
+echo $data->name; // Outputs: Alice
+echo $data->age;  // Outputs: 25
+```
+
+##### Decoding as Associative Arrays
+
+By passing `true` as the second argument, you can decode JSON strings as associative arrays:
+
+```php
+$json = '{"name":"Alice","age":25}';
+$data = json_decode($json, true);
+
+echo $data["name"]; // Outputs: Alice
+echo $data["age"];  // Outputs: 25
+```
+
+#### JSON in Professional Applications
+
+JSON is widely used in professional applications, especially when working with APIs. To illustrate, here's a basic example of creating a weather API using JSON:
+
+```php
+$weatherData = [
+    "location" => "New York",
+    "temperature" => 75,
+    "conditions" => "Sunny"
+];
+
+// Encode the weather data as JSON
+$json = json_encode($weatherData);
+
+// Set the content type to JSON
+header('Content-Type: application/json');
+
+// Send the JSON response
+echo $json;
+```
+
+In this example, we create a basic weather API that provides weather information in JSON format. This is a simplified demonstration, but in real applications, the data could come from a weather service or database.
+
+### **PHP Exceptions**
+---
+#### Definition
+
+In PHP, exceptions are a way to handle runtime errors and exceptional situations gracefully. They allow you to handle errors and respond to them in a structured way, improving the robustness of your application.
+
+#### Throwing Exceptions
+
+To throw an exception, use the `throw` statement. You can throw built-in exceptions or create custom ones.
+
+```php
+// Throw a built-in exception
+throw new Exception("This is a generic exception.");
+
+// Create a custom exception class
+class MyException extends Exception {}
+throw new MyException("This is a custom exception.");
+```
+
+#### Catching Exceptions
+
+To catch exceptions and handle them, use the `try` and `catch` blocks.
+
+```php
+try {
+    // Code that may throw an exception
+} catch (Exception $e) {
+    // Handle the exception
+    echo "An exception occurred: " . $e->getMessage();
+}
+```
+
+#### Multiple Catch Blocks
+
+You can catch multiple types of exceptions with separate `catch` blocks.
+
+```php
+try {
+    // Code that may throw an exception
+} catch (MyException $e) {
+    // Handle MyException
+    echo "Custom exception: " . $e->getMessage();
+} catch (Exception $e) {
+    // Handle other exceptions
+    echo "An exception occurred: " . $e->getMessage();
+}
+```
+
+#### Finally Block
+
+You can use the `finally` block to specify code that should always execute, regardless of whether an exception was thrown or not.
+
+```php
+try {
+    // Code that may throw an exception
+} catch (Exception $e) {
+    // Handle the exception
+    echo "An exception occurred: " . $e->getMessage();
+} finally {
+    // This block always executes
+    echo "Cleanup code here.";
+}
+```
+
+#### Rethrowing Exceptions
+
+You can rethrow an exception to let it propagate up the call stack.
+
+```php
+try {
+    throw new Exception("Original exception");
+} catch (Exception $e) {
+    // Handle the exception
+    echo "Caught exception: " . $e->getMessage();
+    throw $e; // Rethrow the same exception
+}
+```
+
+#### Custom Exception Classes
+
+Custom exception classes allow you to define specific error scenarios.
+
+```php
+class MyException extends Exception {
+    public function __construct($message, $code = 0, Exception $previous = null) {
+        parent::__construct($message, $code, $previous);
+    }
+}
+```
+
+### Exception Methods
+
+#### 1. `getMessage()`
+
+Returns the error message.
+
+```php
+try {
+    throw new Exception("An error occurred.");
+} catch (Exception $e) {
+    echo $e->getMessage(); // Outputs: An error occurred.
+}
+```
+
+#### 2. `getCode()`
+
+Returns the error code.
+
+```php
+try {
+    throw new Exception("An error occurred.", 42);
+} catch (Exception $e) {
+    echo $e->getCode(); // Outputs: 42
+}
+```
+
+#### 3. `getPrevious()`
+
+Returns the previous exception.
+
+```php
+try {
+    throw new Exception("First exception");
+} catch (Exception $e) {
+    try {
+        throw new Exception("Second exception", 0, $e);
+    } catch (Exception $e) {
+        echo $e->getPrevious()->getMessage(); // Outputs: First exception
+    }
+}
+```
+
+#### 4. `getTrace()`
+
+Returns an array of the call stack.
+
+```php
+try {
+    throw new Exception("An error occurred.");
+} catch (Exception $e) {
+    $trace = $e->getTrace();
+    print_r($trace);
+}
+```
+
+These methods and techniques allow you to handle exceptions effectively in professional PHP applications, providing clear error information and graceful error handling.
+
+### **Professional Project Example**
+---
+#### Example 1: Function for Dividing Numbers
+
+In this example, we create a function to divide two numbers, and we throw a custom exception if division by zero occurs.
+
+```php
+class DivisionByZeroException extends Exception {}
+
+function divide($dividend, $divisor) {
+    if ($divisor === 0) {
+        throw new DivisionByZeroException("Division by zero is not allowed.");
+    }
+    return $dividend / $divisor;
+}
+
+try {
+    $result = divide(10, 2);
+    echo "Result: $result";
+} catch (DivisionByZeroException $e) {
+    echo "Error: " . $e->getMessage();
+}
+```
+
+This function, `divide()`, checks for division by zero and throws a custom exception. In the `try` block, we call the function and catch the exception if it occurs.
+
+#### Example 2: Function for File Reading
+
+In this example, we create a function to read a file, and we throw an exception if the file doesn't exist.
+
+```php
+class FileNotFoundException extends Exception {}
+
+function readFileContent($filename) {
+    if (!file_exists($filename)) {
+        throw new FileNotFoundException("File not found: $filename");
+    }
+    return file_get_contents($filename);
+}
+
+try {
+    $content = readFileContent("example.txt");
+    echo "File content: $content";
+} catch (FileNotFoundException $e) {
+    echo "Error: " . $e->getMessage();
+}
+```
+
+The `readFileContent()` function checks if the file exists and throws a custom exception if it doesn't. In the `try` block, we attempt to read the file, and if it fails, we catch and handle the exception.
+
+#### Example 3: Function for Database Query
+
+In this example, we create a function to execute a database query, and we throw an exception if the query fails.
+
+```php
+class DatabaseQueryException extends Exception {}
+
+function executeDatabaseQuery($query) {
+    $result = /* Database query execution logic */;
+    if ($result === false) {
+        throw new DatabaseQueryException("Query execution failed: $query");
+    }
+    return $result;
+}
+
+try {
+    $query = "SELECT * FROM users";
+    $result = executeDatabaseQuery($query);
+    echo "Query result: $result";
+} catch (DatabaseQueryException $e) {
+    echo "Error: " . $e->getMessage();
+}
+```
+
+The `executeDatabaseQuery()` function checks if the query execution fails and throws a custom exception. In the `try` block, we attempt to execute the query, and if it fails, we catch and handle the exception.
