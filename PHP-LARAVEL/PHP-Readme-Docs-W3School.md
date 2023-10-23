@@ -6659,7 +6659,24 @@ Output:
 ```
 Sunset: 18:23:56
 ```
+### 18. `date_sunrise()` and `date_sunset()`
 
+- Description: Calculate sunrise and sunset times for a specified date and location.
+
+```php
+$latitude = 37.7749; // Latitude of San Francisco
+$longitude = -122.4194; // Longitude of San Francisco
+$sunrise = date_sunrise(time(), SUNFUNCS_RET_STRING, $latitude, $longitude);
+$sunset = date_sunset(time(), SUNFUNCS_RET_STRING, $latitude, $longitude);
+echo "Sunrise in San Francisco: $sunrise";
+echo "Sunset in San Francisco: $sunset";
+```
+
+Output:
+```
+Sunrise in San Francisco: 07:23
+Sunset in San Francisco: 18:18
+```
 
 
 #### Date Formatting
@@ -7104,3 +7121,875 @@ if ($isValidRange) {
     echo "The selected date range is not available for any event.";
 }
 ```
+
+### **`include`, `require`, `include_once`, and `require_once`**
+---
+In PHP, the `include`, `require`, `include_once`, and `require_once` statements are used to include external PHP files into your script. These statements are crucial for breaking your code into smaller, reusable, and modular components.
+
+Here's an explanation of each:
+
+1. **`include`**:
+   - The `include` statement is used to include a file in your PHP script.
+   - If the file cannot be found or included, it will produce a warning and continue script execution.
+   - It's commonly used for non-essential files, such as templates or optional functionality.
+   - Example:
+
+    ```php
+    include("myfile.php");
+    ```
+
+2. **`require`**:
+   - The `require` statement is similar to `include` but with one key difference: if the file cannot be found or included, it will produce a fatal error and halt the script execution.
+   - It's used for essential files that your script cannot run without.
+   - Example:
+
+    ```php
+    require("myfile.php");
+    ```
+
+3. **`include_once`**:
+   - The `include_once` statement works like `include`, but it checks if the file has already been included in the script. If it has, it won't include it again. This is useful to prevent including the same file multiple times.
+   - Example:
+
+    ```php
+    include_once("myfile.php");
+    ```
+
+4. **`require_once`**:
+   - `require_once` is similar to `require`, but it also checks if the file has already been included. If it has, it won't include it again.
+   - It's used for files that are crucial and should only be included once to avoid any conflicts.
+   - Example:
+
+    ```php
+    require_once("myfile.php");
+    ```
+
+Which one to use depends on your specific needs:
+
+- Use `include` or `include_once` when the file's absence wouldn't be fatal to the script, and you want to include it multiple times.
+- Use `require` or `require_once` when the file is essential, and you want to ensure it's included only once.
+
+Here's a quick summary:
+
+- `include` and `require` include a file, with `require` being more strict.
+- `include_once` and `require_once` include a file but avoid duplicates, with `require_once` being more strict.
+
+**the differences between `include`, `require`, `include_once`, and `require_once`**
+
+| Function        | Behavior If File Not Found | Prevents Duplicate Inclusion | Example                        |
+|-----------------|-----------------------------|------------------------------|--------------------------------|
+| `include`       | Produces a warning          | No                           | `include("myfile.php");`       |
+| `require`       | Produces a fatal error      | No                           | `require("myfile.php");`       |
+| `include_once`  | Produces a warning          | Yes                          | `include_once("myfile.php");`  |
+| `require_once`  | Produces a fatal error      | Yes                          | `require_once("myfile.php");`  |
+
+Here are code examples to illustrate these differences:
+
+#### Example 1: `include`
+
+```php
+// Assuming "myfile.php" doesn't exist
+include("myfile.php");
+echo "Script continues after include.";
+```
+
+Output:
+```
+Warning: include(myfile.php): failed to open stream: No such file or directory in your_script.php
+Warning: include(): Failed opening 'myfile.php' for inclusion (include_path='...') in your_script.php
+Script continues after include.
+```
+
+#### Example 2: `require`
+
+```php
+// Assuming "myfile.php" doesn't exist
+require("myfile.php");
+echo "Script continues after require.";
+```
+
+Output:
+```
+Fatal error: require(): Failed opening required 'myfile.php' (include_path='...') in your_script.php on line ...
+```
+
+In this case, the script halts after the `require` statement due to the fatal error.
+
+#### Example 3: `include_once`
+
+```php
+// myfile.php contents: echo "This is included.";
+include_once("myfile.php");
+include_once("myfile.php");
+echo "Script continues after include_once.";
+```
+
+Output:
+```
+This is included.
+Script continues after include_once.
+```
+
+As you can see, the file is included only once even when the `include_once` statement is used multiple times.
+
+#### Example 4: `require_once`
+
+```php
+// myfile.php contents: echo "This is included.";
+require_once("myfile.php");
+require_once("myfile.php");
+echo "Script continues after require_once.";
+```
+
+Output:
+```
+This is included.
+Script continues after require_once.
+```
+### **PHP File Handling**
+---
+
+File handling in PHP is essential for various tasks, such as reading configuration files, uploading user files, and logging data. It involves operations like creating, reading, writing, and deleting files.
+
+#### Creating Text Files
+
+##### 1. **Create a Text File (Write)**
+
+You can create a new text file using `fopen()` with the "w" mode, which opens the file for writing. If the file doesn't exist, it's created.
+
+```php
+$filename = "example.txt";
+$file = fopen($filename, "w");
+
+if ($file) {
+    fwrite($file, "Hello, this is a text file!");
+    fclose($file);
+    echo "Text file created successfully.";
+} else {
+    echo "Failed to create the text file.";
+}
+```
+
+##### 2. **Append to a Text File**
+
+To add content to an existing text file, use the "a" mode with `fopen()`.
+
+```php
+$filename = "example.txt";
+$file = fopen($filename, "a");
+
+if ($file) {
+    fwrite($file, "\nThis text is appended.");
+    fclose($file);
+    echo "Text appended successfully.";
+} else {
+    echo "Failed to append to the text file.";
+}
+```
+
+#### Reading Text Files
+
+##### 3. **Read a Text File**
+
+You can read the contents of a text file using `fread()`.
+
+```php
+$filename = "example.txt";
+$file = fopen($filename, "r");
+
+if ($file) {
+    $content = fread($file, filesize($filename));
+    fclose($file);
+    echo "File contents: $content";
+} else {
+    echo "Failed to read the text file.";
+}
+```
+
+#### Uploading Files
+
+##### 4. **Handling File Uploads**
+
+To handle file uploads in PHP, you can use the `$_FILES` superglobal. Here's a basic example:
+
+```php
+if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
+    $uploadedFile = $_FILES['file']['tmp_name'];
+    $destination = "uploads/" . $_FILES['file']['name'];
+
+    if (move_uploaded_file($uploadedFile, $destination)) {
+        echo "File uploaded successfully.";
+    } else {
+        echo "Failed to upload the file.";
+    }
+} else {
+    echo "Error occurred during upload.";
+}
+```
+
+#### Binary Files
+
+##### 5. **Working with Binary Files (Images)**
+
+To work with binary files like images, you can use binary read/write modes like "rb" and "wb".
+
+```php
+$filename = "image.jpg";
+$handle = fopen($filename, "rb");
+
+if ($handle) {
+    $imageData = fread($handle, filesize($filename));
+    fclose($handle);
+    echo "Image data read successfully.";
+} else {
+    echo "Failed to read the image data.";
+}
+```
+
+##### 6. **Editing Text Files**
+
+To edit text files, you can read the content, make changes, and write them back.
+
+```php
+$filename = "example.txt";
+$file = fopen($filename, "r+");
+
+if ($file) {
+    $content = fread($file, filesize($filename));
+    $content = str_replace("text", "file", $content); // Edit the content
+    fseek($file, 0); // Move the file pointer to the beginning
+    fwrite($file, $content); // Write the edited content back
+    fclose($file);
+    echo "File edited successfully.";
+} else {
+    echo "Failed to edit the text file.";
+}
+```
+
+#### File Modes
+
+In the code examples above, we used different file modes, including:
+
+- "w": Write mode
+- "a": Append mode
+- "r": Read mode
+- "rb": Read binary mode
+- "wb": Write binary mode
+- "r+": Read/write mode
+
+File modes determine how the file should be opened and what operations are allowed. Choosing the right mode is essential for your specific use case.
+
+#### File System Modes
+
+##### File Permissions
+- In professional applications, it's essential to set the appropriate file permissions. Common modes include `0644` for read/write and `0755` for read/write/execute.
+
+```php
+$filename = "file.txt";
+chmod($filename, 0644); // Set read and write permissions for owner, read-only for others
+```
+
+##### Error Handling
+- Professional applications often require robust error handling when dealing with files. Use functions like `file_exists()`, `is_file()`, and `is_readable()` to validate files before operating on them.
+
+```php
+if (file_exists("example.txt") && is_readable("example.txt")) {
+    // File is accessible
+    // Perform file operations here
+} else {
+    // Handle the error
+}
+```
+#### File Open and Read Line By Line
+```php
+$filename = "webdictionary.txt";
+
+try {
+    // Open the file for reading
+    $file = fopen($filename, "r");
+
+    if ($file === false) {
+        throw new Exception("Unable to open file!");
+    }
+
+    // Output one line until end-of-file
+    while (!feof($file)) {
+        echo fgets($file) . "<br>";
+    }
+
+    // Close the file
+    fclose($file);
+} catch (Exception $e) {
+    // Handle any exceptions that occur
+    echo "Error: " . $e->getMessage();
+}
+```
+ **File Open and  Read and output one line until end-of-file. Read and output characters one by one.**
+
+ ```php
+$myfile = fopen("webdictionary.txt", "r") or die("Unable to open file!");
+
+// Read and output one line until end-of-file
+while (!feof($myfile)) {
+    echo fgets($myfile) . "<br>";
+}
+
+// Move the file pointer back to the beginning of the file
+rewind($myfile);
+
+echo "Reading characters one by one:<br>";
+
+// Read and output characters one by one
+while (!feof($myfile)) {
+    echo fgetc($myfile);
+}
+
+fclose($myfile);
+
+```
+
+In a project admin panel, you may need to handle not only individual files but also entire folders. Here's a guide on file and folder handling in PHP for an admin panel:
+
+### File and Folder Management
+
+#### Listing Files and Folders
+
+You might need to display the contents of a directory in your admin panel.
+
+```php
+$directory = "path/to/directory";
+$contents = scandir($directory);
+
+foreach ($contents as $item) {
+    if ($item != "." && $item != "..") {
+        echo $item . "<br>";
+    }
+}
+```
+
+This code lists the files and folders in the specified directory, excluding the current directory (`.`) and parent directory (`..`).
+
+#### Creating Folders
+
+You can create new folders when organizing files.
+
+```php
+$directory = "path/to/new/directory";
+
+if (!file_exists($directory)) {
+    mkdir($directory, 0755, true);
+    echo "Directory created successfully.";
+} else {
+    echo "Directory already exists.";
+}
+```
+
+This code creates a new directory if it doesn't exist.
+
+#### Uploading Files
+
+File uploads are common in admin panels. Ensure you've set the appropriate `enctype` in your HTML form: `<form action="upload.php" method="post" enctype="multipart/form-data">`.
+
+```php
+$targetDirectory = "uploads/";
+$targetFile = $targetDirectory . basename($_FILES["fileToUpload"]["name"]);
+
+if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
+    echo "File uploaded successfully.";
+} else {
+    echo "File upload failed.";
+}
+```
+
+This code moves an uploaded file to a designated directory.
+
+#### Deleting Files and Folders
+
+Admin panels often require deleting files or folders. Use caution with these operations.
+
+```php
+$fileToDelete = "path/to/file";
+$folderToDelete = "path/to/folder";
+
+if (file_exists($fileToDelete)) {
+    unlink($fileToDelete);
+    echo "File deleted successfully.";
+}
+
+if (is_dir($folderToDelete)) {
+    rmdir($folderToDelete);
+    echo "Folder deleted successfully.";
+}
+```
+
+These examples illustrate how to delete files and folders when needed.
+
+#### Renaming Files and Folders
+
+Renaming files or folders can be an important admin panel function.
+
+```php
+$oldName = "old_name.txt";
+$newName = "new_name.txt";
+
+if (rename($oldName, $newName)) {
+    echo "Renamed successfully.";
+} else {
+    echo "Rename failed.";
+}
+```
+
+This code renames a file.
+
+### **Cookie In PHP**
+---
+### Introduction to Cookies
+
+Cookies are small pieces of data that a web server sends to a user's browser to be stored locally. They are often used to track user sessions, store user preferences, and maintain state across multiple page requests.
+
+#### Creating Cookies
+
+To create a cookie in PHP, you can use the `setcookie()` function. It allows you to specify the cookie's name, value, expiration time, and other attributes.
+
+```php
+setcookie("username", "john_doe", time() + 3600, "/", "example.com", true, true);
+```
+
+- `"username"`: Cookie name
+- `"john_doe"`: Cookie value
+- `time() + 3600`: Cookie expiration time (in seconds)
+- `"/"`: Cookie path (available to all pages)
+- `"example.com"`: Cookie domain
+- `true`: Cookie is secure (requires HTTPS)
+- `true`: Cookie is HTTP-only (not accessible via JavaScript)
+
+#### Retrieving Cookies
+
+You can retrieve cookies in PHP using the `$_COOKIE` superglobal.
+
+```php
+if (isset($_COOKIE["username"])) {
+    $username = $_COOKIE["username"];
+    echo "Welcome back, $username!";
+} else {
+    echo "No username cookie found.";
+}
+```
+
+#### Modifying Cookie Values
+
+To modify a cookie, you can set a new cookie with the same name.
+
+```php
+setcookie("username", "new_value", time() + 3600, "/", "example.com", true, true);
+```
+
+#### Deleting Cookies
+
+To delete a cookie, you can set its expiration time to a past value.
+
+```php
+setcookie("username", "", time() - 3600, "/", "example.com", true, true);
+```
+
+### **Types of Cookies**
+
+#### Session Cookies
+
+- **Definition:** Session cookies are temporary cookies that expire when the user closes their browser or after a short period of inactivity.
+- **Usage:** They are often used to maintain user sessions and store temporary data.
+
+#### Persistent Cookies
+
+- **Definition:** Persistent cookies have an expiration date and are stored on the user's device until that date is reached.
+- **Usage:** They are used for long-term data storage and user preferences.
+
+#### Secure Cookies
+
+- **Definition:** Secure cookies are transmitted over secure HTTPS connections only.
+- **Usage:** They are used for sensitive data like authentication tokens.
+
+#### HttpOnly Cookies
+
+- **Definition:** HttpOnly cookies cannot be accessed via JavaScript, enhancing security.
+- **Usage:** They are used for session management and security-critical data.
+
+#### Same-Site Cookies
+
+- **Definition:** Same-Site cookies restrict cross-origin sharing, enhancing security.
+- **Usage:** They are used to prevent cross-site request forgery (CSRF) attacks.
+
+#### Third-Party Cookies
+
+- **Definition:** Third-party cookies are set by domains other than the one the user is visiting.
+- **Usage:** They are often used for tracking and advertising.
+
+#### Professional Use Cases
+
+- **User Authentication:** Storing user session tokens or authentication data in cookies.
+- **Shopping Carts:** Saving cart contents or user preferences.
+- **Analytics:** Tracking user behavior and website usage.
+- **Personalization:** Customizing the user experience based on stored preferences.
+- **Security:** Implementing CSRF protection using Same-Site cookies.
+- **Compliance:** Ensuring GDPR and privacy regulations for cookie usage.
+
+#### 3. Shopping Carts and E-commerce
+
+E-commerce applications often use cookies to store users' shopping cart contents, ensuring that items are retained between visits. Cookies can be used to maintain cart items and their quantities until the user decides to purchase or remove them.
+
+```php
+// Store shopping cart items in cookies
+setcookie("cart", serialize($cartItems), time() + 2592000, "/");
+```
+
+#### 4. Remember Me Functionality
+
+For applications that require users to stay logged in, the "Remember Me" feature is implemented with cookies. A persistent cookie is set when a user selects this option, allowing them to stay logged in even after closing the browser.
+
+```php
+// Implement a "Remember Me" cookie
+setcookie("remember_me", $userToken, time() + 604800, "/");
+```
+
+#### 5. Cross-Site Request Forgery (CSRF) Protection
+
+Cookies can be used to protect against CSRF attacks. An anti-CSRF token is set as a cookie, and the application checks it when processing forms. This helps ensure that the request originated from the same site.
+
+```php
+// Set a CSRF protection cookie
+setcookie("csrf_token", $token, 0, "/", "", false, true);
+```
+
+#### 6. GDPR and Cookie Consent
+
+In professional web applications, complying with data protection regulations like GDPR is essential. Cookies used for tracking user behavior or collecting personal information should be implemented with user consent mechanisms. This can involve setting cookies only after the user has provided explicit consent.
+
+#### 7. Cookie Security
+
+To enhance the security of cookies, professionals often consider using the HttpOnly and Secure flags. The HttpOnly flag restricts access to cookies from JavaScript, reducing the risk of cross-site scripting (XSS) attacks. The Secure flag ensures that cookies are only sent over secure (HTTPS) connections.
+
+```php
+// Create a secure and HttpOnly cookie
+setcookie("token", $value, time() + 3600, "/", "example.com", true, true);
+```
+
+### **PHP Session**
+---
+
+Sessions in PHP allow you to preserve and manage user data across multiple pages and interactions. They are essential for building features like user authentication, shopping carts, and more.
+
+#### Starting a Session
+
+To start a session, you can use the `session_start()` function. This function should be called at the beginning of your PHP script before any output is sent to the browser.
+
+```php
+<?php
+session_start();
+// Rest of your code
+?>
+```
+
+#### Storing and Accessing Session Data
+
+Sessions allow you to store and retrieve data that remains accessible across multiple pages as long as the session is active.
+
+##### Storing Data
+
+You can store data in the session superglobal `$_SESSION`:
+
+```php
+$_SESSION['username'] = 'john_doe';
+$_SESSION['user_id'] = 123;
+```
+
+##### Accessing Data
+
+You can access session data in subsequent pages:
+
+```php
+<?php
+session_start();
+echo "Welcome, " . $_SESSION['username'];
+echo "User ID: " . $_SESSION['user_id'];
+?>
+```
+
+#### Ending a Session
+
+To end a session and release the associated resources, you can use `session_destroy()`.
+
+```php
+session_destroy();
+```
+
+#### Session Functions
+
+Here are some key session functions used in professional applications:
+
+- `session_start()`: Initializes a new session or resumes the current session.
+- `session_id()`: Gets or sets the session ID.
+- `session_name()`: Gets or sets the session name.
+- `session_regenerate_id()`: Regenerates the session ID to enhance security.
+- `session_destroy()`: Destroys all data registered to a session.
+- `session_unset()`: Unsets a specific variable from the session.
+- `session_status()`: Returns the current session status (e.g., PHP_SESSION_NONE, PHP_SESSION_ACTIVE).
+
+### Using Sessions Securely
+
+To ensure the security of session data in professional applications:
+
+- Always start sessions before any output is sent.
+- Validate and sanitize session data before using it.
+- Use secure cookies (`session.cookie_secure`) for HTTPS connections.
+- Implement proper session timeout and garbage collection to release old sessions.
+
+#### Example: Session Timeout
+
+```php
+ini_set('session.gc_maxlifetime', 60 * 30); // 30 minutes
+session_set_cookie_params(60 * 30);
+session_start();
+```
+
+In this example, the session timeout is set to 30 minutes.
+
+#### Example: Regenerating Session ID
+
+```php
+if (isset($_SESSION['logged_in'])) {
+    if (mt_rand(1, 100) == 1) {
+        session_regenerate_id();
+    }
+}
+```
+
+In this example, the session ID is regenerated occasionally for added security.
+
+### **Session Functions**
+---
+
+#### `session_start()`: Initializes a new session or resumes the current session.
+
+```php
+<?php
+session_start(); // Start or resume the session
+
+// Storing data in the session
+$_SESSION['username'] = 'john_doe';
+$_SESSION['user_id'] = 123;
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Session Example</title>
+</head>
+<body>
+    <h1>Welcome, <?php echo $_SESSION['username']; ?></h1>
+</body>
+</html>
+```
+
+In this example, we use `session_start()` to initialize or resume a session. Then, we store user data in the session, which can be accessed on other pages within the same session.
+
+#### `session_id()`: Gets or sets the session ID.
+
+```php
+<?php
+session_id("custom_session_id"); // Set a custom session ID
+session_start(); // Start or resume the session
+
+echo "Session ID: " . session_id();
+?>
+```
+
+In this code, we set a custom session ID using `session_id()`. Then, we start or resume the session and display the session ID.
+
+#### `session_name()`: Gets or sets the session name.
+
+```php
+<?php
+session_name("my_session_name"); // Set a custom session name
+session_start(); // Start or resume the session
+
+echo "Session Name: " . session_name();
+?>
+```
+
+Here, we set a custom session name with `session_name()` and then start or resume the session, displaying the session name.
+
+#### `session_regenerate_id()`: Regenerates the session ID to enhance security.
+
+```php
+<?php
+session_start(); // Start or resume the session
+
+if (isset($_SESSION['user_id'])) {
+    if (mt_rand(1, 100) == 1) { // Regenerate the session ID occasionally
+        session_regenerate_id();
+    }
+}
+?>
+```
+
+In this code, we use `session_regenerate_id()` to periodically regenerate the session ID for added security.
+
+#### `session_destroy()`: Destroys all data registered to a session.
+
+```php
+<?php
+session_start(); // Start or resume the session
+
+if (isset($_SESSION['logged_in'])) {
+    session_destroy(); // Destroy the session
+    echo "Session destroyed.";
+}
+?>
+```
+
+In this example, if the user is logged in, we use `session_destroy()` to destroy the session and log the user out.
+
+#### `session_unset()`: Unsets a specific variable from the session.
+
+```php
+<?php
+session_start(); // Start or resume the session
+
+// Unset a specific variable from the session
+if (isset($_SESSION['user_id'])) {
+    unset($_SESSION['user_id']);
+    echo "User ID unset from the session.";
+}
+?>
+```
+
+This code unsets a specific variable (`user_id`) from the session using `unset()`.
+
+#### `session_status()`: Returns the current session status (e.g., PHP_SESSION_NONE, PHP_SESSION_ACTIVE).
+
+```php
+<?php
+$status = session_status(); // Get the current session status
+
+if ($status == PHP_SESSION_NONE) {
+    echo "Session is not active.";
+} elseif ($status == PHP_SESSION_ACTIVE) {
+    echo "Session is active.";
+}
+?>
+```
+
+Here, we use `session_status()` to check the current session status and display a message accordingly.
+
+#### professional logout system function with session
+
+A professional logout system with sessions typically involves creating a user-defined function to log out a user, destroy their session, and redirect them to a specified page.
+
+```php
+<?php
+// Start or resume the session
+session_start();
+
+// User-defined logout function
+function logout() {
+    // Unset all session variables
+    $_SESSION = array();
+
+    // If a session cookie exists, delete it
+    if (isset($_COOKIE[session_name()])) {
+        setcookie(session_name(), '', time()-3600, '/');
+    }
+
+    // Destroy the session data
+    session_destroy();
+}
+
+if (isset($_POST['logout'])) {
+    logout(); // Call the logout function
+    header("Location: login.php"); // Redirect to the login page after logout
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logout Example</title>
+</head>
+<body>
+    <h1>Welcome, <?php echo $_SESSION['username']; ?></h1>
+    <form method="post">
+        <input type="submit" name="logout" value="Logout">
+    </form>
+</body>
+</html>
+
+```
+#### **Professional Timeout and JS Counter Timeout**
+Creating an automatically expiring session that redirects the user to the home or login page after 5 minutes of inactivity can be achieved by combining session timeout settings with JavaScript. Here's a step-by-step guide on how to implement this in a professional PHP system:
+
+1. **Session Timeout Configuration:**
+
+   Set the PHP session timeout to 5 minutes (300 seconds) by configuring `session.gc_maxlifetime` and `session.cookie_lifetime` in your PHP script. Place this code at the beginning of every PHP page where you want the session to timeout.
+
+   ```php
+   <?php
+   ini_set('session.gc_maxlifetime', 300); // 5 minutes in seconds
+   session_set_cookie_params(300);
+   session_start();
+   ?>
+   ```
+
+2. **JavaScript Countdown Timer:**
+
+   Use JavaScript to create a countdown timer that will redirect the user to the home or login page after 5 minutes of inactivity.
+
+   ```html
+   <script>
+   var idleTimeout;
+
+   function resetTimer() {
+       clearTimeout(idleTimeout);
+       idleTimeout = setTimeout(redirect, 300000); // 5 minutes in milliseconds
+   }
+
+   function redirect() {
+       window.location.href = 'login.php'; // Redirect to the login page
+   }
+
+   document.addEventListener('mousemove', resetTimer);
+   document.addEventListener('keydown', resetTimer);
+
+   resetTimer(); // Start the timer on page load
+   </script>
+   ```
+
+   In this JavaScript code:
+   - The `resetTimer()` function resets the timer whenever there's user activity (mouse movement or keypress).
+   - The `idleTimeout` variable holds the timeout.
+   - The `redirect()` function is called when the timeout is reached, redirecting the user to the login page.
+
+3. **Logout on Session Expiry:**
+
+   To log the user out and destroy the session on session expiry, you can add a condition to check if the session has expired at the beginning of protected pages. If the session has expired, redirect the user to the login page.
+
+   ```php
+   <?php
+   ini_set('session.gc_maxlifetime', 300);
+   session_set_cookie_params(300);
+   session_start();
+
+   if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 300)) {
+       session_unset(); // Unset all session values
+       session_destroy(); // Destroy the session data
+       header('Location: login.php'); // Redirect to the login page
+   }
+
+   // Update the last activity time
+   $_SESSION['LAST_ACTIVITY'] = time();
+   ?>
+   ```
+
+4. **Login Page:**
+
+   Make sure your login page sets the session variables when a user logs in. This might include setting the user's ID, username, or other relevant information in the session.
+
