@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    
+
+    <script>
+
+const animals = ['cat', 'dog', 'elephant'];
+var animalsVar = animals.entries();
+    // document.write(animalsVar);
+    console.log(animals.values());
+
+    const animalKey = animals.keys();
+    const animalvalues = animals.values();
+
+    for(const animal  of animalvalues){
+        console.log("value = " + animal);
+    }
+
+    for(const animal  of animalKey){
+        console.log("Index = " + animal + ", value = " + animal);
+    }
+
+
+    /* Just Value  */
+
+
+    for(const [index,value] of animalsVar){
+
+        console.log("Index = " + index + ", value = " + value);
+    };
+
+  
+    const numbers = [1, 2, 3];
+     console.log(numbers.toString()); // "1,2,3"
+     console.log(Array.isArray(numbers)); // true
+
+     const str = ["hellow", "world"];
+     console.log(str.join(', '));
+
+
+     /* Number of Last Index of */
+     const numberIndex = [1, 2, 3, 2, 1,3,9];
+     console.log(numberIndex.lastIndexOf(3)); // 5
+     console.log(numberIndex.indexOf(3));  // 2
+     console.log(numberIndex.indexOf(9));  // 6
+     console.log(numberIndex.indexOf(9));  // 6
+     console.log(numberIndex.includes(12));  // false
+     console.log(numberIndex.sort((a,b) => b - a));  // 9. 3, 3, 2, .....
+     console.log(numberIndex.sort((a,b) => a - b));  // 1,1. 2, 2, 3, 3, 9, 9 .....
+
+     const fruits = ['apple', 'banana', 'orange','Lichi','Grave'];
+     console.log(fruits.find(fruit => fruit.length  < 6));  //  apple
+
+     console.log( 'findIndex Result is ' + fruits.findIndex(fruit => fruit === "apple")); // findIndex Result is 0
+     console.log(fruits.filter(fruit => fruit.length >= 5));  // ["apple","banana","orange","Lichi","Grave"]
+
+     console.log(numberIndex.every(num => num % 2 === 0));  // return boolean value = false
+     console.log(numberIndex.some(num => num % 2 === 0));  // return boolean value = true
+
+     console.log(numberIndex.reduce((acc,num) => acc + num,0)); // 21
+
+     console.log(numberIndex.map(num => num * 2)); // [ 2,2,4,4,6,6,18]
+
+     const numbersArr = [1, 2, 3];
+     numbersArr.forEach(function(num){
+        console.log(num * 3);
+     })
+/*          3
+            6
+            9
+ */
+ const months = ['January', 'March', 'April'];
+  var allMonths = months.splice(1, 0, 'February');
+  console.log(allMonths); // months: ['January', 'February', 'March', 'April']
+
+    </script>
+
+</body>
+</html>

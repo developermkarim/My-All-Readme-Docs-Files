@@ -8741,6 +8741,25 @@ class MyException extends Exception {
         parent::__construct($message, $code, $previous);
     }
 }
+
+// Function that simulates an action and throws the custom exception
+function performAction($value) {
+    if ($value < 0) {
+        throw new MyException("Value cannot be negative.");
+    }
+    return "Action performed successfully!";
+}
+
+// Example of using the custom exception
+try {
+    $inputValue = -5; // Replace this with your actual input
+    $result = performAction($inputValue);
+    echo $result;
+} catch (MyException $e) {
+    echo "Custom Exception: " . $e->getMessage();
+}
+
+
 ```
 
 ### Exception Methods
@@ -8845,7 +8864,8 @@ try {
     echo "File content: $content";
 } catch (FileNotFoundException $e) {
     echo "Error: " . $e->getMessage();
-}
+};
+
 ```
 
 The `readFileContent()` function checks if the file exists and throws a custom exception if it doesn't. In the `try` block, we attempt to read the file, and if it fails, we catch and handle the exception.

@@ -2670,24 +2670,6 @@ const numbers = [1, 2, 3, 4];
 const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0); // 0+1 = 1 // 1+2=3 // 3 + 4 == 7 
 ```
 
-**5. `find(callbackFn, thisArg?)`:** Returns the first element in the array that satisfies the provided testing function.
-```javascript
-const numbers = [1, 2, 3, 4, 5];
-const evenNumber = numbers.find(number => number % 2 === 0); // 2
-```
-
-**6. `some(callbackFn, thisArg?)`:** Checks if at least one element in the array satisfies the provided testing function.
-```javascript
-const numbers = [1, 2, 3, 4, 5];
-const hasEvenNumber = numbers.some(number => number % 2 === 0); // true
-```
-
-**7. `every(callbackFn, thisArg?)`:** Checks if all elements in the array satisfy the provided testing function.
-```javascript
-const numbers = [2, 4, 6, 8, 10,7];
-const allEven = numbers.every(number => number % 2 === 0); // false
-```
-
 **8. `sort(compareFn?)`:** Sorts the elements of an array in place and returns the sorted array.
 ```javascript
 const numbers = [3, 1, 4, 1, 5, 9, 2];
@@ -2695,18 +2677,22 @@ numbers.sort((a, b) => a - b);   // (7) [1, 1, 2, 3, 4, 5, 9]
 numbers.sort((a, b) => b - a);   // (7) [9, 5, 4, 3, 2, 1, 1]
 ```
 
-**9. `concat(...arrays)`:** Returns a new array that is a shallow copy of the original arrays concatenated together.
-```javascript
-const array1 = [1, 2, 3];
-const array2 = [4, 5, 6];
-const combinedArray = array1.concat(array2); // [1,2,3,4,5,6]
-```
-
 **10. `slice(startIndex, endIndex)`:** Returns a shallow copy of a portion of an array into a new array.
 ```javascript
 const numbers = [1, 2, 3, 4, 5];
 const slicedArray = numbers.slice(1, 4); // [2,3,4]
 console.log(numbers);  // (5) [1, 2, 3, 4, 5] after slice
+
+
+const numbers = [1, 2, 3, 4, 5];
+
+// Using a negative start index
+const sliced1 = numbers.slice(-3);
+// Result: sliced1 = [3, 4, 5]
+
+// Using both negative start and end indices
+const sliced2 = numbers.slice(-4, -1);
+// Result: sliced2 = [2, 3, 4]
 ```
 
 **11. `splice(startIndex, deleteCount, ...items)`:** Changes the contents of an array by removing or replacing existing elements and/or adding new elements.
@@ -2717,66 +2703,6 @@ numbers.splice(2, 2, 6, 7); // (2) [3, 4]  // Removes 2 elements starting from 
 console.log(numbers);  // (5) [1, 2, 3, 4, 5] after splice
 ```
 
-**12. `indexOf(searchElement, fromIndex?)`:** Returns the first index at which a given element can be found in the array, or -1 if it is not present.
-```javascript
-const numbers = [1, 2, 3, 4, 5];
-const index = numbers.indexOf(3);
-```
-
-**13. `lastIndexOf(searchElement, fromIndex?)`:** Returns the last index at which a given element can be found in the array, or -1 if it is not present.
-```javascript
-const numbers = [1, 2, 3, 4, 3, 5];
-const lastIndex = numbers.lastIndexOf(3);
-```
-
-**14. `includes(searchElement, fromIndex?)`:** Checks if an array contains a certain element, returning `true` or `false`.
-```javascript
-const numbers = [1, 2, 3, 4, 5];
-const includes3 = numbers.includes(3);
-```
-
-**15. `isArray(array)`:** Checks if a given value is an array.
-```javascript
-const arr = [1, 2, 3];
-const isArr = Array.isArray(arr);
-```
-
-**16. `push(...elements)`:** Adds one or more elements to the end of an array and returns the new length of the array.
-```javascript
-const numbers = [1, 2, 3];
-const newLength = numbers.push(4, 5);
-```
-
-**17. `pop()`:** Removes the last element from an array and returns that element.
-```javascript
-const numbers = [1, 2, 3];
-const lastElement = numbers.pop();
-```
-
-**18. `shift()`:** Removes the first element from an array and returns that element.
-```javascript
-const numbers = [1, 2, 3];
-const firstElement = numbers.shift();
-```
-
-**19. `unshift(...elements)`:** Adds one or more elements to the beginning of an array and returns the new length of the array.
-```javascript
-const numbers = [2, 3, 4];
-const newLength = numbers.unshift(0, 1);
-```
-
-**20. `reverse()`:** Reverses the order of the elements in an array in place.
-```javascript
-const numbers = [1, 2, 3, 4, 5];
-numbers.reverse();
-```
-
-These are some of the important array methods in JavaScript. They can be powerful tools for working with arrays efficiently and elegantly. Remember that mastering these methods and understanding their nuances will greatly enhance your ability to work with arrays in advanced JavaScript programming.
-
-Sure, I can provide you with an extensive list of JavaScript array methods along with their definitions and code examples. Array methods are an essential part of working with arrays in JavaScript, allowing you to manipulate, transform, and manipulate array data efficiently.
-
-Here are the commonly used array methods and some important ones for advanced-level learners:
-
 1. **push(item1, item2, ...)**: Adds one or more items to the end of an array and returns the new length of the array.
 
 ```javascript
@@ -2785,13 +2711,6 @@ fruits.push('orange', 'grape');
 // fruits: ['apple', 'banana', 'orange', 'grape']
 ```
 
-2. **pop()**: Removes the last item from an array and returns that item.
-
-```javascript
-const colors = ['red', 'blue', 'green'];
-const removedColor = colors.pop();
-// colors: ['red', 'blue'], removedColor: 'green'
-```
 
 3. **unshift(item1, item2, ...)**: Adds one or more items to the beginning of an array and returns the new length of the array.
 
@@ -2809,14 +2728,6 @@ const removedLetter = letters.shift();
 // letters: ['c', 'd'], removedLetter: 'b'
 ```
 
-5. **concat(array1, array2, ...)**: Combines two or more arrays and returns a new array.
-
-```javascript
-const arr1 = [1, 2];
-const arr2 = [3, 4];
-const combined = arr1.concat(arr2);
-// combined: [1, 2, 3, 4]
-```
 
 6. **slice(start, end)**: Returns a new array containing elements from the original array within the specified range.
 
@@ -2824,6 +2735,14 @@ const combined = arr1.concat(arr2);
 const animals = ['elephant', 'lion', 'tiger', 'giraffe'];
 const selectedAnimals = animals.slice(1, 3);
 // selectedAnimals: ['lion', 'tiger']
+
+const numbers = [1, 2, 3, 4, 5];
+const slicedNumbers = numbers.slice(1, 3); // start index is inclusive and end index is exclusive
+// Result: slicedNumbers = [2, 3]
+
+const fruits = ["apple", "banana", "cherry", "date"];
+const slicedFruits = fruits.slice(1, 3);
+// Result: slicedFruits = ["banana", "cherry"]
 ```
 
 7. **splice(start, deleteCount, item1, item2, ...)**: Changes the contents of an array by removing, replacing, or adding items in place.
@@ -2832,6 +2751,16 @@ const selectedAnimals = animals.slice(1, 3);
 const months = ['January', 'March', 'April'];
 months.splice(1, 0, 'February');
 // months: ['January', 'February', 'March', 'April']
+
+// The splice() methods can be used to remove array elements:
+
+const numbers = [1, 2, 3, 4, 5];
+const removed = numbers.splice(1, 2); // index, deletecount
+// Result: numbers = [1, 4, 5], removed = [2, 3]
+
+const fruits = ["apple", "banana", "cherry", "date"];
+const removed = fruits.splice(1, 2, "grape", "fig");
+// Result: fruits = ["apple", "grape", "fig", "date"], removed = ["banana", "cherry"]
 ```
 
 8. **forEach(callback(item, index, array))**: Executes a provided function once for each array element.

@@ -2,7 +2,7 @@
 ---
 Here essments. However, please note that creating such a comprehensive document would be a time-consuming process, and it might not be feasible to cover all possible topics in a single response.
 
-## BASIC
+## **BASIC**
 ---
 Its Basic Level Problem SOlving With the serial of W3SCHOOL.com website
 

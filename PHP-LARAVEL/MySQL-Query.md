@@ -17,6 +17,12 @@ SQL (Structured Query Language) is a powerful domain-specific language used for 
    ```sql
    INSERT INTO table_name (column1, column2)
    VALUES (value1, value2);
+
+   INSERT INTO table_name (column1, column2, ...)
+   SELECT column1, column2, ...
+   FROM another_table
+   WHERE some_condition;
+
    ```
 
 3. **UPDATE**: Modifies existing records in a table.
@@ -87,7 +93,9 @@ CREATE INDEX new_name_index ON table_name (column_name);
     ```
 
 11. **GRANT and REVOKE**: These commands are used to grant or revoke specific privileges (like SELECT, INSERT, UPDATE, DELETE) to or from users and roles.
-the *GRANT* and *REVOKE* statements are used to manage permissions and privileges for database objects such as tables, views, and procedures. These statements control who can perform specific actions (e.g., SELECT, INSERT, UPDATE, DELETE) on these objects. 
+
+**GRANT Statement:**
+The `GRANT` statement is used to give specific privileges to a MySQL user or role. It can be used to grant privileges at different levels, including global, database, table, and column levels. The basic syntax is as follows:
 
     ```sql
     GRANT privilege(s) ON object TO user;
@@ -95,13 +103,6 @@ the *GRANT* and *REVOKE* statements are used to manage permissions and privilege
     GRANT SELECT, INSERT, UPDATE ON orders TO sales_role;
     REVOKE DELETE ON products FROM bob;
     ```
-In MySQL, the `GRANT` and `REVOKE` statements are used to control user privileges and permissions on database objects, such as tables, views, and stored procedures. These statements are essential for managing the security and access control of your MySQL database.
-
-Here's how to use the `GRANT` and `REVOKE` statements with examples:
-
-**GRANT Statement:**
-
-The `GRANT` statement is used to give specific privileges to a MySQL user or role. It can be used to grant privileges at different levels, including global, database, table, and column levels. The basic syntax is as follows:
 
 ```sql
 GRANT privilege(s)
@@ -121,7 +122,7 @@ GRANT SELECT, INSERT ON company.employees TO 'john'@'localhost';
 GRANT SELECT, INSERT ON mydatabase.users TO 'webuser'@'codewithmakim.com'; // db_user = webuser and domain = codewithmakim.com
 
  // To Give all Privileges 
-GRANT ALL PRIVILEGES ON codermkarim_food_order.* TO 'codermkarim_food_order'@'codewithkarim.com';
+GRANT ALL PRIVILEGES ON codermkarim_food_order.* TO 'codermkarim_food_order'@'codewithmkarim.com';
 
 ```
 the user webuser from codewithmakim.com would have permission to read data from and insert data into the users table in the mydatabase database.
@@ -149,43 +150,47 @@ REVOKE SELECT ON company.employees FROM 'john'@'localhost';
 
 12. **COMMIT and ROLLBACK**: Used in transactions to either save changes (COMMIT) or discard them (ROLLBACK).
 
-    In SQL, `COMMIT` and `ROLLBACK` are commands used to manage transactions within a relational database. A transaction is a sequence of one or more SQL statements that are executed as a single unit of work. Transactions are essential for maintaining data integrity and consistency within the database. Let's explore `COMMIT` and `ROLLBACK` with examples and explanations:
+In MySQL, the `COMMIT` and `ROLLBACK` statements are used in the context of transactions. Transactions are used to group one or more SQL statements into a single unit of work, and you can apply `COMMIT` and `ROLLBACK` to these transactions. Here's when and why you might use them:
 
-**COMMIT**:
+1. **COMMIT**:
+   - You use the `COMMIT` statement to save the changes made during a transaction.
+   - After a transaction is successfully executed, you can issue a `COMMIT` to make all the changes permanent and visible to other users.
+   - It is used when you're satisfied with the changes and want to make them permanent.
 
-The `COMMIT` command is used to permanently save all the changes made during a transaction to the database. If the transaction is successful (i.e., all statements within the transaction execute without errors), the changes are committed and become permanent. If there are any errors during the transaction, the changes are rolled back, and nothing is saved to the database.
+   ```sql
+   BEGIN TRANSACTION; -- Start a transaction
 
-```sql
-BEGIN TRANSACTION; -- Start a transaction
+   -- SQL statements within the transaction
+   INSERT INTO employees (employee_id, first_name, last_name) VALUES (101, 'John', 'Doe');
+   UPDATE accounts SET balance = balance - 100 WHERE account_id = 123;
+   DELETE FROM temp_orders WHERE order_date < '2023-01-01';
 
--- SQL statements within the transaction
-INSERT INTO employees (employee_id, first_name, last_name) VALUES (101, 'John', 'Doe');
-UPDATE accounts SET balance = balance - 100 WHERE account_id = 123;
-DELETE FROM temp_orders WHERE order_date < '2023-01-01';
+   COMMIT; -- Save changes to the database
+   ```
+**Note** IF any SQL query within the transaction fails, a `ROLLBACK` occurs automatically. If all queries are successful, you need to issue a `COMMIT` to make the changes permanent. If you want to manually undo the changes, you can issue a `ROLLBACK` before committing.
 
-COMMIT; -- Save changes to the database
-```
+2. **ROLLBACK**:
+   - You use the `ROLLBACK` statement to undo the changes made during a transaction.
+   - If something goes wrong within a transaction, you can issue a `ROLLBACK` to discard all changes made within that transaction.
+   - It's used to ensure that the database remains in a consistent state even if an error occurs during the transaction.
 
-In this example, a transaction is started with `BEGIN TRANSACTION`. The transaction includes multiple SQL statements to insert, update, and delete records. If all statements execute without errors, the `COMMIT` command is used to permanently save these changes to the database.
+   ```sql
+   BEGIN TRANSACTION; -- Start a transaction
 
-**ROLLBACK**:
+   -- SQL statements within the transaction
+   INSERT INTO employees (employee_id, first_name, last_name) VALUES (101, 'John', 'Doe');
+   UPDATE accounts SET balance = balance - 100 WHERE account_id = 123;
+   -- An error occurs here
+   ROLLBACK; -- Undo changes and discard the transaction
+   ```
 
-The `ROLLBACK` command is used to undo all changes made during a transaction and return the database to its state before the transaction started. It is typically used when an error occurs within the transaction, and you want to discard the changes.
+Transactions are crucial in database operations to maintain data integrity. They are commonly used in situations like transferring funds between bank accounts. If the withdrawal succeeds but the deposit fails, you would want to `ROLLBACK` the entire transaction to keep the data consistent.
 
-```sql
-BEGIN TRANSACTION; -- Start a transaction
+ When you issue `BEGIN`, it starts a transaction, and you can choose to either `COMMIT` to make the changes permanent or `ROLLBACK` to undo them based on the outcome of the transaction's operations.
 
--- SQL statements within the transaction
-INSERT INTO employees (employee_id, first_name, last_name) VALUES (101, 'John', 'Doe');
-UPDATE accounts SET balance = balance - 100 WHERE account_id = 123;
--- An error occurs here
-ROLLBACK; -- Undo changes and discard the transaction
-```
+**Note:** In MySQL, it's not possible to use `COMMIT` and `ROLLBACK` in a single query because `COMMIT` and `ROLLBACK` are transaction control statements, and transactions are meant to span multiple queries or SQL statements.
 
-In this example, if an error occurs during the transaction (e.g., a constraint violation, division by zero, etc.), the `ROLLBACK` command is executed to undo all changes made within the transaction, ensuring that the database remains in a consistent state.
-
-
-## MySQL SELECT Statement
+## **MySQL SELECT Statement**
 ---
 Certainly! Below are some advanced MySQL `SELECT` statements with various conditions and multiple tables. These queries demonstrate complex scenarios that advanced-level developers might encounter:
 
@@ -265,8 +270,8 @@ Certainly! Below are some advanced MySQL `SELECT` statements with various condit
        WHERE customers.customer_id = orders.customer_id
    );
    ```
-## Result
-| customer_name |
+  Result
+| customer_name|
 |--------------|
 | Customer A   |
 | Customer B   |
@@ -286,6 +291,15 @@ Certainly! Below are some advanced MySQL `SELECT` statements with various condit
        FROM order_details
        WHERE quantity > 10
    );
+
+   <!-- Alternative Query -->
+
+   SELECT p.product_name
+   FROM products p
+   JOIN order_details o
+   ON p.product_id = o.product_id
+   WHERE o.quantity > 10;
+
    ```
    You want to find customers who have placed orders with a total order value greater than the average order value.
 
@@ -296,9 +310,18 @@ Certainly! Below are some advanced MySQL `SELECT` statements with various condit
        SELECT customer_id
        FROM orders
        GROUP BY customer_id
-       HAVING SUM(order_total) > (SELECT AVG(order_total) FROM orders)
+       HAVING SUM(order_total) > (SELECT AVG(order_total) FROM orders);
    );
+
+   <!-- ALTERNATIVE QUERY -->
+   SELECT c.customer_id, c.first_name, c.last_name
+   FROM customers c
+   JOIN orders o ON c.customer_id = o.customer_id
+   GROUP BY c.customer_id, c.first_name, c.last_name
+   HAVING SUM(o.order_total) > (SELECT AVG(order_total) FROM orders); // 10 / 2000 = 200 
    ```
+ **Note** This query will select customer details from the "customers" table for customers whose total order value is greater than the average order value in the "orders" table. It uses a JOIN to connect the "customers" and "orders" tables based on the customer_id.
+
 **9. Subquery with JOIN:**
    - Combine subqueries with joins for complex filtering.
    
@@ -310,8 +333,14 @@ Certainly! Below are some advanced MySQL `SELECT` statements with various condit
        FROM orders
        WHERE order_total > 1000
    ) AS orders ON customers.customer_id = orders.customer_id;
-   ```
 
+
+   <!-- ALTERNATIVE QUERY -->
+   SELECT c.customer_name, o.order_date
+   FROM customers c
+   JOIN orders o ON c.customer_id = o.customer_id
+   WHERE o.order_total > 1000;
+   ```
 
    This query performs a self-join to connect employees with their managers.
 
@@ -320,28 +349,18 @@ Certainly! Below are some advanced MySQL `SELECT` statements with various condit
    You want to calculate the total sales for each product category but exclude products with a specific status.
 
    ```sql
-   SELECT categories.category_name, SUM(CASE WHEN products.status != 'inactive' THEN order_items.quantity * products.unit_price ELSE 0 END) AS total_sales
+   SELECT categories.category_id, categories.category_name, SUM(CASE WHEN products.status != 'inactive' THEN order_items.quantity * products.unit_price ELSE 0 END) AS total_sales
    FROM categories
    INNER JOIN products ON categories.category_id = products.category_id
    INNER JOIN order_items ON products.product_id = order_items.product_id
-   GROUP BY categories.category_name;
+   GROUP BY categories.category_id, categories.category_name;
    ```
 
    This query uses conditional aggregation to sum the sales of products with a specific status.
 
-**11. Common Table Expression (CTE):**
+   **Note** Now, the query includes both `categories.category_id` and `categories.category_name` in the SELECT clause, which is the correct way to use the GROUP BY clause in this context. This modified query will work correctly and provide the expected results.
 
-   Suppose you have a table `sales` that records monthly sales data, and you want to calculate the cumulative sales for each month.
 
-   ```sql
-   WITH cte_sales AS (
-       SELECT month, SUM(sales_amount) AS monthly_sales
-       FROM sales
-       GROUP BY month
-   )
-   SELECT month, monthly_sales, SUM(monthly_sales) OVER (ORDER BY month) AS cumulative_sales
-   FROM cte_sales;
-   ```
  ## MYSQL JOINING SHOW IN IMAGE
  ---
  ![altimg](https://i.ibb.co/nswLhzq/0-r-FMCh-X4-SAm-Q9-Rz-F9.webp)
@@ -861,7 +880,6 @@ ORDER BY
 | 9          | NULL              | 4         | Yet another reply to comment 1.|
 | 10         | NULL              | 5         | Yet another reply to reply 3.|
 +------------+-------------------+-----------+---------------------------+
-
 
 ```
 ![altimg](https://i.ibb.co/cD0yWCb/self-join.png)
