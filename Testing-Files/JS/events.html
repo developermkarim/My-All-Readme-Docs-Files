@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<body  onload="alert('Page loaded!')">
+
+    <input type="text" onfocus="console.log('Input focused')">
+
+    <input type="text" onblur="console.log('Input focused')">
+
+    <input type="text" onkeydown="console.log('Key ondown:', event.key)" placeholder="on key down">
+    <input type="text" onkeypress="console.log('Key press:', event.key)" placeholder=" on key press">
+    <input type="text" onkeyup="console.log('Key released on keyup:', event.key)" placeholder="on key up">
+
+    <div onmousemove="console.log('Mouse moved')" onmousedown="console.log('Mouse down')" onmouseup="console.log('Mouse up')">HELLOW TEST ME ON MOUSE</div>
+</body>
+</html>

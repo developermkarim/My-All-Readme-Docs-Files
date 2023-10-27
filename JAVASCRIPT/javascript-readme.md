@@ -2022,7 +2022,7 @@ cat.makeSound(); // Output: Cat makes a meow sound.
 dog.makeSound(); // Output: Dog makes a geo sound.
 ```
 
-### Encapsulation:
+### **Encapsulation:**
 
 Encapsulation refers to the practice of bundling data (attributes) and methods (functions) that operate on that data into a single unit, usually a class. This restricts direct access to the internal details of an object and enforces controlled interaction.
 For example, if you have a class that has one or more private fields that you use to store the data, then you are in encapsulation.
@@ -2167,7 +2167,7 @@ shapes.forEach(shape => {
 //         Area: 24
 ```
 
-#### Abstraction:
+#### **Abstraction:**
 
 The concept of Abstraction in JavaScript is to hide the implementation details and highlight an object’s essential features to the users. That’s how embedding Abstraction in a JavaScript program can enhance the readability of the code and avoid duplication. By providing only important details to the users, it also improves the security of an application.
 
@@ -2278,7 +2278,8 @@ console.log(person1.hasOwnProperty("sayHello")); // Output: false
 
 In this example, `Person.prototype` is the prototype of objects created by the `Person` constructor. The `__proto__` property of `person1` points to `Person.prototype`, allowing it to access the `sayHello` method even though `person1` does not directly have a `sayHello` property.
 
- ## HTML EVENTS HANDERLS FOR JAVASCRIPT
+ ## **HTML EVENTS HANDERLS FOR JAVASCRIPT**
+ ---
 Certainly! HTML event handlers are attributes or properties that allow you to specify JavaScript code to be executed when a particular event occurs on an HTML element. Here are some important HTML event handlers explained with definitions and code examples:
 
 1. **onclick:**
@@ -2450,7 +2451,8 @@ These event handlers are just a subset of what's available. They can be used inl
 
 
 
-## STRINGS IN JAVASCRIPT
+## **STRINGS IN JAVASCRIPT**
+---
 Certainly! JavaScript provides a variety of string methods that are essential for advanced-level learners. Here's a list of important string methods along with their definitions and code examples:
 
 1. **charAt(index):**
@@ -2678,22 +2680,61 @@ numbers.sort((a, b) => b - a);   // (7) [9, 5, 4, 3, 2, 1, 1]
 ```
 
 **10. `slice(startIndex, endIndex)`:** Returns a shallow copy of a portion of an array into a new array.
+
 ```javascript
 const numbers = [1, 2, 3, 4, 5];
 const slicedArray = numbers.slice(1, 4); // [2,3,4]
 console.log(numbers);  // (5) [1, 2, 3, 4, 5] after slice
-
-
 const numbers = [1, 2, 3, 4, 5];
 
+```
+
+**slice(index)** it starts slicing the array from the specified index (in your case, index 2) to the end of the array.
+
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+const slicedArray = numbers.slice(2);
+console.log(slicedArray); // [3, 4, 5]
+```
+**Note** the `slicedArray` contains the elements `[3, 4, 5]` because it starts from index 2 (which is the third element) and includes all elements until the end of the `numbers` array.
+
+
+**slice(-start,-end)**
+
+```javascript
 // Using a negative start index
 const sliced1 = numbers.slice(-3);
 // Result: sliced1 = [3, 4, 5]
+```
+**Important Notice**
+When you use a negative index in JavaScript, it counts elements from the end of the array. In the case of `numbers.slice(-3)`, it counts 3 elements from the end. Here's how the indexing works:
 
+- `-3` counts 3 elements from the end, so it refers to the element at the third position from the end.
+- `-2` counts 2 elements from the end, so it refers to the element at the second position from the end.
+- `-1` counts 1 element from the end, so it refers to the last element.
+
+In your specific example `numbers.slice(-3)`, it starts counting from the end and takes the last 3 elements of the array, which are at positions `-3`, `-2`, and `-1` respectively. This is why you get `[3, 4, 5]` as the result.
+
+So, in the context of `numbers.slice(-3)`, the element at position `-3` is `3`, the element at position `-2` is `4`, and the element at position `-1` is `5`.
+
+```javascript
+const arr = [10, 20, 30, 40, 50];
+```
+in summary, when indexing arrays in JavaScript, `-0` and `0` are functionally the same and both refer to the first element.
+
+
+```javascript
 // Using both negative start and end indices
-const sliced2 = numbers.slice(-4, -1);
+const numbers = [1, 2, 3, 4, 5];
+
+const sliced2 = numbers.slice(-3, -1);
 // Result: sliced2 = [2, 3, 4]
 ```
+
+- `-3` refers to the third-to-last element, which is `3`.
+- `-1` refers to the first element from the end, which is `5`.
+
+So, `sliced1` will include elements starting from the element with index `-3` (inclusive) up to, but not including, the element with index `-1`. In this case, it will include `3` and `4`, resulting in `sliced1` being `[3, 4]`.
 
 **11. `splice(startIndex, deleteCount, ...items)`:** Changes the contents of an array by removing or replacing existing elements and/or adding new elements.
 ```javascript
