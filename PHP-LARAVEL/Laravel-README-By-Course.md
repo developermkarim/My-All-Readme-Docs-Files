@@ -2,7 +2,7 @@
 ---
 
 
-## Install, ConfigurE, Directory Structure, Frontend, Starter Kits & Deployment
+## Install, Configure, Directory Structure, Frontend, Starter Kits & Deployment
 ---
 Certainly! I'll provide you with a comprehensive explanation of each of these topics in Laravel, along with code examples where relevant. This will serve as a thorough guide for Laravel developers.
 
@@ -38,6 +38,73 @@ It contains various subfolders and files that together make up the application's
 - `vendor`: Composer dependencies.
 - `.env`: Environment configuration file.
 - `webpack.mix.js` and `package.json`: Frontend build configuration.
+
+#### **app/auth.php**
+In Laravel's `auth.php` configuration file, these settings are used to define how authentication works in your application. Let's break down each part for beginners:
+
+```php
+ 'defaults' => [
+        'guard' => 'web',
+        'passwords' => 'users',
+    ], 
+    
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+    ], 
+    
+    'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+
+     'passwords' => [
+        'users' => [
+            'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+    ],
+```
+1. `'defaults'`:
+   - `'guard'`: This specifies the default authentication guard for your application. In a web application, the default guard is set to `'web'`, which uses sessions for authentication.
+   - `'passwords'`: This defines the default password reset broker. It's set to `'users'`, which means it will use the "users" provider for password resets.
+
+2. `'guards'`:
+   - `'web'`: This is a guard configuration named `'web'`, which is used for typical web-based user authentication. It's set to use sessions, which is the default method for web applications, and it specifies the provider (`'users'`) for user retrieval.
+
+3. `'providers'`:
+   - `'users'`: This defines a provider named `'users'`, which is set to use Eloquent for user retrieval. It also specifies the User model (`App\Models\User::class`) to be used.
+
+4. `'passwords'`:
+   - `'users'`: This sets up a password reset configuration named `'users'` and specifies:
+     - `'provider'`: It uses the `'users'` provider, which was defined earlier in `'providers'`.
+     - `'table'`: It specifies the database table (`'password_resets'`) where password reset tokens are stored.
+     - `'expire'`: It sets the expiration time for password reset tokens to 60 minutes.
+     - `'throttle'`: It limits the number of password reset emails that can be sent within 60 minutes.
+
+Now, let's explain this in simple terms for beginners:
+
+- `'defaults'` tells Laravel what the default way of authentication is (sessions) and the default method for password resets (using the "users" provider).
+
+- `'guards'` define how authentication should work. `'web'` is used for regular web applications and relies on session-based authentication.
+
+- `'providers'` specify where user information is stored and how to retrieve it. `'users'` uses the Eloquent model to interact with the users' data.
+
+- `'passwords'` is about handling password resets. `'users'` configuration defines how password reset tokens are generated, how long they are valid, and how many can be sent within a certain time.
+
+In essence, these settings configure how users are authenticated and how password resets are handled in a Laravel web application. Beginners can think of them as the rules and tools that make user login and password reset features work smoothly.
+
+**Why Not Used in register or email verify or others**
+to summarize, `'defaults'`,`'guards'`, `'providers'`, and `'passwords'` in `auth.php` primarily deal with user login and password reset, while user registration and email verification are typically implemented using separate routes, controllers, views, and email functionality in your Laravel application.
+
+When a user is not logged in and visits a website as a guest, Laravel's auth.php configuration doesn't have a direct impact on their experience. The settings in `auth.php` are primarily concerned with how user authentication and sessions are handled for logged-in users.
+
+For `guests` (users who are not logged in), Laravel provides a mechanism for handling public access to your application without requiring authentication. This typically involves setting up routes, controllers, and views to display content to guests.
 
 ### Frontend
 
@@ -1964,8 +2031,18 @@ Here are some key aspects of middleware in Laravel:
 ---
 **CSRF (Cross-Site Request Forgery)** in Laravel is a security feature that helps protect your web application from malicious actions. It ensures that requests made to your application come from a legitimate source. Laravel generates unique tokens for each user session, and these tokens are added to forms. When a form is submitted, Laravel checks if the token matches the one generated for that session, preventing unauthorized or forged requests. This helps keep your application secure from cross-site request forgery attacks.
 
-Here are the key aspects of CSRF protection in Laravel:
+**Summery to Clarify**
+1. **CSRF (Cross-Site Request Forgery)**:
+   - CSRF is like a scam where one website tricks your browser into doing things on another website, even though you didn't want to.
 
+2. **CSRF Token**:
+   - A CSRF token is like a special secret handshake between your browser and a website. It ensures the website knows it's you and not some trickster.
+
+3. **CSRF Protection**:
+   - CSRF protection is when websites use these secret handshakes to make sure your browser only does what you really want it to, and not what tricksters tell it to do.
+
+
+Here are the key aspects of CSRF protection in Laravel:
 #### 1. **CSRF Tokens:**
    - Laravel generates unique CSRF tokens for each user session.
    - These tokens are included in forms as hidden fields or can be added to AJAX requests. 
@@ -2145,7 +2222,7 @@ Certainly, let's dive deeper into CSRF (Cross-Site Request Forgery) and XSRF (Cr
      ```
    - This way, you can add CSRF protection to non-route-closure-based controllers.
 
-### Controllers in Laravel:
+### **Controllers in Laravel:**
 ---
 Controllers in Laravel are PHP classes responsible for handling incoming HTTP requests and returning appropriate responses. They act as intermediaries between the routes and the application's logic, making it easier to separate concerns and maintain a clean codebase.
 
@@ -2166,7 +2243,6 @@ Here are the key aspects of controllers in Laravel:
 #### **3. Request Handling:**
    - Controllers receive incoming requests as method arguments, typically using type-hinted Request objects.
    - Example method in a controller:
-
      ```php
      public function store(Request $request)
      {
@@ -2175,7 +2251,6 @@ Here are the key aspects of controllers in Laravel:
          // Process and store data
      }
      ```
-
 #### **4. Returning Responses:**
    - Controllers return responses to the client, which can be HTML views, JSON data, or other formats.
    - Example of returning a view in a controller method:
@@ -2214,7 +2289,7 @@ Here are the key aspects of controllers in Laravel:
    - Example of dependency injection in a controller constructor:
 
      ```php
-     public function __construct(UserService $userService)
+     public function __construct(UserService $userService) // UserService is a dependency that injects to controller.
      {
          $this->userService = $userService;
      }
@@ -2239,7 +2314,28 @@ Here are the key aspects of controllers in Laravel:
    - Example of creating an API controller:
 
      ```bash
-     php artisan make:controller ApiController
+     php artisan make:controller ProductController
+
+         public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'description' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $product = Product::create($request->all());
+
+        return response()->json($product, 201);
+    }
+
+      # you need to define routes for your API in the `routes/api.php` file. Here's an example:
+
+   Route::resource('products', ProductController::class);
      ```
 
 #### **10. Controller Middleware Groups:**
@@ -2254,7 +2350,6 @@ Here are the key aspects of controllers in Laravel:
         $this->middleware('subscribed')->except('store');
         $this->middleware('auth')->except('publicMethod');
      }
-
      ```
   **Note:** - This allows you to specify middleware behavior for the entire controller while excluding specific methods.
 
@@ -2312,9 +2407,11 @@ Here are the key aspects of controllers in Laravel:
          {
              return 'This is an invokable controller action.';
          }
+
+        public function custom_method(){} // this is not valid method.
+         
      }
      ```
-
    - You can route to invokable controllers directly, simplifying routes for single-action endpoints.
 
 #### **15. Controller Testing:**
@@ -2347,7 +2444,7 @@ Here are the key aspects of controllers in Laravel:
 
    - Namespaced controllers help keep your code organized, especially in larger applications.
 
-Certainly, let's explore some real-life examples of controller methods in Laravel that involve various logic, such as multiple queries, route model binding, and filtering data. We'll use a hypothetical e-commerce application as an example.
+    let's explore some real-life examples of controller methods in Laravel that involve various logic, such as multiple queries, route model binding, and filtering data. We'll use a hypothetical e-commerce application as an example.
 
 ### Real-Life Controller Methods:
 
@@ -2399,19 +2496,19 @@ Certainly, let's explore some real-life examples of controller methods in Larave
    - Code Example:
 
      ```php
-     public function show(Product $product)
+     public function show(Product $product) // Product show/delete/update works with route model binding.
      {
          return view('products.show', compact('product'));
      }
      ```
 
-#### 3. **Add or Update Product Information in One Method:**
+#### 3. **store or Update Product attributes/objects in One Method:**
 
    - Purpose: Handle both adding and updating product information in a single method.
    - Logic: Check if the request contains a product ID; if it does, update the existing product; otherwise, create a new product.
    - Code Example:
 
-##### Beginner Level OF Add or Update Product Information in One Method
+##### *Beginner Level OF Add or Update Product Information in One Method*
 
 ```php
 
@@ -2438,7 +2535,7 @@ public function storeOrUpdate(Request $request, $id = null)
 }
 ```
 
-##### Advanced Level OF Add or Update Product Information in One Method
+##### *Advanced Level OF Add or Update Product Information in One Method*
 
 ```php
 use Illuminate\Support\Facades\Auth;
@@ -5157,121 +5254,37 @@ Certainly! Let's explore Laravel Collections with a simple example and easy-to-u
 
   Collections in Laravel are a powerful way to work with arrays or sets of data. They provide a wide range of methods for filtering, transforming, and manipulating data in a clean and concise way.
 
+  In summary:
+
+- Eloquent and the Query Builder are used for database operations like updating, storing, deleting, and retrieving data from the database. These operations directly interact with the database.
+
+- Laravel Collections are used for  in-memory data manipulation, such as filtering, transforming, and working with arrays or collections of data that are already in your application's memory. They are not directly involved in the interaction with the database.Collections are used for making it easier to work with arrays and collections of data after you have retrieved the data from the database using Eloquent or the Query Builder.
+
+So, when you want to work with data from a database table, you start with database models and database query methods, and you can then use Collections to further manipulate the retrieved data in memory.
+
+```php
+// Retrieve all products using Eloquent
+$products = Product::all();
+
+// Now, you can convert the Eloquent collection to a Laravel Collection
+$productCollection = $products->toBase();
+
+// Use Collection methods for data manipulation
+$filteredProducts = $productCollection->filter(function ($product) {
+    return $product->price > 50; // Filter products with a price greater than 50
+});
+
+// Transform the data, for example, by extracting the product names
+$productNames = $filteredProducts->pluck('name');
+
+// $productNames now contains the names of filtered products as a collection
+```
+
 - **Why Use Collections?**
 
   Collections make it easier to perform common data operations, like filtering items, mapping values, and reducing arrays, without the need for complex loops or custom functions. They can help simplify code and improve readability.
 
 **Scenario: Processing Orders in an E-commerce Application**
-
-Let's create a simplified example of using Laravel Collections to process orders in an e-commerce application.
-
-**Step 1: Retrieve Orders**
-
-1. **What is it?**
-
-   In our scenario, we want to retrieve a list of orders.
-
-2. **How to Do It?**
-
-   In your controller, you can fetch orders from your database or any data source:
-
-   ```php
-   $orders = Order::all(); // Assuming 'Order' is your Eloquent model
-   ```
-
-**Step 2: Use a Collection**
-
-1. **What is it?**
-
-   Once you have your orders, you can convert them into a collection to take advantage of Laravel's collection methods.
-
-2. **How to Do It?**
-
-   ```php
-   use Illuminate\Support\Collection;
-
-   $orderCollection = collect($orders);
-   ```
-
-   Now, you have a collection of orders.
-
-**Step 3: Filter Orders**
-
-1. **What is it?**
-
-   Let's say you want to filter orders to find all the orders with a total amount greater than $100.
-
-2. **How to Do It?**
-
-   You can use the `filter` method:
-
-   ```php
-   $expensiveOrders = $orderCollection->filter(function ($order) {
-       return $order->total > 100;
-   });
-   ```
-
-   `$expensiveOrders` now contains only the orders with a total amount greater than $100.
-
-**Step 4: Calculate Total Revenue**
-
-1. **What is it?**
-
-   Now, you want to calculate the total revenue from these expensive orders.
-
-2. **How to Do It?**
-
-   You can use the `sum` method:
-
-   ```php
-   $totalRevenue = $expensiveOrders->sum('total');
-   ```
-
-   `$totalRevenue` contains the total revenue from expensive orders.
-
-**Step 5: Map Orders to Their Customer Names**
-
-1. **What is it?**
-
-   Let's say you want to create a list of customer names who placed expensive orders.
-
-2. **How to Do It?**
-
-   You can use the `map` method:
-
-   ```php
-   $customerNames = $expensiveOrders->map(function ($order) {
-       return $order->customer->name;
-   });
-   ```
-
-   `$customerNames` now contains a list of customer names.
-
-**Step 6: Display the Results**
-
-1. **What is it?**
-
-   Finally, you can display the results in your view or return them from your controller.
-
-2. **How to Do It?**
-
-   ```php
-   return view('orders', [
-       'expensiveOrders' => $expensiveOrders,
-       'totalRevenue' => $totalRevenue,
-       'customerNames' => $customerNames->implode(', '), // Convert names to a comma-separated string
-   ]);
-   ```
-
-   In your view, you can then access these variables and display them.
-
-**Summary:**
-
-In this example, we used Laravel Collections to filter, calculate, and transform data related to orders in an e-commerce application. Collections simplify data manipulation and allow you to work with data in a more readable and efficient way, making your code cleaner and more maintainable.
-
-
-
-Certainly! Here are some more important Laravel Collection methods along with descriptions:
 
 1. **`map`**: Transforms each item in the collection using a callback function and returns a new collection with the modified items.
 
@@ -5675,129 +5688,239 @@ Certainly! Here are some of the important Laravel Collection methods along with 
    $sliced = $collection->slice(2);
    ```
 
+    #### **collection and DB Query Builders / Model Objects**
+    ---
+    1. **Collections**:
+   - When used with collections, these methods operate on in-memory data structures, such as arrays or Laravel collections. They are used for manipulating data that has already been retrieved from a database or generated in your application.
+
+2. **DB Query Builders / Model Objects**:
+   - When used with database query builders or model objects, these methods are used to interact with the database and retrieve or manipulate data from database tables.
+
+Here's a brief overview of some methods are used in both contexts:
+
+**Collections**:
+
+- `all()`: Returns all items in the collection as an array.
+- `get()`: Returns all items in the collection as a new collection instance.
+- `pluck($column)`: Retrieves a specific column's value from each item in the collection and returns it as a new collection.
+- `max()`: Finds the maximum value in the collection.
+- `min()`: Finds the minimum value in the collection.
+- `sum()`: Calculates the sum of values in the collection.
+- `avg()`: Calculates the average of values in the collection.
+- `isEmpty()`: Checks if the collection is empty.
+- `isNotEmpty()`: Checks if the collection is not empty.
+- `count()`: Counts the number of items in the collection.
+- `skip()`: Skips a specified number of items in the collection.
+- `take()`: Retrieves a specified number of items from the collection, starting from the current position.
+- `first()`: Retrieves the first item in the collection.
+
+**Database Query Builders / Model Objects**:
+- `all()`: Retrieves all records from a database table that match the query criteria.
+- `get()`: Retrieves query results from the database. Typically used to retrieve multiple records.
+- `pluck($column)`: Retrieves a specific column's value from the database table for each matching record.
+- `max()`: Finds the maximum value in a specific column of the database table based on the query.
+- `min()`: Finds the minimum value in a specific column of the database table based on the query.
+- `sum()`: Calculates the sum of values in a specific column of the database table based on the query.
+- `avg()`: Calculates the average of values in a specific column of the database table based on the query.
+- `isEmpty()`: Checks if the query results are empty (no records match the query).
+- `isNotEmpty()`: Checks if the query results are not empty (at least one record matches the query).
+- `count()`: Retrieves the count of rows in the database table that match the query criteria.
+- `skip()`: Skips a specified number of rows in the query results. Useful for implementing pagination in database queries.
+- `take()`: Limits the number of rows to retrieve from the database table.
+- `first()`: Retrieves the first row from the query results.
+
+**Note** When these methods are used with database query builders or model objects, they perform database operations and return results based on the database data. In contrast, when used with collections, they manipulate data that has already been loaded into memory.
+
 ### **CONTACTS IN LARAVEL**
 ---
-Certainly! Let's explore Laravel Contracts with an easy-to-understand definition, a simplified real-life example, and sample code.
+Sure, let's start with some easy-to-understand definitions and code examples of Laravel contracts for beginner students. Laravel contracts are a set of interfaces that define the methods you should implement when working with various services provided by Laravel. These contracts help ensure consistency and make it easier to switch out different implementations.
 
-**Laravel Contracts in Simple Terms:**
+1. **File Storage Contract**
 
-- **What are Contracts?**
+   Laravel provides a contract for interacting with file storage systems. The most common implementation is with the local file system.
 
-  Contracts in Laravel are a set of defined interfaces that provide a blueprint for specific functionalities. They act as agreements that classes must adhere to in order to work with Laravel's core services.
+   **Definition:**
 
-- **Why Use Contracts?**
-
-  Contracts help ensure consistency and compatibility in Laravel by specifying what methods a class must implement. This allows for easier swapping of components and promotes clean, testable code.
-
-**Scenario: Image Upload in a Blogging Platform**
-
-Let's consider a simplified example where you're building a blogging platform in Laravel, and you want to allow users to upload images. We'll use Laravel's `Filesystem` contract for this.
-
-**Step 1: Define the Contract**
-
-1. **What is it?**
-
-   We'll use Laravel's `Filesystem` contract, which defines methods for interacting with a filesystem (e.g., local disk or cloud storage).
-
-2. **How to Use It?**
-
-   Laravel already provides this contract, so we don't need to create it ourselves.
-
-**Step 2: Use the Contract in Your Code**
-
-1. **What is it?**
-
-   We'll create an `ImageUploader` class that uses the `Filesystem` contract to upload images.
-
-2. **How to Do It?**
-
-   - First, create a new class `ImageUploader`:
-
-     ```bash
-     php artisan make:class ImageUploader
-     ```
-
-   - In the `ImageUploader` class, we'll use dependency injection to work with the `Filesystem` contract:
-
-     ```php
-     use Illuminate\Contracts\Filesystem\Filesystem;
-
-     class ImageUploader
-     {
-         protected $filesystem;
-
-         public function __construct(Filesystem $filesystem)
-         {
-             $this->filesystem = $filesystem;
-         }
-
-         public function upload($file)
-         {
-             // Use the filesystem contract to upload the file
-             $path = 'images/' . $file->getClientOriginalName();
-             $this->filesystem->put($path, file_get_contents($file));
-
-             return $path;
-         }
-     }
-     ```
-
-     In this class, we inject the `Filesystem` contract into the constructor and use it to upload an image file.
-
-**Step 3: Bind the Contract to a Concrete Implementation**
-
-1. **What is it?**
-
-   We need to specify which concrete implementation of the `Filesystem` contract to use. Laravel offers multiple options, such as local storage or cloud storage.
-
-2. **How to Do It?**
-
-   In your Laravel configuration (`config/filesystems.php`), specify the filesystem driver you want to use. For example, to use local storage:
+   The `Storage` contract defines methods for interacting with file storage:
 
    ```php
-   'default' => 'local',
-   'disks' => [
-       'local' => [
-           'driver' => 'local',
-           'root' => storage_path('app'),
-       ],
-   ],
+   interface Storage
+   {
+       public function put($path, $contents);
+       public function get($path);
+       public function delete($path);
+   }
    ```
 
-**Step 4: Use the `ImageUploader` Class**
-
-1. **What is it?**
-
-   Now, you can use the `ImageUploader` class in your controllers or services to upload images.
-
-2. **How to Do It?**
-
-   In your controller:
+   **Example:**
 
    ```php
-   use App\ImageUploader;
-   use Illuminate\Http\Request;
+   use Illuminate\Support\Facades\Storage;
 
-   class ImageController extends Controller
+   // Storing a file
+   Storage::put('file.txt', 'Hello, world!');
+
+   // Retrieving a file
+   $contents = Storage::get('file.txt');
+
+   // Deleting a file
+   Storage::delete('file.txt');
+   ```
+
+2. **Mail Driver Contract**
+
+   Laravel's mail system allows you to send email through different drivers, such as SMTP or SendMail. The contract ensures consistency in sending mail.
+
+   **Definition:**
+
+   The `Mailer` contract defines methods for sending emails:
+
+   ```php
+   interface Mailer
    {
-       public function upload(Request $request, ImageUploader $imageUploader)
+       public function to($address, $name = null);
+       public function subject($subject);
+       public function send($view, array $data, $callback);
+   }
+   ```
+
+   **Example:**
+
+   ```php
+   use Illuminate\Support\Facades\Mail;
+
+   Mail::to('recipient@example.com')->subject('Hello')->send('emails.welcome', ['user' => $user], function ($message) {
+       $message->from('sender@example.com', 'Sender Name');
+   });
+   ```
+
+3. **Cache Store Contract**
+
+   Laravel's caching system allows you to store and retrieve data efficiently. The contract defines methods for caching data.
+
+   **Definition:**
+
+   The `Cache` contract defines methods for caching and retrieving data:
+
+   ```php
+   interface Cache
+   {
+       public function put($key, $value, $minutes);
+       public function get($key, $default = null);
+       public function forget($key);
+   }
+   ```
+
+   **Example:**
+
+   ```php
+   use Illuminate\Support\Facades\Cache;
+
+   // Storing data in cache
+   Cache::put('user:1', $userData, 60);
+
+   // Retrieving data from cache
+   $userData = Cache::get('user:1');
+
+   // Removing data from cache
+   Cache::forget('user:1');
+   ```
+
+These are some basic Laravel contracts with simple explanations and code examples for beginner students. Contracts help maintain a structured approach to working with various services in Laravel, making it easier to understand and implement functionality consistently.
+
+#### **Custom Laravel Contract**
+---
+Creating custom contracts in Laravel is a useful practice when you need to define your own interfaces for services that are specific to your application. This can help you maintain a consistent API for your custom services. Here's a step-by-step guide on how to create a custom contract for professionals:
+
+1. **Create a Contract Interface:**
+
+   Start by creating a new contract interface. Contracts are typically placed in the `app/Contracts` directory of your Laravel project.
+
+   ```php
+   // app/Contracts/ProfessionalContract.php
+
+   namespace App\Contracts;
+
+   interface ProfessionalContract
+   {
+       public function getSkills();
+       public function getExperience();
+       public function doWork();
+   }
+   ```
+
+   In this example, we've defined a `ProfessionalContract` with three methods: `getSkills()`, `getExperience()`, and `doWork()`. You can customize these methods to suit the needs of your professional-related functionality.
+
+2. **Implement the Contract:**
+
+   Next, create a class that implements the contract. This class will provide concrete implementations for the methods defined in the contract.
+
+   ```php
+   // app/Professionals/Developer.php
+
+   namespace App\Professionals;
+
+   use App\Contracts\ProfessionalContract;
+
+   class Developer implements ProfessionalContract
+   {
+       public function getSkills()
        {
-           $file = $request->file('image');
-           $path = $imageUploader->upload($file);
+           return ['PHP', 'JavaScript', 'React'];
+       }
 
-           // You can now save the image path in your database or use it as needed
-           // ...
+       public function getExperience()
+       {
+           return '5 years';
+       }
 
-           return "Image uploaded to: $path";
+       public function doWork()
+       {
+           return 'Develop web applications.';
        }
    }
    ```
 
-   This controller method accepts an `ImageUploader` instance through dependency injection and uses it to upload an image file.
+   In this example, we've created a `Developer` class that implements the `ProfessionalContract` interface. It provides specific implementations for the methods.
 
-**Summary:**
+3. **Bind the Implementation in the Service Provider:**
 
-Laravel Contracts are like blueprints that define what methods a class must implement. In our example, we used the `Filesystem` contract to create an `ImageUploader` class that can work with various filesystem drivers, such as local storage. Contracts help ensure that your code adheres to specified interfaces, making it more flexible and maintainable.
+   To use this custom contract and implementation, you need to bind it in a service provider. Open `app/Providers/AppServiceProvider.php` and add the binding to the `register` method:
+
+   ```php
+   // app/Providers/AppServiceProvider.php
+
+   use App\Contracts\ProfessionalContract;
+   use App\Professionals\Developer;
+
+   public function register()
+   {
+       $this->app->bind(ProfessionalContract::class, Developer::class);
+   }
+   ```
+
+   This tells Laravel to use the `Developer` class whenever an instance of `ProfessionalContract` is requested.
+
+4. **Using the Custom Contract:**
+
+   Now you can use your custom contract and implementation throughout your application:
+
+   ```php
+   use App\Contracts\ProfessionalContract;
+
+   public function showProfessionalInfo(ProfessionalContract $professional)
+   {
+       $skills = $professional->getSkills();
+       $experience = $professional->getExperience();
+       $workDescription = $professional->doWork();
+
+       // Use the professional's information as needed
+   }
+   ```
+
+   You can inject the `ProfessionalContract` into your controllers, services, or other classes to access the professional's methods.
+
+By following these steps, you've created a custom contract for professionals and provided an implementation. This approach allows you to define a consistent API for various types of professionals in your application and switch implementations if needed.
 
 ### Laravel **File Storage** and all functionalities of file storage
 ---
