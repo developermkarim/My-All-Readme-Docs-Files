@@ -99,6 +99,282 @@ Now, let's explain this in simple terms for beginners:
 
 In essence, these settings configure how users are authenticated and how password resets are handled in a Laravel web application. Beginners can think of them as the rules and tools that make user login and password reset features work smoothly.
 
+#### **More & Custom Guard**
+---
+Sure, let's create a custom guard step by step using a guard table and a provider in a Laravel application. For simplicity, we'll create a basic guard called `custom` that uses a database table named `guard_users` for authentication.
+
+1. **Database Setup**:
+
+   First, create a migration to define the structure of the `guard_users` table. Open a terminal and run:
+
+   ```bash
+   php artisan make:migration create_guard_users_table
+   ```
+
+   Edit the generated migration file to define the table structure:
+
+   ```php
+   // database/migrations/[timestamp]_create_guard_users_table.php
+
+   use Illuminate\Database\Migrations\Migration;
+   use Illuminate\Database\Schema\Blueprint;
+   use Illuminate\Support\Facades\Schema;
+
+   class CreateGuardUsersTable extends Migration
+   {
+       public function up()
+       {
+           Schema::create('guard_users', function (Blueprint $table) {
+               $table->id();
+               $table->string('name');
+               $table->string('email')->unique();
+               $table->string('password');
+               $table->timestamps();
+           });
+       }
+
+       public function down()
+       {
+           Schema::dropIfExists('guard_users');
+       }
+   }
+   ```
+
+   Run the migration:
+
+   ```bash
+   php artisan migrate
+   ```
+
+2. **Model Setup**:
+
+   Create a model for the `guard_users` table:
+
+   ```bash
+   php artisan make:model GuardUser
+   ```
+
+   Edit the generated model to specify the table:
+
+   ```php
+   // app/Models/GuardUser.php
+
+   namespace App\Models;
+
+   use Illuminate\Database\Eloquent\Factories\HasFactory;
+   use Illuminate\Database\Eloquent\Model;
+
+   class GuardUser extends Model
+   {
+       use HasFactory;
+
+       protected $table = 'guard_users';
+   }
+   ```
+
+3. **Custom Guard Configuration**:
+
+   Open the `config/auth.php` file and add a new guard configuration:
+
+   ```php
+   'guards' => [
+       'custom' => [
+           'driver' => 'session',  // 'session' or 'token'
+           'provider' => 'custom_users', // The name of the provider
+       ],
+   ],
+   ```
+
+   Add a new provider configuration under the `'providers'` section:
+
+   ```php
+   'providers' => [
+       'custom_users' => [
+           'driver' => 'eloquent',
+           'model' => \App\Models\GuardUser::class,
+       ],
+   ],
+   ```
+
+   This configuration tells Laravel that the `custom` guard uses the `session` driver and the `custom_users` provider, which is an Eloquent model for our `guard_users` table.
+
+4. **Auth Middleware**:
+
+   Use the `auth` middleware to protect routes. Open your routes file (`web.php` for web routes) and use the `auth:custom` middleware:
+
+   ```php
+   Route::middleware('auth:custom')->group(function () {
+       // Your protected routes go here
+   });
+   ```
+
+5. **Authentication in Controller**:
+
+   Now, you can use the `auth()` helper or the `Auth` facade in your controllers to check authentication and get the authenticated user:
+
+   ```php
+   // Example in a controller method
+   public function index()
+   {
+       if (auth('custom')->check()) {
+           // User is authenticated
+           $user = auth('custom')->user();
+           // Do something with the authenticated user
+       } else {
+           // User is not authenticated
+           // Redirect or handle as needed
+       }
+   }
+   ```
+
+Certainly! Let's continue with more details about the custom guard, provider, and session in Laravel.
+
+6. **Session Configuration**:
+
+   The `session` driver in the guard configuration (`'driver' => 'session'`) indicates that the guard will use Laravel's session mechanism for authentication. Sessions are a way to persist user data across requests.
+
+   Make sure that your `config/session.php` file has the following configuration:
+
+   ```php
+   'driver' => env('SESSION_DRIVER', 'file'),
+   ```
+
+   Laravel supports various session drivers (`file`, `database`, `redis`, etc.). In this case, it defaults to the `file` driver.
+
+7. **Middleware Groups**:
+
+   In your `Kernel.php` file (located in the `app/Http` directory), you can find the `$middlewareGroups` property. Ensure that the `web` middleware group includes the `\Illuminate\Session\Middleware\StartSession::class` middleware:
+
+   ```php
+   protected $middlewareGroups = [
+       'web' => [
+           // ... other middleware
+           \Illuminate\Session\Middleware\StartSession::class,
+           // ... other middleware
+       ],
+   ];
+   ```
+
+   This middleware is crucial for handling sessions, which are necessary for the `session` guard driver.
+
+8. **Routes and Redirects**:
+
+   When using the custom guard, make sure to specify the guard name in your routes and redirects:
+
+   ```php
+   // For routes
+   Route::middleware('auth:custom')->group(function () {
+       // Your protected routes go here
+   });
+
+   // For redirects
+   return redirect()->route('your.route.name')->with('guard', 'custom');
+   ```
+
+   This ensures that Laravel knows which guard to use when checking authentication.
+
+9. **Example of Logging In a User**:
+
+   To log in a user, use the `attempt` method on the `Auth` facade. This is typically done in your login controller:
+
+   ```php
+   public function login(Request $request)
+   {
+       // Validate user credentials
+
+       if (Auth::guard('custom')->attempt(['email' => $request->email, 'password' => $request->password])) {
+           // Authentication successful
+           return redirect('/dashboard');
+       } else {
+           // Authentication failed
+           return back()->withErrors(['email' => 'Invalid credentials']);
+       }
+   }
+   ```
+
+   In this example, `Auth::guard('custom')->attempt(...)` attempts to log in a user using the custom guard.
+
+Remember that this example assumes a basic web application setup. Adjustments may be needed based on your specific application requirements, such as API authentication, token-based guards, or additional middleware configurations.
+
+#### *The 'provider' key and the 'driver' key are built in the words of Laravel*
+
+Yes, you can customize the names of the 'provider' and 'driver' keys in your Laravel configuration. These keys are not reserved words, and you have the flexibility to choose different names that make sense for your application.
+
+Here's an example of how you might customize these keys in the 'guards' configuration:
+
+```php
+'guards' => [
+    'custom' => [
+        'authentication_method' => 'session',  // You can use a different name here
+        'data_provider' => 'custom_users',      // You can use a different name here
+    ],
+],
+```
+
+Similarly, you can customize the names in the 'providers' configuration:
+
+```php
+'providers' => [
+    'custom_users' => [
+        'data_source' => 'eloquent',               // You can use a different name here
+        'user_model' => \App\Models\GuardUser::class,
+    ],
+],
+```
+
+These names are just keys used in the configuration array, and you can choose names that align with your application's terminology or your personal preference. Just make sure that you use the same names consistently in both the 'guards' and 'providers' configurations, so Laravel can properly associate them.
+
+In summary, feel free to rename these keys to better suit your application, as long as you maintain consistency across your configuration files.
+
+#### **Middleware of RedirectIfAuthenticated**
+---
+It Handles an incoming request. by the method.
+```bash
+    public function handle(Request $request, Closure $next, string ...$guards): Response
+    {
+        $guards = empty($guards) ? [null] : $guards;
+
+        foreach ($guards as $guard) {
+            if (Auth::guard($guard)->check()) {
+
+                if (Auth::check() && Auth::user()->role == 'user' ) {
+                    return redirect('/dashboard');
+
+                } if (Auth::check() && Auth::user()->role == 'agent' ) {
+                    return redirect('/agent/dashboard');
+
+                }if (Auth::check() && Auth::user()->role == 'admin' ) {
+                    return redirect('/admin/dashboard');
+                }
+ 
+                
+            }
+        }
+
+        return $next($request);
+    }
+```
+**Notes:**
+The `...$guards` syntax allows the function to accept an arbitrary number of arguments ( variadic/বৈচিত্র্যময় parameter). In the case of the RedirectIfAuthenticated middleware, it's designed to work with multiple guards. Guards in Laravel are mechanisms for authenticating users, and a single application might have multiple guards, each responsible for a different authentication system (e.g., web, api).
+
+For Example :
+```bsh
+Route::middleware('auth:web')->get('/dashboard', 'DashboardController@index');
+// or
+Route::middleware('auth:api')->get('/api/dashboard', 'ApiController@index');
+// or even both
+Route::middleware('auth:web,api')->get('/combined/dashboard', 'CombinedController@index');
+
+```
+To Redirect directly , Use the Class in with login Route Like Following.
+
+The Routes :
+```bash
+Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')->middleware(RedirectIfAuthenticated::class); 
+
+ Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login')->middleware(RedirectIfAuthenticated::class); 
+```
+
 **Why Not Used in register or email verify or others**
 to summarize, `'defaults'`,`'guards'`, `'providers'`, and `'passwords'` in `auth.php` primarily deal with user login and password reset, while user registration and email verification are typically implemented using separate routes, controllers, views, and email functionality in your Laravel application.
 
@@ -124,6 +400,181 @@ Laravel provides tools for frontend development:
    mix.js('resources/js/app.js', 'public/js')
       .sass('resources/sass/app.scss', 'public/css');
    ```
+
+### **Vite and Mix**
+---
+#### **Vite:**
+##### Definition:
+Vite is a build tool that's incredibly fast and designed specifically for modern JavaScript projects. It's commonly used with frontend frameworks like Vue.js and React. Vite focuses on rapid development and provides a development server that leverages native ES Module imports to build an application quickly.
+
+##### Simple Explanation:
+Think of Vite as a tool that helps you develop your frontend applications super fast. It does this by taking advantage of modern browser features to build your project quickly during development. It's like a wizard that makes your code run smoothly while you're working on it.
+
+##### How to Use Vite with Vue.js (a basic example):
+Assuming you've already set up a Vue project and have Node.js installed:
+
+1. **Install Vue CLI globally (if not done already):**
+   ```bash
+   npm install -g @vue/cli
+   ```
+
+2. **Create a new Vue project using Vite:**
+   ```bash
+   vue create my-vite-project
+   ```
+
+3. **Start the development server:**
+   ```bash
+   cd my-vite-project
+   npm run dev
+   ```
+   This command will start the development server.
+
+#### **Laravel Mix:**
+
+##### Definition:
+Laravel Mix is a simple and elegant wrapper around the popular JavaScript build tool called Webpack. It simplifies the configuration needed for common frontend tasks like compiling Sass/LESS, bundling JavaScript, and more. Laravel Mix is included with Laravel by default and is used for building frontend assets.
+
+##### Simple Explanation:
+Imagine Laravel Mix as your assistant that helps you compile, combine, and manage your frontend assets (like CSS, JavaScript) without you needing to understand all the complex inner workings. It's like having a handy toolkit for managing your project's frontend tasks easily.
+
+##### How to Use Laravel Mix (a basic example):
+Assuming you have a Laravel project set up:
+
+1. **Install Laravel Mix (if not included already):**
+   It's typically included by default in a fresh Laravel installation.
+
+2. **Define your asset compilation tasks in your `webpack.mix.js` file:**
+   For example, you can compile your SCSS into CSS and merge multiple JavaScript files into one.
+   ```javascript
+   // Example webpack.mix.js file
+   mix.js('resources/js/app.js', 'public/js')
+      .sass('resources/sass/app.scss', 'public/css');
+   ```
+
+3. **Run the compilation:**
+   ```bash
+   npm run dev
+   ```
+   This command will run the predefined asset compilation tasks defined in your `webpack.mix.js` file.
+
+#### Choosing Between Vite and Laravel Mix:
+
+- **Vite:** Choose Vite if you want faster development, especially for modern frontend frameworks. It's great for quick iterations and leveraging modern browser features.
+- **Laravel Mix:** Stick with Laravel Mix if you prefer a simpler, more integrated solution for managing frontend assets within your Laravel application. It's more straightforward and works seamlessly with Laravel's structure.
+
+**Notes:** Both tools serve different purposes, so choose based on your project's requirements and your familiarity with the technologies involved. If your project heavily uses modern frontend frameworks and you prioritize speed, Vite might be the way to go. However, if you're comfortable with Laravel's default tooling and want a more integrated solution, Laravel Mix might be your choice.
+
+
+**Configuration Of Progessional**
+Absolutely! To configure Vite and Laravel in a professional Laravel application, let's consider integrating AdminLTE CSS and JavaScript files into a Laravel project using both Vite and Laravel Mix.
+
+#### **Configuring Laravel Mix:**
+
+1. **Installation:**
+   Install Laravel Mix in your Laravel project:
+   ```bash
+   npm install laravel-mix --save-dev
+   ```
+
+2. **Using Laravel Mix:**
+
+   In your `webpack.mix.js` file, import and compile the AdminLTE CSS and JavaScript:
+
+   ```javascript
+   const mix = require('laravel-mix');
+
+   mix.sass('resources/sass/app.scss', 'public/css')
+      .js('resources/js/app.js', 'public/js')
+      .styles([
+         'node_modules/admin-lte/dist/css/adminlte.min.css',
+      ], 'public/css/admin-lte.css')
+      .scripts([
+         'node_modules/admin-lte/dist/js/adminlte.min.js',
+      ], 'public/js/admin-lte.js');
+   ```
+
+3. **Run Mix Commands:**
+   Compile the assets using Mix commands:
+   ```bash
+   npx mix
+   ```
+
+#### Configuring Vite:
+
+1. **Installation:**
+   Install Vite in your project:
+   ```bash
+   npm init vite@latest my-vite-project
+   cd my-vite-project
+   npm install
+   ```
+
+2. **Using Vite:**
+
+   Inside the `vite.config.js` file in your project root, specify the build setup:
+
+   ```javascript
+   import { defineConfig } from 'vite';
+
+   export default defineConfig({
+     build: {
+       rollupOptions: {
+         input: {
+           app: 'resources/js/app.js',
+         },
+       },
+       css: {
+         preprocessorOptions: {
+           scss: {
+             additionalData: `@import 'admin-lte/dist/css/adminlte.min.css';`,
+           },
+         },
+       },
+     },
+   });
+   ```
+
+3. **Running Vite:**
+   Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
+
+#### Comparison:
+
+- **Laravel Mix**:
+  - Manages compilation tasks in a single configuration file (`webpack.mix.js`).
+  - Offers clear syntax and an easier setup for users familiar with Laravel.
+
+- **Vite**:
+  - Configuration is more modular and flexible, using separate config files and leveraging ES modules.
+  - Provides faster build times due to its modern, optimized approach.
+
+Both examples will integrate AdminLTE into your Laravel project. The Laravel Mix approach involves defining compilation tasks within a single configuration file, while Vite's approach splits the configuration into separate files for more modularity.
+
+Selecting between Laravel Mix and Vite depends on your project's needs, your familiarity with the tooling, and the desired level of flexibility and speed during the development process.
+
+#### Differences:
+
+- **Vite:**
+  - Utilizes native ES modules for faster development and builds.
+  - Doesn't require extensive configuration.
+  - Ideal for modern JavaScript frameworks like Vue.js and React.
+
+- **Laravel Mix:**
+  - Provides a simpler API that abstracts the underlying Webpack configurations.
+  - Offers more comprehensive configuration options for complex projects.
+  - Generally used for traditional asset bundling in Laravel applications.
+
+#### For Beginners:
+
+- **Vite:** Think of it as a tool that quickly compiles and bundles JavaScript and assets in a way that's optimized for modern browsers, making development faster.
+  
+- **Laravel Mix:** Consider it as a user-friendly tool in Laravel that simplifies the bundling of CSS, JavaScript, and other assets without needing to dive deeply into configurations.
+
+Selecting between Vite and Laravel Mix depends on the project's needs. For quick development and modern frameworks, Vite is a great choice. For more straightforward, Laravel-focused asset compilation, Laravel Mix might be preferable.
+
 
 ### Starter Kits
 
@@ -2446,6 +2897,143 @@ Here are the key aspects of controllers in Laravel:
 
     let's explore some real-life examples of controller methods in Laravel that involve various logic, such as multiple queries, route model binding, and filtering data. We'll use a hypothetical e-commerce application as an example.
 
+#### **Controller Test/PHP Unit Testing of Laravel**
+---
+#### Introduction
+
+Testing controllers in Laravel involves verifying the expected behavior of controller methods. Unit tests are written to ensure that the methods perform as intended.
+
+#### Prerequisites
+
+Before beginning controller testing, ensure PHPUnit is installed and set up in your Laravel application.
+
+#### **Example Controller and Methods**
+
+Consider a `UserController` with `show` and `store` methods:
+
+#### UserController:
+
+```php
+class UserController extends Controller
+{
+    public function show($id)
+    {
+        $user = User::find($id);
+        return view('user.show', ['user' => $user]);
+    }
+
+    public function store(Request $request)
+    {
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->save();
+        return redirect()->route('user.show', ['id' => $user->id]);
+    }
+}
+```
+
+#### **Writing Controller Tests**
+
+#### 1. Create a Test Class
+
+Use the Artisan command to generate a test class for the `UserController`:
+
+```bash
+php artisan make:test UserControllerTest
+```
+
+#### 2. Writing Test Methods
+
+##### Test for `show` method:
+
+```php
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class UserControllerTest extends TestCase
+{
+    use RefreshDatabase; // Resets the database after each test
+
+    public function testShow()
+    {
+        $user = factory(User::class)->create(); // Create a user for testing
+
+        $response = $this->get(route('user.show', ['id' => $user->id]));
+
+        $response->assertStatus(200) // Check if the page loads successfully
+            ->assertViewIs('user.show') // Ensure the correct view is loaded
+            ->assertViewHas('user', $user); // Check if the user data is available in the view
+    }
+}
+```
+
+##### Test for `store` method:
+
+```php
+public function testStore()
+{
+    $userData = [
+        'name' => 'Test User',
+        'email' => 'test@example.com'
+    ];
+
+    $response = $this->post(route('user.store'), $userData);
+
+    $response->assertRedirect(route('user.show', ['id' => 1])); // Adjust with the correct user ID
+
+    $this->assertDatabaseHas('users', ['name' => 'Test User', 'email' => 'test@example.com']);
+}
+```
+
+#### **Running Tests**
+
+Execute tests using the following command:
+
+```bash
+php artisan test
+```
+
+#### **Example Output**
+
+Upon running the tests, you should see output similar to the following:
+
+```bash
+PHPUnit x.y.z by Sebastian Bergmann and contributors.
+
+..                                                                 2 / 2 (100%)
+
+Time: 100 ms, Memory: 24.00 MB
+
+OK (2 tests, 5 assertions)
+```
+**Output Can be displayed like this**
+```bash
+PHPUnit x.y.z by Sebastian Bergmann and contributors.
+
+...FFF                                                              6 / 6 (100%)
+
+Time: 123 ms, Memory: 24.00 MB
+
+There were 3 failures:
+
+1) ExampleTest::testBasicTest
+Some assertion failed...
+
+2) AnotherTest::testAnotherFeature
+Another assertion failed...
+
+3) YetAnotherTest::testSomethingElse
+This assertion failed...
+
+FAILURES!
+Tests: 6, Assertions: 15, Failures: 3.
+```
+#### Summary
+
+By following this approach, you can thoroughly test your Laravel controllers, ensuring the expected behavior of the methods. This documentation provides step-by-step instructions, code examples, and best practices for testing controllers in Laravel. Regular testing is crucial for maintaining the stability and functionality of your application.
+
+
 ### Real-Life Controller Methods:
 
 #### 1. **Display Products with Filters:**
@@ -2630,8 +3218,8 @@ public function storeOrUpdate(Request $request, $id = null)
         DB::rollback();
         return redirect('/products')->with('error', 'An error occurred while saving the product.');
     }
-
 ```
+
 #### Resource Controller Images
 ![Alt text](https://i.ibb.co/3pWzcnB/29304922-Laravel-Resource-Controller-2x.png "Resource Controller")
 
@@ -2705,7 +3293,7 @@ Route::get('/', function () {
 });
 ```
 
-#### Sending Responses:
+#### **Sending Responses:**
 
 1. **Returning JSON Responses:**
    - Used when you want to return data in JSON format, often for AJAX requests or APIs.
@@ -2735,14 +3323,14 @@ Route::get('/', function () {
    To return a view as a response, you can use the `view()` method:
 
    ```php
-   return view('welcome');
+   return view('welcome'); // returns the response of view page which page's content is loaded from welcome.blade.php
    ```
 
 4. **Customizing Responses:**
    You can set custom HTTP headers and status codes:
 
    ```php
-   return response('Unauthorized', 401)
+   return response('Unauthorized', 401) // respones data is "Unauthorized" and status code is 401
        ->header('Content-Type', 'text/plain');
    ```
 
@@ -2758,7 +3346,7 @@ Route::get('/', function () {
 ---
 To create View File
 ```php
-php artisan make:view frontend/welcome
+php artisan make:view frontend/welcome // will be created to be frontend/welcome.blade.php
 ```
 Once you're inside the project directory, you can create a new view and folder in the frontend directory using the `mkdir` command (for creating a folder) and the `touch` command (for creating a view file). Replace `view_name` with the name of your view and `folder_name` with the name of the folder:
 
@@ -2791,7 +3379,7 @@ In Laravel, there are several ways to share data with views to pass information 
    
    ```php
    $variable = 'some value';
-   return view('viewName', compact('variable'));
+   return view('viewName', compact('variable','users'));
    ```
 
 4. **Using the `@php` Blade directive:**
@@ -2806,20 +3394,28 @@ In Laravel, there are several ways to share data with views to pass information 
 5. **Using view composers:**
    View composers allow you to bind data to specific views or view templates using service providers. This is helpful when you want to share data with multiple views.
    
-   ```php
+```php
    View::composer('viewName', function ($view) {
        $view->with('variableName', $variableValue);
    });
-   ```
+
+   View::composer(['products.index', 'categories.index'], function ($view) {
+    $view->with('sharedVariable', $sharedData);
+});
+
+```
 
 6. **Using view creators:**
    Similar to view composers, view creators let you share data with views, but they allow for more fine-grained control as they are tied to specific view classes.
    
-   ```php
-   View::creator('App\SomeViewClass', function ($view) {
-       $view->with('variableName', $variableValue);
-   });
+```php
+View::creator('products.index', function ($view) {
+    $view->with('variableName', $variableValue);
+});
    ```
+**Notes**
+- **Use `View::creator()`** when you need specific, targeted data sharing for individual views.
+- **Use `View::composer()`** when you need to share data across multiple views or a group of views efficiently without duplicating code.
 
 7. **Using the `@inject` Blade directive:**
    The `@inject` directive allows you to inject a service or value into your view directly from a service container.
@@ -2830,6 +3426,49 @@ In Laravel, there are several ways to share data with views to pass information 
 
 8. **Using shared views:**
    You can create a shared view that includes data you want to share across multiple views. This can be included in other views using the `@include` directive.
+
+    **Usage of `@include`:**
+
+- **Basic Inclusion:**
+  ```blade  
+  @include('partials.header')
+  ```
+
+  This line includes the `header.blade.php` file from the `partials` directory. Whatever content is in `header.blade.php` will be rendered at this point in the view.
+
+- **Passing Data to Included Views:**
+  You can pass variables to the included view.
+  ```blade
+  @include('partials.header', ['title' => 'My Title'])
+  ```
+
+  This example passes a variable named `title` with a value of `'My Title'` to the included `header.blade.php` file.
+
+- **Conditional Inclusion:**
+  ```blade
+  @if($condition)
+      @include('partials.sidebar')
+  @else
+      @include('partials.default-sidebar')
+  @endif
+  ```
+
+  ```blade
+<!-- main.blade.php -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+    @include('partials.header')
+</head>
+<body>
+    @include('partials.sidebar')
+    <div class="content">
+       @yield('main-content')  <!-- Main content of the page -->
+    </div>
+</body>
+</html>
+```
 
 9. **Basic View:**
 A basic view is a simple HTML template. Here's an example:
@@ -2872,6 +3511,7 @@ Blade allows you to create a master layout and extend it in child views. This pr
 
 @section('content')
     <h1>Welcome to the Home Page</h1>
+    // More Page Wise Content
 @endsection
 ```
 11. **Conditional Views:**
@@ -2895,23 +3535,10 @@ Blade provides directives for looping through data. Here's an example of looping
 <!-- resources/views/loop.blade.php -->
 <ul>
     @foreach($items as $item)
-        <li>{{ $item }}</li>
+        <li>{{ $item->name }}</li>
+        <li>{{ $item->email }}</li>
     @endforeach
 </ul>
-```
-
-13. **Including Sub-Views:**
-
-You can include sub-views within your main view using the `@include` directive. For example:
-
-```php
-<!-- resources/views/main.blade.php -->
-<div class="header">
-    @include('partials.header')
-</div>
-<div class="content">
-    @include('partials.content')
-</div>
 ```
 
  ### **Blade Inheritance and Layout**
@@ -2930,41 +3557,6 @@ You can include sub-views within your main view using the `@include` directive. 
    </html>
    ```
 
-2. **Extending a Layout:**
-   Blade allows you to create reusable layouts and extend them in child views. The `@extends` directive is used to inherit the layout, and the `@section` directive defines sections within the layout that can be customized in child views.
-
-   **`layout.blade.php` (Layout File):**
-   ```php
-   <html>
-   <head>
-       <title>@yield('title')</title>
-   </head>
-   <body>
-       @yield('content')
-   </body>
-   </html>
-   ```
-
-   **`child.blade.php` (Child View):**
-   ```php
-   @extends('layout')
-
-   @section('title', 'Child Page')
-   
-   @section('content')
-       <h1>Hello from Child Page</h1>
-   @endsection
-   ```
-
-3. **Including Subviews:**
-   You can include subviews within your Blade templates using the `@include` directive. This is useful for reusing components across different views.
-
-   ```php
-   <div class="header">
-       @include('partials.header')
-   </div>
-   ```
-
 4. **Conditional Statements:**
    Blade allows you to use conditional statements like `@if`, `@else`, `@elseif`, and `@endif` to conditionally display content based on certain conditions.
 
@@ -2974,17 +3566,6 @@ You can include sub-views within your main view using the `@include` directive. 
    @else
        <p>Welcome, Guest!</p>
    @endif
-   ```
-
-5. **Loops:**
-   You can use Blade directives for loops, such as `@foreach`, `@for`, and `@while`, to iterate through arrays or collections.
-
-   ```php
-   <ul>
-       @foreach($items as $item)
-           <li>{{ $item }}</li>
-       @endforeach
-   </ul>
    ```
 
 6. **Escaping Content:**
@@ -3078,7 +3659,7 @@ You can include sub-views within your main view using the `@include` directive. 
 
    ```php
    Blade::directive('myDirective', function ($expression) {
-       return "<?php // Your custom code here ?>";
+       return "<?php // Your custom code here ?>"; // @myDirective
    });
    ```
 
@@ -3121,7 +3702,7 @@ You can include sub-views within your main view using the `@include` directive. 
    public function boot()
    {
        Blade::directive('currentDate', function () {
-           return "<?php echo now()->format('Y-m-d'); ?>";
+           return "<?php echo now()->format('Y-m-d'); ?>"; // @currentDate 
        });
    }
    ```
@@ -3154,8 +3735,6 @@ You can include sub-views within your main view using the `@include` directive. 
 
 6. **Test Your Custom Blade Directive:**
    Finally, load a page that uses the custom directive in your Laravel application, and you should see the output generated by your custom Blade directive.
-
-By following these steps, you can create and use custom Blade directives in Laravel to encapsulate logic and make your templates more expressive and maintainable.
 
 
 7. **Stack**
@@ -3404,18 +3983,37 @@ You can generate a URL with the `route()` function like this:
 **Generating URLs with Controllers:**
 Laravel allows you to generate URLs to controller actions. If you have a controller method like this:
 
-```php
-public function about()
-{
-    // ...
-}
-```
-
 You can generate the URL using the `action()` function:
 
 ```php
-<a href="{{ action('AboutController@about') }}">About Us</a>
+Route::get('/user/profile', 'UserProfileController@show')->name('user.profile');
+
+<a href="{{ action('UserController@show') }}">User Profile</a>
+
+http://127.8000/user/profile
+
+/* Another System */
+
+$url = action('UserProfileController@show');
+<a href="{{ $url }}">About Us</a>
+
+http://127.8000/about
+
 ```
+
+**Notes :** 
+You can construct a URL with query string parameters by using the `route()` helper
+ along with the `URL::to()` method as follows:
+
+ ```php
+ Route::get('/user/profile', 'UserProfileController@show')->name('user.profile');
+
+ $userId = 1; // Replace this with the actual user ID
+$url = URL::to(route('user.profile', ['id' => $userId]));
+
+ http://yourappurl/user/profile?id=1
+
+ ```
 
 **URL Generation with Parameters:**
 If your route has parameters, you can pass them as an array in the `action()` function:
@@ -3435,6 +4033,7 @@ This generates a URL to the user's profile, where `$user->id` contains the user'
 
 ### **SESSION**
 ---
+
 **Definition:**
 In web development, a session is a mechanism that allows you to store data on the server temporarily, tied to a specific user. Sessions are crucial for maintaining stateful interactions with users across multiple HTTP requests.
 
@@ -3577,6 +4176,8 @@ In your Blade file, you can display the flashed message like this:
 @endif
 
 ```
+**Notes:**
+In essence, while `session('message', 'data is saved')` sets a session value that persists across multiple requests until explicitly removed, `session()->flash('message', 'This is a flash message.')` flashes a message to be available for the next request cycle only.
 
 #### Deleting Data:
 
@@ -3584,8 +4185,6 @@ To remove data from the session, you can use the `forget` method. Here's an exam
 
 ```php
 session()->forget('key');
-
-
 
 <!-- Your registration form HTML goes here -->
 ```
@@ -3597,24 +4196,29 @@ Absolutely, you can use Laravel's `increment` and `decrement` methods to manipul
 
 1. Increment by 1 (default):
 ```php
-$request->session()->increment('count');
+$request->session()->increment('count'); // Increase 'count' by 1
+
+// Output the value after incrementing
+$count = $request->session()->get('count');
+echo $count; // This will output the incremented value of 'count'
 ```
 
 2. Increment by a specific value (e.g., 2):
+
 ```php
-$request->session()->increment('count', $incrementBy = 2);
+$request->session()->increment('count', $incrementBy = 2); //  Increase 'count' by 2
 ```
 
 #### Decrementing Session Values:
 
 1. Decrement by 1 (default):
 ```php
-$request->session()->decrement('count');
+$request->session()->decrement('count'); //  Decrementing 'count' by 1
 ```
 
 2. Decrement by a specific value (e.g., 2):
 ```php
-$request->session()->decrement('count', $decrementBy = 2);
+$request->session()->decrement('count', $decrementBy = 2); // //  Decrementing 'count' by 1
 ```
 
 Here's a simple example of how you might use this in practice:
@@ -3643,7 +4247,6 @@ public function decrementCount(Request $request)
 }
 ```
 
-
 ### **Advanced-SESSION**
 ---
 In Laravel, regenerating or invalidating the session ID is a useful security measure to prevent session fixation attacks. It changes the session ID, making it more challenging for malicious users to hijack a session. To do this, you can use the `invalidate()` method to regenerate the session ID. Here's how to do it:
@@ -3665,6 +4268,8 @@ You can typically use this within a controller method or route closure. Here's a
 ```php
 public function logout(Request $request)
 {
+       Auth::logout(); // Logs the user out
+
     // Invalidate and regenerate the session ID
     $request->session()->invalidate();
     $request->session()->regenerate();
@@ -3674,7 +4279,10 @@ public function logout(Request $request)
 
     return redirect('/login');
 }
+
 ```
+**regenerate()**
+The method preserves the existing session data while changing the session ID. This means the user's session data, such as authenticated status, cart items, or any other stored data, remains intact, but with a new session ID.
 
 3. The` flush()` method in Laravel's session handling allows you to clear all data stored in the session, effectively resetting it. When you call flush(), all session data, including variables and values, will be removed
 
@@ -3713,33 +4321,183 @@ public function store(Request $request)
    $validatedData = $request->validate([
     'name' => 'required|string|max:255',
     'email' => 'required|email|unique:users',
+    'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // sometimes used if input value exist ,if not exit , nothing happened
     'password' => 'required|min:6',
     'description' => 'string|max:500',
     'age' => 'numeric',
     'quantity' => 'integer',
     'username' => 'unique:users',
-    'phone' => 'regex:/^[0-9]{10}$/',
-    'gender' => 'in:Male,Female,Other',
-    'birthdate' => 'date_format:Y-m-d',
-    'event_date' => 'after:2023-01-01',
+    'category_id' => 'required|exists:categories,id',
+    'sub_category_id' => 'nullable|exists:sub_categories,id',
+     'status' => ['required', Rule::in(Product::getStatusOptions())], 
+     /* In Product Model Method ->
+      public static function getStatusOptions(){
+     return ['active', 'inactive']; } */
+    'featured' => 'required|boolean',
+    'date' => 'required|date',
+    'phone' => 'regex:/^[0-9]{10}$/', // /^ is a starting or initializing delimiter and $/ is ending delimiter,{10} minimum 10 value, {10,11} minimum 10 and maximum 11, 
+    'gender' => 'in:Male,Female,Other', // In: used to indicate any type of option that is selected by user.
+    'birthdate' => 'date_format:Y-m-d', // 2023-11-12
+    'event_date' => 'after:2023-01-01', // 'after:' . $request->date,
     'expiry_date' => 'before:2023-12-31',
+    // Or
+    'event_date' => 'after:' . now()->toDateString(),
+    'expiry_date' => 'before:' . now()->addDays(15)->toDateString(), // now()->addYear()->toDateString(),
     'password_confirmation' => 'required_with:password|same:password',
+    # or
+    'password_confirmation' => 'required|string|confirmed',
+
     'custom_field' => function ($attribute, $value, $fail) {
         if ($value != 'expected_value') {
             $fail($attribute.' is invalid.');
         }
     },
-]);
+],
+[
+    'name.required' => "User name must be inserted",
+    'name.string' => "Null or non string  can't be taken",
+    'age.numeric' => " String User age value can not be accessible",
+]
+);
+
+ $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:posts|max:255',
+            'body' => 'required',
+        ]);
+ 
+        if ($validator->fails()) {
+            return redirect('post/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+ 
+        // Retrieve the validated input...
+        $validated = $validator->validated();
+ 
+        // Retrieve a portion of the validated input...
+        $validated = $validator->safe()->only(['name', 'email']);
+        $validated = $validator->safe()->except(['name', 'email']);
+ 
+        // Store the blog post...
 
 // Alternatively, validation rules may be specified as arrays of rules instead of a single | delimited string:
 
 $validatedData = $request->validate([
-    'title' => ['required', 'unique:posts', 'max:255'],
+    'title' => ['required', 'unique:posts', 'max:255'], // alternative rule of 'required|unique:posts|max:255'
     'body' => ['required'],
 ]);
        // Process the validated data
+
+       # Or
+       Validator::make($request->all(), [
+        'title' => 'required|unique:posts|max:255',
+        'body' => 'required',
+        ])->validate();
 }
 ```
+#### **Custom Validation**
+To use a custom validation rule in a professional form in Laravel, you can create a Form Request class and define the custom rule in the `rules()` method. This way, your validation logic is separated from your controller, promoting a cleaner and more maintainable code structure.
+
+Here's a step-by-step guide:
+
+1. **Create a Form Request:**
+
+   Create a new Form Request class using the artisan command:
+
+   ```bash
+   php artisan make:request CustomValidationRequest
+   ```
+ **Custom Request File stored in:**
+    ```bash
+    app
+    └── Http
+        └── Requests
+            └── CustomValidationRequest.php
+    ```
+   This will generate a new file at `app/Http/Requests/CustomValidationRequest.php`.
+
+2. **Define the Custom Rule in the Form Request:**
+
+   Open the `CustomValidationRequest.php` file and define the custom rule in the `rules()` method:
+
+```php
+   <?php
+
+   namespace App\Http\Requests;
+
+   use Illuminate\Foundation\Http\FormRequest;
+
+   class CustomValidationRequest extends FormRequest
+   {
+       public function rules()
+       {
+           return [
+               'custom_field' => function ($attribute, $value, $fail) {
+                   if ($value != 'expected_value') {
+                       $fail($attribute.' is invalid.');
+                   }
+               },
+               // Add other rules for your form fields
+           ];
+       }
+
+     // Optionally, you can override the messages method to customize validation error messages
+    public function messages()
+    {
+        return [
+            'custom_field' => 'The :attribute is invalid.',
+            // Define custom error messages for other fields if needed
+        ];
+    }
+
+    # OR 
+    public function messages()
+    {
+        return [
+            'title.required' => 'The title field is required.',
+            'content.required' => 'The content field is required.',
+        ];
+    }
+}
+ ```
+
+   Make sure to add any other validation rules for your form fields within the `rules()` method.
+
+3. **Use the Form Request in the Controller:**
+
+   In your controller, type-hint the `CustomValidationRequest` in the method that handles the form submission:
+
+ ```php
+    use App\Http\Requests\CustomValidationRequest;
+
+    public function processForm(CustomValidationRequest $request) // not Request but also CustomValidationRequest is depenedency injection
+    {
+        $validatedData = $request->validated();
+        // If the request passes validation, this method is executed
+        // ...
+
+        return response()->json(['message' => 'Form submission successful'], 200);
+    }
+```
+
+   Laravel will automatically validate the request using the rules defined in the `CustomValidationRequest` before executing the `processForm` method.
+
+4. **Display Validation Errors in the View:**
+
+   In your view, you can display validation errors using Laravel's `@error` directive. For example:
+
+   ```blade
+   <div>
+       @error('custom_field')
+           <span class="text-red-500">{{ $message }}</span>
+       @enderror
+   </div>
+   ```
+
+   This will display an error message if the 'custom_field' validation fails.
+
+By following these steps, you've organized your validation logic in a dedicated Form Request class, making your code more modular and adhering to Laravel's best practices. Adjust the validation rules and error display in the view based on your specific requirements.
+
 
 **Displaying The Validation Errors:**
 
@@ -3820,9 +4578,11 @@ You can perform additional custom validation beyond the built-in rules. Use the 
 use Illuminate\Support\Facades\Validator;
 
 $data = [
-    'name' => 'John',
-    'email' => 'john@example.com',
+
+    'name' =>  $request->name,
+    'email' => $request->email,
     // Add other data fields here
+    
 ];
 
 $rules = [
@@ -3832,6 +4592,13 @@ $rules = [
 ];
 
 $validator = Validator::make($data, $rules);
+
+ # OR
+
+ $validator = Validator::make($request->all() , [
+    'name' => 'required|string|max:255',
+    'email' => 'required|email|unique:users|max:255',
+ ]);
 
 if ($validator->fails()) {
     // Validation failed, you can handle errors here
@@ -4442,8 +5209,212 @@ In your Blade view (e.g., `logMessage.blade.php`):
 
 When you visit the route associated with `showLogMessage`, you'll see the log message displayed in the browser.
 
-#### 7. Viewing Logs
-By default, Laravel stores logs in the storage/logs directory. You can access these log files to review and troubleshoot issues in your application.
+#### 7. Viewing Logs / displaying all the logs
+
+```php
+php artisan log:read
+```
+By Default, In a Laravel project, the logs are typically stored in the `storage/logs` directory. The main log file is usually named `laravel.log`.
+ You can access these log files to review and troubleshoot issues in your application.
+
+### **Real Life Example of Log**
+---
+For an e-commerce website, it's important to log relevant information to monitor user activities, track errors, and analyze performance. Below is an example of how you might structure the logging in a Laravel-based e-commerce application:
+
+1. **User Activity Logging:**
+   Log when users perform significant actions, such as making a purchase or updating their profile.
+
+   ```php
+   use Illuminate\Support\Facades\Log;
+
+   // Log when a user makes a purchase
+   Log::info('User purchased item', ['user_id' => auth()->user()->id, 'item_id' => $item->id]);
+   ```
+
+2. **Error Logging:**
+   Log errors and exceptions to quickly identify and resolve issues.
+
+   ```php
+   try {
+       // Code that may throw an exception
+   } catch (Exception $e) {
+       Log::error('Exception occurred', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+       // Handle the exception as needed
+   }
+   ```
+
+3. **Performance Logging:**
+   Log performance-related information to identify bottlenecks or slow-performing parts of your application.
+
+   ```php
+   $startTime = microtime(true);
+   // Code to measure performance
+   $executionTime = microtime(true) - $startTime;
+   Log::debug('Page loaded', ['execution_time' => $executionTime]);
+   ```
+
+4. **Custom Logs for Orders:**
+   For an e-commerce site, orders are crucial. Log order-related information.
+
+   ```php
+   // Log when an order is placed
+   Log::info('Order placed', ['order_id' => $order->id, 'total_amount' => $order->total_amount]);
+   ```
+
+5. **Security Logging:**
+   Log suspicious activities or security-related events.
+
+   ```php
+   // Log failed login attempts
+   Log::warning('Failed login attempt', ['username' => $username, 'ip' => $request->ip()]);
+   ```
+
+6. **Custom Log Channels:**
+   If needed, create custom log channels for specific components, like payment processing or user authentication.
+
+   ```php
+   // Config/logging.php
+   'channels' => [
+       'payment' => [
+           'driver' => 'single',
+           'path' => storage_path('logs/payment.log'),
+           'level' => 'debug',
+       ],
+   ],
+   ```
+
+   ```php
+   // Log payment-related information
+   Log::channel('payment')->info('Payment processed', ['order_id' => $order->id, 'amount' => $order->total_amount]);
+   ```
+
+### **Log Using IN Controller**
+---
+Certainly! In addition to the basic logging methods, I'll include some additional logging methods and demonstrate how they can be used in a Laravel controller class. Here's an extended example:
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class ProductController extends Controller
+{
+    public function create(Request $request)
+    {
+        try {
+            // Log the incoming request data for debugging
+            Log::info('Product Creation Request Data:', $request->all());
+
+            // Validate the request data
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric',
+                // Add other validation rules as needed
+            ]);
+
+            // Perform product creation logic
+            // ...
+
+            // Log a success message
+            Log::info('Product Created Successfully:', ['product_name' => $request->input('name')]);
+
+            // Return a response indicating success
+            return response()->json(['message' => 'Product created successfully'], 201);
+        } catch (\Exception $e) {
+            // Log the error message and details
+            Log::error('Product Creation Error:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+
+            // Log an emergency alert for critical errors
+            Log::emergency('Critical Error during Product Creation', ['exception' => $e]);
+
+            // Return an error response
+            return response()->json(['error' => 'Product creation failed'], 500);
+        }
+    }
+
+    public function update(Request $request, $productId)
+    {
+        try {
+            // Log the incoming request data for debugging
+            Log::info('Product Update Request Data:', $request->all());
+
+            // Validate the request data
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric',
+                // Add other validation rules as needed
+            ]);
+
+            // Perform product update logic
+            // ...
+
+            // Log a success message
+            Log::info('Product Updated Successfully:', ['product_id' => $productId]);
+
+            // Return a response indicating success
+            return response()->json(['message' => 'Product updated successfully'], 200);
+        } catch (\Exception $e) {
+            // Log the error message and details
+            Log::error('Product Update Error:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+
+            // Log a warning for non-critical errors
+            Log::warning('Non-Critical Error during Product Update', ['exception' => $e]);
+
+            // Return an error response
+            return response()->json(['error' => 'Product update failed'], 500);
+        }
+    }
+
+    public function delete($productId)
+    {
+        try {
+            // Log a debug message for product deletion request
+            Log::debug('Product Deletion Requested:', ['product_id' => $productId]);
+
+            // Perform product deletion logic
+            // ...
+
+            // Log a success message
+            Log::info('Product Deleted Successfully:', ['product_id' => $productId]);
+
+            // Return a response indicating success
+            return response()->json(['message' => 'Product deleted successfully'], 200);
+        } catch (\Exception $e) {
+            // Log the error message and details
+            Log::error('Product Deletion Error:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+
+            // Log an alert for unexpected errors during deletion
+            Log::alert('Unexpected Error during Product Deletion', ['exception' => $e]);
+
+            // Return an error response
+            return response()->json(['error' => 'Product deletion failed'], 500);
+        }
+    }
+}
+```
+
+In this extended example:
+
+- The `Log::emergency()` method is used for critical errors during product creation.
+- The `Log::warning()` method is used for non-critical errors during product update.
+- The `Log::debug()` method is used for debugging messages during product deletion.
+- The `Log::alert()` method is used for unexpected errors during product deletion.
+
+These additional methods provide more granularity in categorizing log messages based on their severity and importance. Customize the log messages and levels based on your specific needs and the nature of your application.
+
+**Show The Logs**
+In the Path `laravel-real-state-project\storage\logs\laravel.log`
+or CLI Command 
+
+```bash
+cat storage/logs/laravel.log
+```
+
+Remember to adjust the log levels (`info`, `debug`, `error`, etc.) based on the severity of the information. Regularly review logs to identify and address issues proactively, ensuring a smooth and secure operation of your e-commerce website.
+
 
 ## **DIGGING DEEPERS : ADVANCED LEVEL**
 ---
@@ -9838,118 +10809,395 @@ $post->comments()->createMany([
 ]);
 ```
 ### Database: Pagination
+In Laravel, database pagination allows you to divide a large result set into smaller "pages," making it more manageable to display and navigate through data. Laravel provides a clean and straightforward way to implement pagination. Here are the main methods and concepts related to database pagination in Laravel:
+
+1. **Paginating Query Results:**
+
+   To paginate the results of a query, you can use the `paginate` method on the query builder or Eloquent model.
+
+   ```php
+   // Query builder example
+   $results = DB::table('your_table')->paginate(10);
+
+   // Eloquent model example
+   $results = YourModel::paginate(10);
+   ```
+
+   This will retrieve 10 records per page from the specified table or model.
+
+2. **Displaying Paginated Results in Blade Views:**
+
+   In your Blade view, you can use the `links` method provided by the paginated result to render pagination links.
+
+   ```blade
+   {{-- Displaying results --}}
+   @foreach ($results as $result)
+       {{-- Your result display logic --}}
+   @endforeach
+
+   {{-- Display pagination links --}}
+   {{ $results->links() }}
+   ```
+
+   The `links` method generates HTML links for pagination.
+
+3. **Customizing the Number of Results Per Page:**
+
+   You can customize the number of results per page by passing the desired count to the `paginate` method.
+
+   ```php
+   $results = DB::table('your_table')->paginate(20);
+   ```
+
+4. **Customizing the Query Parameter for Page Number:**
+
+   By default, Laravel uses the `page` query parameter for page number. You can customize this by using the `onEachSide` method.
+
+   ```php
+   $results = DB::table('your_table')->paginate(10)->onEachSide(5);
+   ```
+
+   The `onEachSide` method determines how many additional page links are shown on each side of the current page link.
+
+5. **Getting Paginated Results in Controller:**
+
+   If you need to pass paginated results to a view from a controller:
+
+   ```php
+   public function index()
+   {
+       $results = DB::table('your_table')->paginate(10);
+
+       return view('your_view', ['results' => $results]);
+   }
+   ```
+
+6. **Manually Creating a Paginator Instance:**
+
+   If you need more control, you can manually create a paginator instance:
+
+   ```php
+   use Illuminate\Pagination\Paginator;
+
+   $paginator = new Paginator($items, $perPage, $currentPage);
+   ```
+
+   Here, `$items` is the collection of items to paginate, `$perPage` is the number of items per page, and `$currentPage` is the current page.
+
+In addition to the `paginate` method, Laravel provides `simplePaginate` and `cursorPaginate` methods for handling pagination in slightly different ways. Let's explore each method:
+
+7. **`paginate` Method:**
+
+The `paginate` method is used for traditional pagination where the paginated data is returned along with the pagination links.
+
+```php
+$perPage = 10;
+
+// Eloquent model example
+$results = YourModel::paginate($perPage);
+```
+
+In your Blade view:
+
+```blade
+@foreach ($results as $result)
+    {{-- Your result display logic --}}
+@endforeach
+
+{{ $results->links() }}
+```
+
+8. **`simplePaginate` Method:**
+
+The `simplePaginate` method is similar to `paginate` but only returns the next and previous links, making it more suitable for simple paginations without the need for numbered page links.
+
+```php
+$perPage = 10;
+
+// Eloquent model example
+$results = YourModel::simplePaginate($perPage);
+```
+
+In your Blade view:
+
+```blade
+@foreach ($results as $result)
+    {{-- Your result display logic --}}
+@endforeach
+
+{{ $results->links() }}
+```
+
+9. **`cursorPaginate` Method:**
+
+The `cursorPaginate` method is used for cursor-based pagination. Instead of relying on page numbers, it uses "cursors" to navigate through the data. This is often more efficient for large datasets.
+
+```php
+$perPage = 10;
+
+// Eloquent model example
+$results = YourModel::cursorPaginate($perPage);
+```
+
+In your Blade view:
+
+```blade
+@foreach ($results as $result)
+    {{-- Your result display logic --}}
+@endforeach
+
+{{ $results->links() }}
+```
+
+#### Differences:
+
+- `paginate` and `simplePaginate` are based on traditional page numbers, while `cursorPaginate` uses cursor-based pagination.
+  
+- `paginate` returns the paginated data along with all the pagination links, while `simplePaginate` returns only the next and previous links.
+
+- `cursorPaginate` is often more efficient for large datasets as it doesn't rely on offset calculations.
+
+#### Choosing Between Them:
+
+- Use `paginate` for typical paginations with numbered page links.
+
+- Use `simplePaginate` when you don't need or want to show all the page numbers and just need next and previous links.
+
+- Use `cursorPaginate` for large datasets where efficient cursor-based navigation is preferred.
+
+Choose the method that best fits your specific use case and performance requirements.
+
+#### **Database : Soft Delete, Restore and Parmanently Delete**
 ---
-There are several ways to paginate items. The simplest is by using the paginate method on the query builder or an Eloquent query. 
+Certainly! In Laravel, implementing a professional product delete, soft delete, and restore functionality involves using Laravel's Eloquent ORM along with database migrations and controllers. Soft delete is a way to "mark" a record as deleted without actually removing it from the database.
 
-#### Paginating Query Builder Results
----
-The paginate method automatically takes care of setting the query's "limit" and "offset" based on the current page being viewed by the user. By default, the current page is detected by the value of the page query string argument on the HTTP request.
+1. **Soft Deletes:**
+   Laravel's Eloquent supports soft deletes out of the box. Add the `SoftDeletes` trait to your `Product` model:
 
-```bash
-<?php
+   ```php
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+ 
+Schema::table('flights', function (Blueprint $table) {
+    $table->softDeletes();
+});
+ 
+Schema::table('flights', function (Blueprint $table) {
+    $table->dropSoftDeletes();
+});
+   ```
 
-class UserController extends Controller
+   Also, don't forget to add a `deleted_at` column to your `products` table. If it's not already there, you can create a migration:
+
+   ```bash
+   php artisan make:migration add_deleted_at_to_products_table --table=products
+   ```
+
+   In the generated migration file, add:
+
+   ```php
+   public function up()
+   {
+       Schema::table('products', function ($table) {
+           $table->softDeletes();
+       });
+   }
+   ```
+
+   Then run:
+
+   ```bash
+   php artisan migrate
+   ```
+
+3. **Controller:**
+   In your controller, implement methods for delete, soft delete, restore, and permanently delete.
+
+   ```php
+   namespace App\Http\Controllers;
+
+   use App\Models\Product;
+   use Illuminate\Http\Request;
+
+   class ProductController extends Controller
+   {
+       // Soft delete
+       public function softDelete($id)
+       {
+           $product = Product::find($id);
+           $product->delete();
+
+           return redirect()->route('products.index')
+               ->with('success', 'Product soft deleted successfully.');
+       }
+
+       // Restore soft deleted product
+       public function restore($id)
+       {
+           Product::withTrashed()->where('id', $id)->restore();
+
+           return redirect()->route('products.index')
+               ->with('success', 'Product restored successfully.');
+       }
+
+       // Permanently delete from bin box
+       public function deleteFromBin($id)
+       {
+           Product::withTrashed()->where('id', $id)->forceDelete();
+
+           return redirect()->route('products.index')
+               ->with('success', 'Product permanently deleted.');
+       }
+   }
+
+   public function forceDeleteFromHistory($id)
+   {
+       // Force delete from soft delete history
+       Product::withTrashed()->find($id)->history()->forceDelete();
+
+       return redirect()->back()->with('success', 'Product permanently deleted from history.');
+   }
+
+   public function restoreFromHistory($id)
+   {
+       // Restore from soft delete history
+       Product::withTrashed()->find($id)->history()->restore();
+
+       return redirect()->back()->with('success', 'Product restored from history successfully.');
+   }
+
+
+   ```
+
+4. **Routes:**
+   Define routes for your controller methods in `routes/web.php` or `routes/api.php`.
+
+   ```php
+   use App\Http\Controllers\ProductController;
+
+   Route::delete('/products/{id}/soft-delete', [ProductController::class, 'softDelete']);
+   Route::patch('/products/{id}/restore', [ProductController::class, 'restore']);
+   Route::delete('/products/{id}/delete-from-bin', [ProductController::class, 'deleteFromBin']);
+
+Route::put('/product/restore/history/{id}', [ProductController::class, 'restoreFromHistory']);
+Route::delete('/product/force-delete/history/{id}', [ProductController::class, 'forceDeleteFromHistory']);
+   ```
+
+5. **View:**
+   Create a view to display your products and buttons for soft delete, restore, and permanently delete.
+
+   ```blade
+   <!-- Display products -->
+   @foreach($products as $product)
+       <tr>
+           <td>{{ $product->name }}</td>
+           <td>{{ $product->description }}</td>
+           <td>
+               <!-- Soft delete button -->
+               <form action="{{ url("/products/{$product->id}/soft-delete") }}" method="post">
+                   @csrf
+                   @method('delete')
+                   <button type="submit">Soft Delete</button>
+               </form>
+               <!-- Restore button -->
+               <form action="{{ url("/products/{$product->id}/restore") }}" method="post">
+                   @csrf
+                   @method('patch')
+                   <button type="submit">Restore</button>
+               </form>
+               <!-- Permanently delete button -->
+               <form action="{{ url("/products/{$product->id}/delete-from-bin") }}" method="post">
+                   @csrf
+                   @method('delete')
+                   <button type="submit">Delete from Bin</button>
+               </form>
+           </td>
+       </tr>
+   @endforeach
+   ```
+
+#### **More**
+Certainly! Laravel provides additional methods for working with soft deleted records, especially when using the `SoftDeletes` trait. Here are examples with `history()->restore()`, `history()->forceDelete()`, `withTrashed()`, `trashed()`, and `onlyTrashed()`:
+
+1. **Restore Method (`history()->restore()`):**
+
+   Laravel provides the `restore` method, which you can use on a query builder to restore soft-deleted records.
+
+   ```php
+   // Restore a single soft-deleted product by ID
+   Product::withTrashed()->find($id)->restore();
+
+   // Restore all soft-deleted products
+   Product::withTrashed()->restore();
+   ```
+
+2. **Force Delete Method (`history()->forceDelete()`):**
+
+   The `forceDelete` method is used to permanently remove a record, even if it's soft-deleted.
+
+   ```php
+   // Permanently delete a single soft-deleted product by ID
+   Product::withTrashed()->find($id)->forceDelete();
+
+   // Permanently delete all soft-deleted products
+   Product::withTrashed()->forceDelete();
+   ```
+
+3. **withTrashed() and trashed():**
+
+   The `withTrashed` method retrieves all records, including soft-deleted ones, while `trashed` is used to filter only soft-deleted records.
+
+   ```php
+   // Retrieve all products, including soft-deleted ones
+   $products = Product::withTrashed()->get();
+
+   // Retrieve only soft-deleted products
+   $trashedProducts = Product::onlyTrashed()->get();
+   ```
+
+4. **onlyTrashed():**
+
+   The `onlyTrashed` method is used to retrieve only soft-deleted records.
+
+   ```php
+   // Retrieve only soft-deleted products
+   $trashedProducts = Product::onlyTrashed()->get();
+   ```
+
+Here's an updated example of the controller methods to include these functionalities:
+
+```php
+use App\Models\Product;
+
+public function restoreProduct($id)
 {
-     * Show all application users.
-    public function index()
-    {
-        return view('user.index', [
-            'users' => DB::table('users')->paginate(15)
-        ]);
-        or
-        $users = DB::table('users')->paginate(15);
-        return view('user.index',compact('users'));
-    }
+    // Restore soft deleted product
+    Product::withTrashed()->find($id)->restore();
+
+    return redirect()->back()->with('success', 'Product restored successfully.');
+}
+
+public function deleteFromBin($id)
+{
+    // Permanent delete (from bin)
+    Product::withTrashed()->find($id)->forceDelete();
+
+    return redirect()->back()->with('success', 'Product permanently deleted.');
+}
+
+public function allProducts()
+{
+    // Retrieve all products, including soft-deleted ones
+    $products = Product::withTrashed()->get();
+
+    // Retrieve only soft-deleted products
+    $trashedProducts = Product::onlyTrashed()->get();
+
+    return view('products.index', compact('products', 'trashedProducts'));
 }
 ```
-#### Simple Pagination for both query builder and Eloquent
-----
-The paginate method counts the total number of records matched by the query before retrieving the records from the database. This is done so that the paginator knows how many pages of records there are in total. However, if you do not plan to show the total number of pages in your application's UI then the record count query is unnecessary.
 
-Therefore, if you only need to display simple "Next" and "Previous" links in your application's UI, you may use the simplePaginate method to perform a single, efficient query:
-```bash
-$users = DB::table('users')->simplePaginate(15);
-```
-### Paginating Eloquent Results
----
-You may also paginate Eloquent queries.In that we plan to display 15 records per page. As you can see, the syntax is nearly identical to paginating query builder results:
-```bash
-$users = User::paginate(15);
-```
-Of course, you may call the paginate method after setting other constraints on the query, such as where clauses:
-```bash
-$users = User::where('votes', '>', 100)->paginate(15);
-or
-$users = User::where('votes', '>', 100)->simplePaginate(15);
-or
-  $employees = Employee::paginate(8);
-      return view('home', compact('employees'));
-```
-#### Cursor vs. Offset Pagination
----
-To illustrate the differences between offset pagination and cursor pagination, let's examine some example SQL queries. Both of the following queries will both display the "second page" of results for a users table ordered by id:
-```bash
-# Offset Pagination...
-select * from users order by id asc limit 15 offset 15;
- 
-# Cursor Pagination...
-select * from users where id > 15 order by id asc limit 15;
-```
-The cursor pagination query offers the following advantages over offset pagination:
-
-For large data-sets, cursor pagination will offer better performance if the "order by" columns are indexed. This is because the "offset" clause scans through all previously matched data.
-For data-sets with frequent writes, offset pagination may skip records or show duplicates if results have been recently added to or deleted from the page a user is currently viewing.
-
-
-### Displaying Pagination Results
----
-once you have retrieved the results, you may display the results and render the page links using Blade:
-```bash
-<div class="container">
-    @foreach ($users as $user)
-        {{ $user->name }}
-    @endforeach
-</div>
- 
-{{ $users->links() }}
-
-or 
-Using the onEachSide method, you may control how many additional links are displayed on each side of the current page within the middle, sliding window of links generated by the paginator:
- </tbody>
-        </table>
-        {{-- Pagination --}}
-        <div class="d-flex justify-content-center">
-           {{ $users->onEachSide(5)->links() }}
-        </div>
-    </div>
-</body>
-</html>
-```
-Note : You will notice that the links may not be aesthetically pleasing because Laravel uses Tailwind by default, while this example application uses Bootstrap.
-
-The links method will render the links to the rest of the pages in the result set. Each of these links will already contain the proper page query string variable. Remember, the HTML generated by the links method is compatible with the Tailwind CSS framework.
-
-Now, in your AppServiceProvider boot method, tell Paginator to use Bootstrap, as shown below.
-```bash
-public function boot()
-{
-    Paginator::useBootstrap(); 
-    or
-    Paginator::useBootstrapFive();
-    Paginator::useBootstrapFour();
-}
-```
-[To Know More about Pagination from documentation Page](https://laravel.com/docs/9.x/pagination#displaying-pagination-results);
-[To Watch The Works from youtube ,CLick Here](https://www.youtube.com/watch?v=LCOaWiGGptQ)
-
-
-
-
-
-
-
-
-
+Now, you can use these methods in your routes to perform various actions on your Laravel products. Adjust the examples based on your application's specific needs.
 
 
 ## Mail Sending laravel 8 and 9 version
@@ -10199,15 +11447,112 @@ To create a new database table, use the create method on the Schema facade. The 
 
 Dependency Object : In software engineering, dependency injection (Blueprint) is a design pattern in which an object (Blueprint) or function receives other objects ($table) or functions that it (Blueprint) depends on.
 ```bash
+use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
- 
-Schema::create('users', function (Blueprint $table) {
-    $table->id();
-    $table->string('name');
-    $table->string('email');
-    $table->timestamps();
-});
+
+class CreateProductsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->decimal('price', 10, 2);
+            $table->integer('quantity');
+            $table->boolean('is_available')->default(true);
+            $table->date('manufacture_date');
+            $table->dateTime('expiry_date_time');
+            $table->uuid('uuid')->unique();
+            $table->string('sku')->unique();
+            $table->index('name');
+            $table->point('location')->nullable();
+            $table->virtualAs('quantity * price');
+            $table->storedAs('total_price', 'quantity * price');
+            $table->comment('A comment about the product');
+            $table->string('custom_collation_column')->collation('utf8mb4_bin');
+            $table->json('images')->nullable();
+            $table->decimal('discounted_price', 10, 2)->nullable();
+            $table->dateTime('discount_start')->nullable();
+            $table->dateTime('discount_end')->nullable();
+            $table->json('multiple_images')->nullable();
+            $table->foreignId('category_id')->constrained('categories'); // or
+            $table->foreignId('category_id')->constrained()->onUpdate('cascade'); // or
+            $table->foreignId('category_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign(['user_id', 'post_id'])->references(['id', 'post_id'])->on('users_posts')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreignId('brand_id')->constrained('brands', 'brand_id');
+            $table->foreignId('supplier_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('category_id'); // Unsigned big integer for the foreign key
+            $table->foreignId('warehouse_id')->constrained('warehouses');
+            $table->unsignedBigInteger('user_id');
+            $table->softDeletes();
+            $table->float('weight')->nullable();
+            $table->float('length')->nullable();
+            $table->float('width')->nullable();
+            $table->float('height')->nullable();
+            $table->decimal('average_rating', 3, 2)->nullable();
+            $table->integer('total_ratings')->nullable();
+            $table->json('variations')->nullable();
+            $table->string('url')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->timestamp('downloaded_at')->nullable();
+             $table->timestamps(0);
+
+
+            // Foreign key constraint for UnsignedBigInteger('user_id')
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        
+        });
+
+        // Sample data
+        DB::table('products')->insert([
+            'name' => 'Professional Product',
+            'description' => 'This is a product with additional professional features.',
+            'price' => 129.99,
+            'quantity' => 25,
+            'manufacture_date' => '2022-05-01',
+            'expiry_date_time' => '2023-05-01 10:00:00',
+            'uuid' => Str::uuid(),
+            'sku' => 'PRO789',
+            'location' => DB::raw('POINT(4, 7)'),
+            'category_id' => 3, // Assuming 'categories' table has category with id 3
+            'brand_id' => 3, // Assuming 'brands' table has brand with id 3
+            'supplier_id' => 1, // Assuming 'suppliers' table has supplier with id 1
+            'warehouse_id' => 1, // Assuming 'warehouses' table has warehouse with id 1
+            'created_at' => now(),
+            'updated_at' => now(),
+            'weight' => 5.0,
+            'length' => 15.0,
+            'width' => 8.0,
+            'height' => 12.0,
+            'average_rating' => 4.8,
+            'total_ratings' => 80,
+            'variations' => json_encode(['Color' => ['Silver', 'Gold'], 'Size' => ['Medium', 'X-Large']]),
+            'url' => 'https://example.com/professional-product',
+            'downloaded_at' => now(),
+            'status' => 'active',
+        ]);
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('products');
+    }
+}
+
 ```
 Note : When creating the table, you may use any of the schema builder's column methods to define the table's columns.
 
@@ -10263,6 +11608,7 @@ $table->increments('my_id'); # user defined int(10) column name
 ```
 #### bigInteger()
 ---
+
 The bigInteger method creates a "BIGINT" equivalent column(without primary key , auth-increments and UNSIGNED):
 ```bash
 $table->bigInteger('votes');
@@ -10349,6 +11695,50 @@ Create a foreign key constraint on this column referencing the "id" column of th
 ```bash
 $table->foreignIdFor(User::class)->constrained();
 ```
+In Laravel migrations, there are several ways to define foreign key constraints using the `foreignId` and `constrained` methods. Here are the commonly used ways:
+
+#### Basic Foreign Key
+
+```php
+$table->foreignId('category_id')->constrained();
+```
+
+In this example, Laravel assumes that the foreign key column (`category_id`) references the `id` column in the related table (`categories`). This is suitable when the column and table names follow the Laravel convention.
+
+#### Specify Column Name
+
+```php
+$table->foreignId('category_id')->constrained('categories', 'cat_id');
+```
+
+In this example, we explicitly specify that the foreign key column (`category_id`) references the `cat_id` column in the related table (`categories`). This is useful when the column names differ.
+
+#### Cascade On Delete
+
+```php
+$table->foreignId('category_id')->constrained()->onDelete('cascade');
+```
+
+This example adds a cascade on delete constraint. If a row in the related table (`categories`) is deleted, the corresponding rows in the current table (`products`) will be deleted as well.
+
+#### Cascade On Update
+
+```php
+$table->foreignId('category_id')->constrained()->onUpdate('cascade');
+```
+
+Similar to the cascade on delete, this example adds a cascade on update constraint. If the primary key value is updated in the related table (`categories`), the corresponding foreign key values in the current table (`products`) will be updated as well.
+
+#### Restrict On Delete/Update
+
+```php
+$table->foreignId('category_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
+```
+
+In this example, the restrict option prevents deletion or update of a row in the related table (`categories`) if there are corresponding rows in the current table (`products`). This is the default behavior if you don't specify `onDelete` or `onUpdate`.
+
+These are some common ways to define foreign key constraints in Laravel migrations. Choose the method that best fits your requirements and naming conventions.
+
 #### json()
 ---
 The json method creates a JSON equivalent column:
@@ -10661,7 +12051,8 @@ To force the seeders to run without a prompt, use the --force flag:
 ```bash
 php artisan db:seed --force
 ```
-### Database : Redis
+
+### **Database : Redis**
 ---
 * What is Redis : 
 Redis is a NoSQL database which follows the principle of key-value store. The key-value store provides ability to store some data called a value, inside a key. You can recieve this data later only if you know the exact key used to store it.
@@ -10691,31 +12082,85 @@ Redis server is used to store data in memory . It controls all type of managemen
 ---
 Following is the list of main features of Redis:
 
-Speed: Redis stores the whole dataset in primary memory that's why it is extremely fast. It loads up to 110,000 SETs/second and 81,000 GETs/second can be retrieved in an entry level Linux box. Redis supports Pipelining of commands and facilitates you to use multiple values in a single command to speed up communication with the client libraries.
+1. **In-Memory Data Storage:**
+   - Redis stores data in memory, allowing for extremely fast read and write operations.
 
-Persistence: While all the data lives in memory, changes are asynchronously saved on disk using flexible policies based on elapsed time and/or number of updates since last save. Redis supports an append-only file persistence mode. Check more on Persistence, or read the AppendOnlyFileHowto for more information.
+2. **Key-Value Store:**
+   - Data is stored as key-value pairs, making it simple and efficient for various data structures.
 
+3. **Data Structures:**
+   - Supports various data structures like strings, hashes, lists, sets, and sorted sets, providing flexibility in data modeling.
 
-Data Structures: Redis supports various types of data structures such as strings, hashes, sets, lists, sorted sets with range queries, bitmaps, hyperloglogs and geospatial indexes with radius queries.
+4. **Persistence Options:**
+   - Offers different persistence options, allowing data to be saved to disk for durability or used purely in-memory for high-performance scenarios.
 
-Atomic Operations: Redis operations working on the different Data Types are atomic, so it is safe to set or increase a key, add and remove elements from a set, increase a counter etc.
+15. **Simple Configuration:**
+    - Configuration is usually straightforward, and Redis can be easily integrated into various applications.
 
-Supported Languages: Redis supports a lot of languages such as ActionScript, C, C++, C#, Clojure, Common Lisp, D, Dart, Erlang, Go, Haskell, Haxe, Io, Java, JavaScript (Node.js), Julia, Lua, Objective-C, Perl, PHP, Pure Data, Python, R, Racket, Ruby, Rust, Scala, Smalltalk and Tcl.
-
-Master/Slave Replication: Redis follows a very simple and fast Master/Slave replication. It takes only one line in the configuration file to set it up, and 21 seconds for a Slave to complete the initial sync of 10 MM key set on an Amazon EC2 instance.
-
-Sharding: Redis supports sharding. It is very easy to distribute the dataset across multiple Redis instances, like other key-value store.
-
-
-Portable: Redis is written in ANSI C and works in most POSIX systems like Linux, BSD, Mac OS X, Solaris, and so on. Redis is reported to compile and work under WIN32 if compiled with Cygwin, but there is no official support for Windows currently.
+Redis's combination of speed, versatility, and features makes it a powerful choice for caching, real-time analytics, messaging systems, and many other applications where fast and scalable data storage is crucial.
 
 #### Redis Get and Set Methods
 ---
-Get: This gets a key example blogs from the local cache and return its value. The Get method only stores strings and will return an error—the key stores hashes or others.
+Certainly! In Laravel, you can use Redis for caching by utilizing the `get` and `set` methods provided by Laravel's Redis facade. Below is a simple example of using these methods:
 
-Set: This method sets a key example blogs to hold string values. If a key already exists, then it will override the value(s) of that key, regardless of its type, unless instructed otherwise.
+1. **Setting a value in Redis:**
 
-we need to install the predis package in our application using composer prior to using Redis on our application. Predis is a Redis client written entirely in PHP and does not require any additional extensions. Run the following command on your terminal to install Predis:
+   ```php
+   // Assuming you are in a controller or a service
+
+   use Illuminate\Support\Facades\Redis;
+
+   public function setRedisValue()
+   {
+       // Key for the value in Redis
+       $key = 'example_key';
+
+       // Value to be stored in Redis
+       $value = 'Hello, Redis!';
+
+       // Set the value in Redis with an optional expiration time (in seconds)
+       Redis::set($key, $value);
+   }
+   ```
+
+   In this example, the `set` method is used to store a value in Redis with a specified key.
+
+2. **Getting a value from Redis:**
+
+   ```php
+   // Assuming you are in a controller or a service
+
+   use Illuminate\Support\Facades\Redis;
+
+   public function getRedisValue()
+   {
+       // Key to retrieve the value from Redis
+       $key = 'example_key';
+
+       // Get the value from Redis
+       $value = Redis::get($key);
+
+       // Check if the value exists
+       if ($value === null) {
+           // Value does not exist in Redis
+           return 'Value not found in Redis.';
+       }
+
+       return $value;
+   }
+   ```
+
+   The `get` method is used to retrieve a value from Redis based on the specified key. The method returns `null` if the key is not found, so you can check for that condition.
+
+Remember to configure your Laravel application to use Redis as the cache driver in the `.env` file:
+
+```dotenv
+CACHE_DRIVER=redis
+```
+
+This is a basic example, and you can customize it based on your specific use case. Additionally, you may want to explore more advanced features of Redis, such as setting expiration times, using Redis hashes for more complex data structures, and handling cache invalidation strategies.
+
+#### **Using In Professional**
 
 Installing Redis : 
 ```bash
@@ -10746,130 +12191,67 @@ You can modify the default settings to your own custom settings depending on you
 
 After that is done, go ahead to register your REDIS_CLIENT in the .env file:
 
-REDIS_CLIENT=predis
-Seeding
-I’ve gone ahead and created a database connection in my .env file and seeded a couple of blogs in the database.
 
-Note: This is not a compulsory step but rather a maneuver to avoid going the long route to make a create request.
+Here's a basic example of how you can integrate Laravel with Redis for a product cache in an ecommerce site. Make sure you have the `predis/predis` package installed.
 
-Use the command below to create a seeder. Then, add a couple of blogs, which we run with the artisan command to seed the data:
+1. **Install Redis and Predis Package:**
+   
+   ```bash
+   composer require predis/predis
+   ```
 
-php artisan make:seeder BlogSeeder
-This will create a new BlogSeeder in your database folder. Next, we will add a couple of blogs:
-```bash
-DB::table('blogs')->insert([
-          'title' => 'First blog',
-          'sub_header' => 'This is the first sub header',
-          'content' => 'BLOG_CONTENT'
-      ]);
-      ```
-...
-Then, we run the artisan command to seed the data to the database under the blogs table:
-```bash
-php artisan db:seed --class=BlogSeeder
-```
-Fetching : 
-To fetch a blog from the database, we create a blog controller and add a function to fetch a blog using id from the database. On the first request, the blog will be fetched from the database and cached in Redis. However, on subsequent requests, the blog will be retrieved directly from Redis and formatted in JSON.
+2. **Configure Laravel to use Redis:**
 
-First, we will create a new controller using the following command:
-```bash
-php artisan make:controller BlogController
-```
-Then, we add our function to get all blogs:
+   Open your `.env` file and set the `CACHE_DRIVER` and `REDIS_*` variables.
 
-```bash
-use App\Models\Blog;
-use Illuminate\Support\Facades\Redis;
+   ```dotenv
+   CACHE_DRIVER=redis
+   REDIS_HOST=127.0.0.1
+   REDIS_PASSWORD=null
+   REDIS_PORT=6379
+   ```
 
-public function index($id) {
+3. **Create a Cache Key for Products:**
 
-  $cachedBlog = Redis::get('blog_' . $id);
+   In your controller or service where you retrieve product data, create a cache key for the products.
 
+   ```php
+   // ProductController.php
 
-  if(isset($cachedBlog)) {
-      $blog = json_decode($cachedBlog, FALSE);
+   use Illuminate\Support\Facades\Cache;
 
-      return response()->json([
-          'status_code' => 201,
-          'message' => 'Fetched from redis',
-          'data' => $blog,
-      ]);
-  }else {
-      $blog = Blog::find($id);
-      Redis::set('blog_' . $id, $blog);
+   public function getProducts()
+   {
+       $cacheKey = 'products.all';
 
-      return response()->json([
-          'status_code' => 201,
-          'message' => 'Fetched from database',
-          'data' => $blog,
-      ]);
-  }
-}
-```
-In the above code, we are first checking Redis for the key with blog_ + id and returning it in JSON format if it exists. If the key has not been set, then we go to the database, get the key, and set it in Redis using blog_ + id.
+       // Check if the data is already in the cache
+       if (Cache::has($cacheKey)) {
+           $products = Cache::get($cacheKey);
+       } else {
+           // If not, fetch the data from the database
+           $products = Product::all();
 
-Next, we create a route in routes/web.php that our API can interact with when used in Postman. This route will point to our BlogController and, specifically, our function that is fetching the blog:
-```bash
-Route::get('/blogs/{id}', 'BlogController@index');
-```
+           // Store the data in the cache for 10 minutes (adjust as needed)
+           Cache::put($cacheKey, $products, 10 * 60);
+       }
 
-* Updating : 
-In this process, we will get a single blog and update it in the database. When this is done, we will look up the key in Redis and delete it, and then create a new key with the id of the updated blog.
+       return view('products.index', ['products' => $products]);
+   }
+   ```
 
-Before we proceed, I commented out \App\Http\Middleware\VerifyCsrfToken::class, in the app/http/kernel.php file to disable CSRF verification. You shouldn’t do this in an application ready for production, as this is necessary for the protection of the application routes. You can read more about CSRF verification and its usefulness here.
+   This example caches the product data for 10 minutes. You can adjust the cache duration based on your requirements.
 
-First, we create our update function in the BlogController:
-```bash
-public function update(Request $request, $id) {
+4. **Clearing Cache:**
 
-  $update = Blog::findOrFail($id)->update($request->all());
+   When you update or add new products, make sure to clear the cache to reflect the changes.
 
-  if($update) {
+   ```php
+   Cache::forget('products.all');
+   ```
 
-      // Delete blog_$id from Redis
-      Redis::del('blog_' . $id);
+This basic example demonstrates how to use Redis as a cache for product data in Laravel. It's important to adapt this to your specific needs and consider additional caching strategies based on the data access patterns in your application.
 
-      $blog = Blog::find($id);
-      // Set a new key with the blog id
-      Redis::set('blog_' . $id, $blog);
-
-      return response()->json([
-          'status_code' => 201,
-          'message' => 'User updated',
-          'data' => $blog,
-      ]);
-  }
-}
-```
-
-In the above code, we got the id of the blog, updated it in the database, and then deleted the key with blog_ + id. After the key is deleted, we then fetch the blog from the database using the id and create a new key in Redis.
-
-After this is done, we can create our route:
-```bash
-Route::post('/blogs/update/{id}', 'BlogController@update');
-```
-* Delete : 
-For the last part, we will delete a blog from the database and then delete the key from Redis. First, add the delete function:
-```bash
-public function delete($id) {
-
-  Blog::findOrFail($id)->delete();
-  Redis::del('blog_' . $id);
-
-  return response()->json([
-      'status_code' => 201,
-      'message' => 'Blog deleted'
-  ]);
-}
-```
-This will get the id and delete the blog from the database. Then, it will delete the key from Redis. After adding our function, we can then create a route.
-```bash
-Route::delete('/blogs/delete/{id}', 'BlogController@delete');
-```
-Notes : The redis crud source collected from this [LINK](https://www.honeybadger.io/blog/laravel-caching-redis/)
-
-### To Learn Redis with Practical Example
-### [Follow This steps to See the How Redis works in Laravel](https://youtu.be/3mAX8pjAtyU)
+Remember, caching introduces the challenge of keeping the cache in sync with the actual data, so always clear or update the cache when the underlying data changes.
 
 ### Eloquent: Collections
 ---
@@ -11461,10 +12843,14 @@ use App\Models\User; // Assuming you have a User model for the seller
 
 $factory->define(Product::class, function (Faker $faker) {
     return [
+        'first_name' => $faker->firstName(),
+        'last_name'=> $faker->lastName(),
         'name' => $faker->sentence(3),
         'email' => $faker->unique()->safeEmail, // Generates a unique email address
         'password' => bcrypt('password'), // Sets a static password (useful for testing)
         'description' => $faker->paragraph(4),
+        'category' = Category::inRandomOrder()->first(),
+        'subCategory' = SubCategory::where('category_id', $category->id)->inRandomOrder()->first(),
         'price' => $faker->randomFloat(2, 10, 1000), // Example: 256.75 // random floating-point number between $10 and $1000.random floating-point number between $10 and $1000.
         'quantity' => $faker->numberBetween(1, 100),
         'seller_id' => User::inRandomOrder()->first()->id, // Assign a random seller from the User model
@@ -11473,6 +12859,8 @@ $factory->define(Product::class, function (Faker $faker) {
         'rating' => $faker->randomFloat(1, 1, 5),
         'seller' => $faker->company,
         'image' => $faker->imageUrl(400, 400, 'product', true),
+        'start_time' => $faker->dateTimeBetween('-1 month', 'now'), // Random start time within the last month
+        'end_time' => $faker->dateTimeBetween('now', '+6 months'), // Random end time within the next 6 months
         'color' => $faker->colorName,
         'size' => $faker->randomElement(['S', 'M', 'L', 'XL']),
         'weight' => $faker->randomFloat(2, 0.1, 100),
@@ -11498,6 +12886,7 @@ $factory->define(Product::class, function (Faker $faker) {
         'created_at' => now(),
         'created_at' => $faker->dateTimeBetween('-2 years', 'now'), // Generates a random creation date.
         'updated_at' => $faker->dateTimeThisDecade,
+        'gallery_images' => json_encode([$faker->imageUrl(), $faker->imageUrl(), $faker->imageUrl()]), // Gallery images as JSON array
     ];
 });
 
