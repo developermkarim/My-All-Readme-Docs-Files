@@ -39,7 +39,7 @@ It contains various subfolders and files that together make up the application's
 - `.env`: Environment configuration file.
 - `webpack.mix.js` and `package.json`: Frontend build configuration.
 
-#### **app/auth.php**
+#### **config/auth.php**
 In Laravel's `auth.php` configuration file, these settings are used to define how authentication works in your application. Let's break down each part for beginners:
 
 ```php
@@ -47,20 +47,17 @@ In Laravel's `auth.php` configuration file, these settings are used to define ho
         'guard' => 'web',
         'passwords' => 'users',
     ], 
-    
     'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
     ], 
-    
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
      'passwords' => [
         'users' => [
             'provider' => 'users',
@@ -72,6 +69,7 @@ In Laravel's `auth.php` configuration file, these settings are used to define ho
 ```
 1. `'defaults'`:
    - `'guard'`: This specifies the default authentication guard for your application. In a web application, the default guard is set to `'web'`, which uses sessions for authentication.
+
    - `'passwords'`: This defines the default password reset broker. It's set to `'users'`, which means it will use the "users" provider for password resets.
 
 2. `'guards'`:
@@ -382,7 +380,7 @@ When a user is not logged in and visits a website as a guest, Laravel's auth.php
 
 For `guests` (users who are not logged in), Laravel provides a mechanism for handling public access to your application without requiring authentication. This typically involves setting up routes, controllers, and views to display content to guests.
 
-### Frontend
+### **Frontend**
 
 Laravel provides tools for frontend development:
 
@@ -394,18 +392,33 @@ Laravel provides tools for frontend development:
    ```
 
 - **Asset Compilation:** Laravel Mix simplifies asset compilation, including CSS and JavaScript.
+ **Laravel Mix**
 
+ `mix.js('resources/js/app.js', 'public/js').sass('resources/sass/app.scss', 'public/css');` is typically found in your Laravel project's `webpack.mix.js` file. This file is located at the root of your Laravel project.
    ```javascript
    // webpack.mix.js
    mix.js('resources/js/app.js', 'public/js')
       .sass('resources/sass/app.scss', 'public/css');
    ```
+   **Means:**
+1. **`mix.js('resources/js/app.js', 'public/js')`:**
+   - This is using Laravel Mix to compile JavaScript.
+   - It takes the JavaScript file located at `resources/js/app.js`.
+   - It compiles and bundles it.
+   - The result is saved in the `public/js` directory.
+
+2. **`.sass('resources/sass/app.scss', 'public/css')`:**
+   - This part is for compiling Sass (Syntactically Awesome Stylesheets) into CSS.
+   - It takes the Sass file located at `resources/sass/app.scss`.
+   - It compiles it into CSS.
+   - The result is saved in the `public/css` directory.
+
+In summary, this line of code is configuring Laravel Mix to process your JavaScript and Sass files, compile them, and store the output in the specified directories (`public/js` for JavaScript and `public/css` for Sass/CSS). It's a convenient way to manage and build your frontend assets in a Laravel project.
+
 
 ### **Vite and Mix**
 ---
 #### **Vite:**
-##### Definition:
-Vite is a build tool that's incredibly fast and designed specifically for modern JavaScript projects. It's commonly used with frontend frameworks like Vue.js and React. Vite focuses on rapid development and provides a development server that leverages native ES Module imports to build an application quickly.
 
 ##### Simple Explanation:
 Think of Vite as a tool that helps you develop your frontend applications super fast. It does this by taking advantage of modern browser features to build your project quickly during development. It's like a wizard that makes your code run smoothly while you're working on it.
@@ -432,9 +445,6 @@ Assuming you've already set up a Vue project and have Node.js installed:
 
 #### **Laravel Mix:**
 
-##### Definition:
-Laravel Mix is a simple and elegant wrapper around the popular JavaScript build tool called Webpack. It simplifies the configuration needed for common frontend tasks like compiling Sass/LESS, bundling JavaScript, and more. Laravel Mix is included with Laravel by default and is used for building frontend assets.
-
 ##### Simple Explanation:
 Imagine Laravel Mix as your assistant that helps you compile, combine, and manage your frontend assets (like CSS, JavaScript) without you needing to understand all the complex inner workings. It's like having a handy toolkit for managing your project's frontend tasks easily.
 
@@ -451,23 +461,12 @@ Assuming you have a Laravel project set up:
    mix.js('resources/js/app.js', 'public/js')
       .sass('resources/sass/app.scss', 'public/css');
    ```
-
 3. **Run the compilation:**
    ```bash
    npm run dev
    ```
    This command will run the predefined asset compilation tasks defined in your `webpack.mix.js` file.
 
-#### Choosing Between Vite and Laravel Mix:
-
-- **Vite:** Choose Vite if you want faster development, especially for modern frontend frameworks. It's great for quick iterations and leveraging modern browser features.
-- **Laravel Mix:** Stick with Laravel Mix if you prefer a simpler, more integrated solution for managing frontend assets within your Laravel application. It's more straightforward and works seamlessly with Laravel's structure.
-
-**Notes:** Both tools serve different purposes, so choose based on your project's requirements and your familiarity with the technologies involved. If your project heavily uses modern frontend frameworks and you prioritize speed, Vite might be the way to go. However, if you're comfortable with Laravel's default tooling and want a more integrated solution, Laravel Mix might be your choice.
-
-
-**Configuration Of Progessional**
-Absolutely! To configure Vite and Laravel in a professional Laravel application, let's consider integrating AdminLTE CSS and JavaScript files into a Laravel project using both Vite and Laravel Mix.
 
 #### **Configuring Laravel Mix:**
 
@@ -551,30 +550,6 @@ Absolutely! To configure Vite and Laravel in a professional Laravel application,
   - Configuration is more modular and flexible, using separate config files and leveraging ES modules.
   - Provides faster build times due to its modern, optimized approach.
 
-Both examples will integrate AdminLTE into your Laravel project. The Laravel Mix approach involves defining compilation tasks within a single configuration file, while Vite's approach splits the configuration into separate files for more modularity.
-
-Selecting between Laravel Mix and Vite depends on your project's needs, your familiarity with the tooling, and the desired level of flexibility and speed during the development process.
-
-#### Differences:
-
-- **Vite:**
-  - Utilizes native ES modules for faster development and builds.
-  - Doesn't require extensive configuration.
-  - Ideal for modern JavaScript frameworks like Vue.js and React.
-
-- **Laravel Mix:**
-  - Provides a simpler API that abstracts the underlying Webpack configurations.
-  - Offers more comprehensive configuration options for complex projects.
-  - Generally used for traditional asset bundling in Laravel applications.
-
-#### For Beginners:
-
-- **Vite:** Think of it as a tool that quickly compiles and bundles JavaScript and assets in a way that's optimized for modern browsers, making development faster.
-  
-- **Laravel Mix:** Consider it as a user-friendly tool in Laravel that simplifies the bundling of CSS, JavaScript, and other assets without needing to dive deeply into configurations.
-
-Selecting between Vite and Laravel Mix depends on the project's needs. For quick development and modern frameworks, Vite is a great choice. For more straightforward, Laravel-focused asset compilation, Laravel Mix might be preferable.
-
 
 ### Starter Kits
 
@@ -590,7 +565,7 @@ Laravel offers starter kits for common use cases:
 php artisan ui bootstrap --auth
 ```
 
-### Deployment
+### **Deployment**
 
 When deploying a Laravel application:
 
@@ -789,12 +764,10 @@ Suppose you are building an e-commerce application and you want to implement dif
    In your Blade view, you can use the resolved instance to display the payment option:
 
 ```html
+$paymentGateway = app(PaymentGateway::class);
    <p>Payment Method: {{ $paymentGateway->getName() }}</p>
 ```
 
-This real-life example demonstrates how the Service Container in Laravel can be used to handle different payment gateways with ease.
-
-By leveraging the Service Container, you can achieve better code organization, maintainability, and testability in your Laravel applications. It's a powerful feature that enables you to manage dependencies efficiently throughout your project.
 
 ### **SERVICE CONTAINER : REAL-LIFE EXAMPLES**
 ---
@@ -810,11 +783,6 @@ Let's say you have a web application, and you need different services and object
 
 public function register()
 {
-    // Bind a database connection to the container.
-    $this->app->singleton('database', function ($app) {
-        return new DatabaseConnection();
-    });
-
     // Bind a mailer service to the container.
     $this->app->singleton('mailer', function ($app) {
         return new MailerService();
@@ -825,31 +793,19 @@ public function register()
 In this code example:
 
     - We're using a service provider to register services in the service container.
-    - We've bound a database connection and a mailer service to the container using the `singleton` method.
     - Now, any part of your application can access these services by requesting them from the container.
-
-For example, to get the database connection:
-
-```php
-$database = app('database');
-```
 
 And to send an email using the mailer service:
 
 ```php
-$mailer = app('mailer');
+$mailer = app('mailer'); // insead of using  app(MailService::class)
 $mailer->sendEmail('recipient@example.com', 'Hello, this is an email!');
 ```
 
-The service container simplifies the management of services and dependencies, making it a crucial part of Laravel for building robust web applications. It ensures that the right tools and services are available where and when you need them.
+### **Service Provider**:
+---
 
-
-2. **Service Provider**:
    - **Definition**: A service provider in Laravel is a way to register services (classes) into the service container. It defines what the container should do when an application needs an instance of a particular class.
-
-   - **Real-life Example**: In a real-world scenario, a car dealership can be seen as a service provider. They provide various car models (services) to customers. The dealership tells you which cars (services) are available, and when you choose one, they give you the keys (an instance of the class).
-
-Here's a simple Laravel project example:
 
 Let's say you have a Laravel e-commerce website. You want to create a service that calculates shipping costs.
 
@@ -903,7 +859,7 @@ class ShippingCalculator
 ```
 
 2. Create a service provider, e.g., `ShippingServiceProvider`, and register the `ShippingCalculator` class in it.
-
+php artisan make:provider ShippingServiceProvider
 ```php
 use Illuminate\Support\ServiceProvider;
 
@@ -911,11 +867,12 @@ class ShippingServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->bind('shipping', function ($app) {
-            return new ShippingCalculator();
+        $this->app->bind('shipping', function ($app) {  
+             return new ShippingCalculator();
         });
     }
 }
+// use  like this $test = app('shipping');  $test->calculateShippingCost($weight, $destination)
 ```
 
 3. Now, in your controller or wherever you need to calculate shipping costs, you can use the service container to get an instance of the `ShippingCalculator` class.
@@ -996,8 +953,6 @@ class ShippingController extends Controller
      $shippingCalculator = app(ShippingCalculator::class);
      ```
 
-     Here, we're asking the service container to provide an instance of the `ShippingCalculator` class. The service container knows how to create and manage instances of classes.
-
 **Using the Service Container in Controller and Blade**:
 
 1. **Controller**:
@@ -1008,8 +963,6 @@ class ShippingController extends Controller
    $shippingCalculator = app(ShippingCalculator::class);
    ```
 
-   This way, you don't have to manually create instances; Laravel handles it for you.
-
 2. **Blade View**:
 
    In Blade views, you don't directly interact with the service container. Instead, you use data passed from the controller. For example, in the Blade view, we displayed the shipping cost like this:
@@ -1019,19 +972,7 @@ class ShippingController extends Controller
        <p>Shipping Cost: ${{ $shippingCost }}</p>
    @endif
    ```
-
-   The `$shippingCost` variable was set in the controller and then passed to the Blade view. Blade is simply used to display data provided by the controller.
-
-
-### **Service Provider**
----
-#### DEFINITION:
-Service providers in Laravel are classes that contain methods for registering services, binding classes, and performing application bootstrapping. They act as the central place to configure various parts of your application.
-**To wrap up:** a service provider is a way to register and boot various services or components in your application. It's a crucial part of Laravel's service container, which is responsible for managing the application's dependencies.
-
-#### Real-life Example:
-
-Yes, you can create and provide instances of classes or services in the service container and then use them within a service provider. Let's create a simple example to illustrate this concept.
+#### **Custom Service Provider Creating**
 
 **Step 1: Create a Class**
 
@@ -1116,7 +1057,7 @@ class TaxController extends Controller
     public function calculateTax(Request $request)
     {
         // Use the service container to get an instance of TaxCalculator
-        $taxCalculator = app('taxCalculator');
+        $taxCalculator = app('taxCalculator'); // instead of new TexCalculator();
         
         // Calculate tax based on the amount
         $amount = $request->input('amount');
@@ -1127,7 +1068,6 @@ class TaxController extends Controller
 }
 
 ```
-
 **Step 5: Create a Route**
 
 Finally, define a route for your controller's method in `routes/web.php`:
@@ -1136,15 +1076,11 @@ Finally, define a route for your controller's method in `routes/web.php`:
 Route::post('/calculate-tax', 'TaxController@calculateTax');
 ```
 
-Now, when you access the `/calculate-tax` route and submit an amount through a form or request, the controller will use the `TaxCalculator` class, which is provided by the service container via the service provider, to calculate and display the tax.
-
-In this example, we've created a class (`TaxCalculator`), registered it in the service container using a service provider (`TaxCalculatorServiceProvider`), and then used it in a controller. This demonstrates how you can provide instances of classes as services through the service container and service providers in Laravel.
-
-### Register() and boot() methods:
+#### Register() and boot() methods:
 ---
 
 **2. `boot()` Method:**
-**In Summary of register:**
+**In Summary of boot:**
 The `boot()` method in a Laravel service provider is used to perform actions after all services have been registered. It's a good place to set up event listeners, configure services, or perform any other tasks that depend on registered services. Let's explain it with a simple code example for beginners:
 
 ```php
@@ -1183,8 +1119,6 @@ Here's what's happening:
 **In Summary of register:**
 - **`register()`:** Used for defining how to create and provide instances of classes or services in the service container.
 
-In Laravel, the service container is a tool that manages and resolves dependencies for your application. When you request an instance of a class, Laravel's service container is responsible for creating and providing that instance. The `register()` method is a way to tell the container how to create instances of specific classes or services.
-
 Here's a step-by-step explanation:
 
 1. **Defining Services**: When you build a Laravel application, you often have classes or components that you need to use throughout your code. These could be database connections, third-party services, or custom classes you've created.
@@ -1207,103 +1141,9 @@ Here's a step-by-step explanation:
    $db = app('database');
    ```
 
-   Laravel's service container will then use the registered callback (the function you provided in `register()`) to create and provide an instance of the `DatabaseConnection` class.
-
 In summary, the `register()` method is a way to define how services or classes should be created and provided by Laravel's service container. It's a key part of Laravel's dependency injection system, making it easy to manage and use various components in your application.
 
-
 - **`boot()`:** Used for performing operations or tasks that rely on registered services and are executed after the application is fully booted.
-
-Both methods are important in Laravel service providers, but as a beginner, you'll often focus on the `register()` method for defining service bindings. The `boot()` method comes into play when you need to set up more complex interactions in your application.
-
-### SERVICE CONATAINER AND PROVIDER With (Class Dependency)
----
-**Scenario: Blog Comment System**
-
-Imagine you're building a blog application, and you have a `CommentService` class that handles creating and managing comments on blog posts. You want to use this service in your controller to handle comment submissions.
-
-**Step 1: Create the `CommentService` Class**
-
-1. **What is it?**
-
-   The `CommentService` class contains methods for creating and managing comments.
-
-2. **How to Create It?**
-
-   Create a `CommentService.php` file in your application's directory (e.g., `app/Services`) and define the class:
-
-   ```php
-   namespace App\Services;
-
-   class CommentService
-   {
-       public function createComment($postId, $content)
-       {
-           // Logic to create a comment and store it in the database
-       }
-       // Other methods for managing comments...
-   }
-   ```
-
-   This class has a method `createComment` to create new comments.
-
-**Step 2: Use Dependency Injection in Controller**
-
-1. **What is it?**
-
-   Dependency injection allows you to inject instances of dependencies (like `CommentService`) into your controller's constructor or method.
-
-2. **How to Do It?**
-
-   In your controller (e.g., `CommentController.php`), use dependency injection in the constructor:
-
-   ```php
-   use App\Services\CommentService;
-
-   class CommentController extends Controller
-   {
-       protected $commentService;
-
-       public function __construct(CommentService $commentService)
-       {
-           $this->commentService = $commentService;
-       }
-
-       // ...
-   }
-   ```
-   Here, we're injecting an instance of `CommentService` into the controller via the constructor.
-
-**Step 3: Use the `CommentService` in Controller Method**
-
-1. **What is it?**
-
-   Now that you have the `CommentService` instance available in your controller, you can use it to handle comment submissions.
-
-2. **How to Do It?**
-
-   In your controller method, you can use the `$this->commentService` instance:
-
-   ```php
-   public function store(Request $request)
-   {
-       // Validate the comment data
-
-       $postId = $request->input('post_id');
-       $content = $request->input('content');
-
-       // Use the CommentService to create the comment
-       $this->commentService->createComment($postId, $content);
-
-       // Redirect or return a response...
-   }
-   ```
-
-   In this example, when a new comment is submitted, we use the `$this->commentService` instance to create the comment.
-
-**Summary:**
-
-In this professional project scenario, we've used dependency injection to inject an instance of the `CommentService` class into the `CommentController`. This allows the controller to use the methods of the `CommentService` to create and manage comments without worrying about how the `CommentService` is instantiated
 
 ### **Facades**
 ---
@@ -1313,7 +1153,7 @@ Laravel provides a set of facades, which are static proxies to underlying classe
 
 **Notes :**
 In Laravel Facades ,  both `Session::put('user_id', 1)` and `session()->put('user_id', 1)` are used to store a value in the session. They achieve the same result, but they use different syntax.
-but some can't use like `Db::table()` , but not `db()->table()`;
+but some can't use like `DB::table()` , but not `db()->table()`;
 
 Facades are found from **use Illuminate\Support\Facades\FacadeName**
 
@@ -1325,7 +1165,7 @@ Facades are found from **use Illuminate\Support\Facades\FacadeName**
      Route::get('/profile', 'UserController@profile')->name('profile');
      
      // Generating URL
-     $url = route('profile');
+     $url = route('profile'); 
      ```
 
 2. **View Facade (`View`):**
@@ -1351,7 +1191,7 @@ Facades are found from **use Illuminate\Support\Facades\FacadeName**
 
      ```php
      // Storing data in the session
-     Session::put('user_id', 1);
+     Session::put('user_id', 1); // $_SESSION['user_id'] = 1;
      session()->put('user_id',auth()->id()); // alternative way Auth::id()
      
      // Retrieving data from the session
@@ -1363,7 +1203,7 @@ Facades are found from **use Illuminate\Support\Facades\FacadeName**
    - Example: Getting request parameters and headers.
 
      ```php
-     $input = Request::input('username');
+     $input = Request::input('username'); // request()->input('');
      $header = Request::header('User-Agent');
      ```
 
@@ -1389,7 +1229,7 @@ Facades are found from **use Illuminate\Support\Facades\FacadeName**
    - Example: Checking if a user is authenticated.
 
      ```php
-     if (Auth::check()) {
+     if (Auth::check()) {  // auth()->user()->id; Auth::user()->id;
          // User is authenticated
      }
      ```
@@ -1538,7 +1378,7 @@ class QrCodeFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'qr-code'; // This should match the binding name in the service provider
+        return 'qr-code'; // This should match the binding name in the service provider QrCode === qr-code
     }
 }
 ```
@@ -1575,7 +1415,6 @@ class QrCodeServiceProvider extends ServiceProvider
     // ...
 }
 ```
-
 In this example, we're using the `SimpleSoftwareIO/QrCode` package for generating QR codes. Make sure to install the package using Composer:
 
 ```bash
@@ -2056,7 +1895,7 @@ Certainly! Here are some more advanced routing concepts and techniques in Larave
               // ...
           ],
           'admin' => [
-              'auth',
+              'auth',  // it is a middleware that is
               'admin.check',
           ],
       ];
@@ -2117,6 +1956,7 @@ Certainly! Here are some more advanced routing concepts and techniques in Larave
      // routes/api.php
      Route::apiResource('products', 'ProductApiController');
      ```
+
 ```plaintext
 +-----------+-----------------------+-----------------------+-------------------+---------------------+--------------+
 | Method    | URI                   | Name                  | Action            | Controller          |
@@ -2128,7 +1968,6 @@ Certainly! Here are some more advanced routing concepts and techniques in Larave
 | DELETE    | api/products/{product} | products.destroy     | destroy           | ProductApiController | destroy      |
 +-----------+-----------------------+-----------------------+-------------------+---------------------+--------------+
 ```
-
 
 #### 19. **Subdomain Routing:**
    - Laravel supports subdomain routing, enabling you to define routes based on subdomains.
@@ -2199,8 +2038,9 @@ You may use the route:clear command to clear the route cache:
 php artisan route:clear
 ```
 
-## Middleware
+## **Middleware**
 ---
+
 Middleware acts as a bridge between a request and a response. It is a type of filtering mechanism.
 
 Laravel includes a middleware that verifies whether the user of the application is authenticated or not. If the user is authenticated, it redirects to the home page otherwise, if not, it redirects to the login page.
@@ -2253,6 +2093,7 @@ Here are some key aspects of middleware in Laravel:
      // app/Http/Kernel.php
      protected $routeMiddleware = [
          'admin' => \App\Http\Middleware\CheckAdmin::class,
+         'role' => \App\Http\Middleware\CheckRole::class,
          // ...
      ];
      ```
@@ -2304,7 +2145,7 @@ Here are some key aspects of middleware in Laravel:
 
      ```php
      // app/Http/Middleware/CheckRole.php
-     public function handle($request, Closure $next, $role)
+     public function handle($request, Closure $next, $role, $permission)
      {
          if (auth()->check() && auth()->user()->hasRole($role)) {
              return $next($request);
@@ -2318,7 +2159,7 @@ Here are some key aspects of middleware in Laravel:
 
      ```php
      // routes/web.php
-     Route::get('/admin', 'AdminController@index')->middleware('role:admin');
+     Route::get('/admin', 'AdminController@index')->middleware('role:admin'); // role:admin,edit-post
      ```
 
 #### 7. **Middleware Execution Order:**
@@ -2347,137 +2188,6 @@ Here are some key aspects of middleware in Laravel:
      ```
      Certainly! Let's create a SubscriptionMiddleware as an example. This middleware will check if a user has an active subscription to access certain routes. Here are the steps:
 
-#### Step 1: **Create the Middleware**
-
-1. **Generate the Middleware:**
-   - Use the Artisan command to create the middleware. Replace `SubscriptionMiddleware` with the desired middleware name:
-
-   ```bash
-   php artisan make:middleware SubscriptionMiddleware
-   ```
-
-   This will create a new middleware file in the `app/Http/Middleware` directory.
-
-2. **Edit the Middleware Logic:**
-   - Open the newly created middleware file (`SubscriptionMiddleware.php`) in a text editor or your IDE.
-
-3. **Implement the Middleware Logic:**
-   - In the `handle` method, check if the authenticated user has an active subscription. You can customize the logic based on your subscription system.
-
-   ```php
-   // app/Http/Middleware/SubscriptionMiddleware.php
-
-   public function handle($request, Closure $next)
-   {
-       // Check if the user is authenticated
-       if (auth()->check()) {
-           // Check if the user has an active subscription
-           if (auth()->user()->hasActiveSubscription()) {
-               // User has an active subscription, proceed to the next middleware or route handler
-               return $next($request);
-           }
-       }
-
-       // User does not have an active subscription, return a response (e.g., 403 Forbidden)
-       return response('Unauthorized. You do not have an active subscription.', 403);
-   }
-
-   ```
-
-   In this example, we assume there's a `hasActiveSubscription` method on the `User` model to check for an active subscription. You should adapt this logic to your subscription system.
-
-#### Step 2: Register the Middleware
-
-1. **Register the Middleware:**
-   - Open the `app/Http/Kernel.php` file.
-
-2. **Add the Middleware to `$routeMiddleware`:**
-   - Inside the `$routeMiddleware` property, add an entry for your custom middleware. You can choose a key (e.g., 'subscription') to use when applying the middleware to routes.
-
-   ```php
-   // app/Http/Kernel.php
-
-   protected $routeMiddleware = [
-       // ...
-       'subscription' => \App\Http\Middleware\SubscriptionMiddleware::class,
-   ];
-   ```
- 
-
-#### Step 3: Apply the Middleware to Routes
-
-1. **Use the Middleware in Routes:**
-   - In your routes file (e.g., `routes/web.php` or `routes/api.php`), apply the middleware to specific routes or route groups that require an active subscription.
-
-   ```php
-   // routes/web.php
-
-   Route::middleware(['subscription'])->group(function () {
-       // Routes that require an active subscription
-       Route::get('/premium-content', 'PremiumContentController@index');
-       // More subscription-based routes
-   });
-   ```
-
-   In this example, the `'subscription'` middleware is applied to all routes within the group, ensuring that only users with an active subscription can access them.
-
-   **2. Use The Middleware In Controller**
-    you can apply middleware directly within a controller class using the $middleware property. This allows you to specify middleware that should be executed for all methods within that controller. Here's a code example:
-  ```php
-  namespace App\Http\Controllers;
-    use Illuminate\Http\Request;
-    class MyController extends Controller
-    {
-       // Middleware applied to all methods in this controller.
-        protected $middleware = [
-            'auth', // Example middleware
-            'log.requests', // Another example middleware
-        ];
-          /**
-     * Constructor method where you can define middleware for specific methods.
-     */
-    public function __construct()
-    {
-        $this->middleware('custom_middleware')->only('specificMethod'); // applying not for all methods but just for this 'specificMethod'
-        $this->middleware('custom_middleware')->except('specificMethod'); // applying for all methods witout this 'specificMethod'
-
-         $this->middleware('custom_middleware'); // applying For all methods
-
-    }
-
-        public function index()
-    {
-        // Middleware 'auth' and 'log.requests' will be applied to this method.
-        return view('welcome');
-    }
-
-    public function specificMethod()
-    {
-        // Middleware 'auth', 'log.requests', and 'custom_middleware' will be applied to this method.
-        return view('specific_view');
-    }
-
-    }
-    ```
-
-#### Step 4: Implement Subscription Logic in the User Model
-
-1. **Implement the `hasActiveSubscription` Method:**
-   - In your `User` model (`app/User.php`), create a method to check if the user has an active subscription. You'll need to interact with your subscription system or database to determine this.
-
-   ```php
-   // app/User.php
-
-   public function hasActiveSubscription()
-   {
-       // Implement your logic here to check for an active subscription
-       return $this->subscriptions->where('status', 'active')->count() > 0;
-   }
-   ```
-
- **Notes :**  Customize this method to fit your subscription model and logic.
-
-
 ### **CSRF Protection in Laravel:**
 ---
 **CSRF (Cross-Site Request Forgery)** in Laravel is a security feature that helps protect your web application from malicious actions. It ensures that requests made to your application come from a legitimate source. Laravel generates unique tokens for each user session, and these tokens are added to forms. When a form is submitted, Laravel checks if the token matches the one generated for that session, preventing unauthorized or forged requests. This helps keep your application secure from cross-site request forgery attacks.
@@ -2492,11 +2202,10 @@ Here are some key aspects of middleware in Laravel:
 3. **CSRF Protection**:
    - CSRF protection is when websites use these secret handshakes to make sure your browser only does what you really want it to, and not what tricksters tell it to do.
 
-
 Here are the key aspects of CSRF protection in Laravel:
 #### 1. **CSRF Tokens:**
    - Laravel generates unique CSRF tokens for each user session.
-   - These tokens are included in forms as hidden fields or can be added to AJAX requests. 
+   - These tokens are included in forms as hidden fields or can be added to AJAX requests.
    - Tokens are used to verify that the incoming request was made from your application and not from a malicious source.
 
 #### 2. **Middleware:**
@@ -2547,6 +2256,8 @@ Here's how you can include the CSRF token in an AJAX request using JavaScript an
 <script>
     // Fetch the CSRF token from the meta tag
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    // Or
+    const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
     // Make an AJAX POST request
     $.ajax({
@@ -2596,7 +2307,6 @@ Certainly, let's dive deeper into CSRF (Cross-Site Request Forgery) and XSRF (Cr
          // Handle errors
      });
      ```
-
    - By including the token in the headers, you ensure that AJAX requests are properly validated.
 
 #### **2. Excluding Routes from CSRF Protection:**
@@ -2633,6 +2343,8 @@ Certainly, let's dive deeper into CSRF (Cross-Site Request Forgery) and XSRF (Cr
      <form method="POST" action="/some-route">
          @csrf_field('csrf_token') <!-- Customize the field name -->
          <!-- Form fields -->
+          // Or
+          <input type="hidden" name="csrf" value="crsf_token()"/>
      </form>
      ```
 
@@ -2718,7 +2430,7 @@ Here are the key aspects of controllers in Laravel:
    - Example of route model binding in a controller:
 
      ```php
-     public function show(User $user)
+     public function show(User $user) // Route::get('data/show/{user}') // {user:slug}
      {
          return view('users.show', compact('user'));
      }
@@ -2729,7 +2441,7 @@ Here are the key aspects of controllers in Laravel:
    - Example of applying middleware to a controller:
 
      ```php
-     public function __construct()
+     public function __construct() 
      {
          $this->middleware('auth');
      }
@@ -2740,9 +2452,11 @@ Here are the key aspects of controllers in Laravel:
    - Example of dependency injection in a controller constructor:
 
      ```php
-     public function __construct(UserService $userService) // UserService is a dependency that injects to controller.
+     class UserController {
+        protected $userService;
+     public function __construct(UserService $DependuserService) // UserService is a dependency that injects to controller.
      {
-         $this->userService = $userService;
+         $this->userService = $DependuserService;
      }
 
      public function index()
@@ -2750,6 +2464,9 @@ Here are the key aspects of controllers in Laravel:
          $users = $this->userService->getAllUsers();
          return view('users.index', compact('users'));
      }
+
+     }
+
      ```
 
 #### **8. Resource Controllers:**
@@ -2895,7 +2612,6 @@ Here are the key aspects of controllers in Laravel:
 
    - Namespaced controllers help keep your code organized, especially in larger applications.
 
-    let's explore some real-life examples of controller methods in Laravel that involve various logic, such as multiple queries, route model binding, and filtering data. We'll use a hypothetical e-commerce application as an example.
 
 #### **Controller Test/PHP Unit Testing of Laravel**
 ---
@@ -4482,28 +4198,42 @@ Here's a step-by-step guide:
 
    Laravel will automatically validate the request using the rules defined in the `CustomValidationRequest` before executing the `processForm` method.
 
-4. **Display Validation Errors in the View:**
+4. **Display Validation Errors in the View with repopulating of old value:**
 
-   In your view, you can display validation errors using Laravel's `@error` directive. For example:
+   In your view, you can display validation errors using Laravel's `@error` directive. and Laravel's `old()` function helps with this to show the old value in the inputs. For example:
 
-   ```blade
+   *Generally The Validation rules* return these error
+    ```blade
+        @error('username')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+    ```
+    for this return 
+    ```php
+      return redirect()->route('your.route.name')->withErrors(['username' => 'Username is required'])->withInput();
+    ```
+using in blade file
+   ```php
    <div>
-       @error('custom_field')
-           <span class="text-red-500">{{ $message }}</span>
-       @enderror
+   for withInput();
+    <!-- Display old input value -->
+    <input type="text" name="username" value="{{ old('username') }}">
+
+    <!-- Display validation error message -->
+    for withErrors();
+    @error('username')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
    </div>
    ```
 
-   This will display an error message if the 'custom_field' validation fails.
+**Displaying The Validation Errors with error position:**
 
-By following these steps, you've organized your validation logic in a dedicated Form Request class, making your code more modular and adhering to Laravel's best practices. Adjust the validation rules and error display in the view based on your specific requirements.
-
-
-**Displaying The Validation Errors:**
-
-When validation fails, Laravel provides an easy way to display error messages in your Blade views. Here's an example of how to display errors for a 'name' field in a Blade view:
+This code checks if there are errors for the "name" field and displays the first error message if any. The `withErrors` method flashes the errors to the session, and `->first('name')` retrieves the first error for the "name" field.
 
 ```php
+redirect()->back()->withErrors($validator)->withInput();
+
 @if ($errors->has('name'))
     <div class="alert alert-danger">
         {{ $errors->first('name') }}
@@ -4511,15 +4241,31 @@ When validation fails, Laravel provides an easy way to display error messages in
 @endif
 ```
 
-**Repopulating Forms:**
+ **with()**
+ `with` method to flash data to the session, and then access that data in your Blade file. This is commonly used for success messages or additional information that needs to be displayed after a redirect. Here's how you can use `with` to return success or error messages in your Blade file:
 
-After form submission with validation errors, it's essential to repopulate the form fields with the user's input. Laravel's `old()` function helps with this. For example:
+    ```php
+        // Redirect with success message
+        return redirect()->route('your.route.name')->with('success', 'Operation successful');
 
-```php
-<input type="text" name="name" value="{{ old('name') }}">
-```
+        // Or, redirect with error message
+        return redirect()->route('your.route.name')->with('error', 'Operation failed');
+    ```
+    ```blade
+    <!-- Check for success message -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-This code repopulates the 'name' input field with the user's previous input.
+    <!-- Check for error message -->
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+    ```
 
 **Form Request Validation:**
 
@@ -4812,7 +4558,9 @@ use Illuminate\Validation\Rules\Password;
 $validator = Validator::make($input, $rules, $messages = [
     'required' => 'The :attribute field is required.',
 ]);
- 
+
+  /* OR */
+
 $validator = Validator::make($request->all(), [
     'password' => ['required', 'confirmed', Password::min(8)],
 ]);
@@ -4822,7 +4570,7 @@ Password::min(8)  // Require at least 8 characters...
     ->mixedCase() // Require at least one uppercase and one lowercase letter...
     ->numbers() // Require at least one number...
     ->symbols()  // Require at least one symbol...
-    ->uncompromised()
+    ->uncompromised();
     /* uncompromised() : 
     If there's a match, it suggests that the user's chosen password has been previously exposed in a data breach. This is a strong indicator that the password is not secure, as hackers might already know it.
 
@@ -4876,6 +4624,7 @@ Error handling in Laravel is a crucial aspect of building robust and reliable ap
        if (!$item) {
            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Item not found.');
        }
+
        return view('item.show', ['item' => $item]);
    }
    ```
@@ -4900,12 +4649,15 @@ Error handling in Laravel is a crucial aspect of building robust and reliable ap
    Laravel allows you to log errors and exceptions for debugging and monitoring purposes. You can configure different log channels, including files, databases, and external services like Loggly or Papertrail.
 
    Example (Logging to a file):
+
    ```php
+
    try {
        // Code that may throw an exception
    } catch (\Exception $e) {
        Log::error('Error occurred: ' . $e->getMessage());
    }
+
    ```
 
 5. **Error Views**:
@@ -4951,7 +4703,9 @@ Error handling in Laravel is a crucial aspect of building robust and reliable ap
    When working with database operations, you can use database transactions to ensure data consistency and handle errors gracefully.
 
    Example:
+
    ```php
+
    DB::beginTransaction();
 
    try {
@@ -4959,8 +4713,9 @@ Error handling in Laravel is a crucial aspect of building robust and reliable ap
        DB::commit();
    } catch (\Exception $e) {
        DB::rollback();
-       Log::error('Database error: ' . $e->getMessage());
-   }
+       Log::error('Database error: ' . $e->getMessage()); // $$->getCode(), $e->getLine();
+   };
+
    ```
 Certainly! You can create a custom exception handler for both 404 (Not Found) and 500 (Internal Server Error) pages in Laravel. Here's how you can do it:
 
@@ -4981,7 +4736,7 @@ Certainly! You can create a custom exception handler for both 404 (Not Found) an
    {
        public function render($request)
        {
-           return response()->view('errors.404', [], 404);
+           return response()->view('errors.404', [], 404);  // views/errors/404.blade.php
        }
    }
    ```
@@ -4999,7 +4754,7 @@ Certainly! You can create a custom exception handler for both 404 (Not Found) an
    {
        public function render($request)
        {
-           return response()->view('errors.500', [], 500);
+           return response()->view('errors.500', [], 500); // views/errors/500.blade.php
        }
    }
    ```
@@ -5152,7 +4907,7 @@ Laravel provides a powerful and flexible logging system through the use of the M
 
 Laravel supports various log levels, each indicating the severity of a message:
 
-- `emergency`: System is unusable.
+- `emergency`: System is unusable. // Log::emergency
 - `alert`: Action must be taken immediately.
 - `critical`: Critical conditions.
 - `error`: Error conditions.
@@ -5415,6 +5170,191 @@ cat storage/logs/laravel.log
 
 Remember to adjust the log levels (`info`, `debug`, `error`, etc.) based on the severity of the information. Regularly review logs to identify and address issues proactively, ensuring a smooth and secure operation of your e-commerce website.
 
+### Debugging Sql QUery by Log
+Yes, the `\DB::listen` code snippet can be used with both raw SQL queries and Eloquent ORM queries in Laravel. The purpose of this snippet is to log queries executed by the database, regardless of whether they are raw SQL queries or queries generated by Eloquent.
+
+Here's how you can use it with Eloquent ORM:
+
+```php
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Models\YourModel; // Replace with your actual model
+
+public function someControllerMethod()
+{
+    // Your controller logic...
+
+    // Log Eloquent queries specific to this controller method
+    DB::listen(function ($query) {
+        Log::info('Eloquent Query: ' . $query->sql);
+        Log::info('Eloquent Bindings: ' . json_encode($query->bindings));
+        Log::info('Eloquent Time: ' . $query->time);
+    });
+
+    // Example Eloquent query
+    $result = YourModel::where('column', 'value')->get();
+
+    // More controller logic...
+}
+
+/* OR */
+        \DB::listen(function ($query) {
+        \Log::info($query->sql);
+        \Log::info($query->bindings);
+        \Log::info($query->time);
+    });
+```
+**Notes** Can We Set it in Middleware to show the result globally
+
+```php
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        if ($this->app->isLocal()) {
+            DB::listen(function ($query) {
+                Log::info($query->sql);
+                Log::info($query->bindings);
+                Log::info($query->time);
+            });
+        }
+    }
+}
+
+/* OR CREATING MIDDLEWARE */
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+class LogQueriesMiddleware
+{
+    public function handle($request, Closure $next)
+    {
+        if (config('app.debug')) {
+            DB::listen(function ($query) {
+                Log::info($query->sql);
+                Log::info($query->bindings);
+                Log::info($query->time);
+            });
+        }
+
+        return $next($request);
+    }
+}
+
+```
+
+**Result of Log above in laravel.log**
+```sql
+[2023-11-26 07:03:18] local.INFO: select * from `properties` where `id` = ? or `id` = ? limit 1  
+[2023-11-26 07:03:18] local.INFO: array (
+  0 => '42',
+  1 => '42',
+)  
+[2023-11-26 07:03:18] local.INFO: 0.51  
+[2023-11-26 07:03:18] local.INFO: select * from `multi_images` where `property_id` = ? or `property_id` = ?  
+[2023-11-26 07:03:18] local.INFO: array (
+  0 => 42,
+  1 => '42',
+)  
+[2023-11-26 07:03:18] local.INFO: 0.8  
+[2023-11-26 07:03:18] local.INFO: Property ID: 42  
+[2023-11-26 07:03:18] local.INFO: Multi Images Relationship: Illuminate\Support\Collection Object
+(
+    [items:protected] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [id] => 56
+                    [property_id] => 42
+                    [photo_name] => upload/property/multi-image/-0119140.jpg
+                    [created_at] => 2023-11-24 13:19:14
+                    [updated_at] => 2023-11-26 06:40:58
+                    [deleted_at] => 2023-11-26 06:40:58
+                )
+
+            [1] => stdClass Object
+                (
+                    [id] => 57
+                    [property_id] => 42
+                    [photo_name] => upload/property/multi-image/-0119380.jpg
+                    [created_at] => 2023-11-24 13:19:38
+                    [updated_at] => 2023-11-26 06:40:58
+                    [deleted_at] => 2023-11-26 06:40:58
+                )
+
+            [2] => stdClass Object
+                (
+                    [id] => 58
+                    [property_id] => 42
+                    [photo_name] => upload/property/multi-image/-0119381.jpg
+                    [created_at] => 2023-11-24 13:19:38
+                    [updated_at] => 2023-11-26 06:40:58
+                    [deleted_at] => 2023-11-26 06:40:58
+                )
+
+        )
+
+    [escapeWhenCastingToString:protected] => 
+)
+  
+[2023-11-26 07:03:18] local.INFO: Multi Images are: Illuminate\Support\Collection Object
+(
+    [items:protected] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [id] => 56
+                    [property_id] => 42
+                    [photo_name] => upload/property/multi-image/-0119140.jpg
+                    [created_at] => 2023-11-24 13:19:14
+                    [updated_at] => 2023-11-26 06:40:58
+                    [deleted_at] => 2023-11-26 06:40:58
+                )
+
+            [1] => stdClass Object
+                (
+                    [id] => 57
+                    [property_id] => 42
+                    [photo_name] => upload/property/multi-image/-0119380.jpg
+                    [created_at] => 2023-11-24 13:19:38
+                    [updated_at] => 2023-11-26 06:40:58
+                    [deleted_at] => 2023-11-26 06:40:58
+                )
+
+            [2] => stdClass Object
+                (
+                    [id] => 58
+                    [property_id] => 42
+                    [photo_name] => upload/property/multi-image/-0119381.jpg
+                    [created_at] => 2023-11-24 13:19:38
+                    [updated_at] => 2023-11-26 06:40:58
+                    [deleted_at] => 2023-11-26 06:40:58
+                )
+
+        )
+
+    [escapeWhenCastingToString:protected] => 
+)
+  
+[2023-11-26 07:03:18] local.INFO: delete from `multi_images` where `property_id` = ?  
+[2023-11-26 07:03:18] local.INFO: array (
+  0 => 42,
+)  
+[2023-11-26 07:03:18] local.INFO: 119.64  
+[2023-11-26 07:03:18] local.INFO: delete from `properties` where `id` = ?  
+[2023-11-26 07:03:18] local.INFO: array (
+  0 => 42,
+)  
+[2023-11-26 07:03:18] local.INFO: 116.35  
+
+```
 
 ## **DIGGING DEEPERS : ADVANCED LEVEL**
 ---
@@ -9207,6 +9147,96 @@ Route::middleware('throttle:api_rate_limit,5,1')->group(function () {
 
 In this example, `api_rate_limit` is the key, `5` is the maximum number of requests allowed, and `1` is the time frame (in minutes).
 
+#### **Rate Limiting Explanation**
+---
+
+In Laravel, a rate limiter is a mechanism that helps control the rate of incoming requests from a user or IP address. It prevents abuse, protects your application from potential attacks, and ensures fair usage of resources.
+
+Here's a beginner-friendly explanation of rate limiting in the context of an e-commerce project:
+
+1. **What is Rate Limiting?**
+   Rate limiting is like a traffic cop for your web application. It sets rules on how quickly users can make requests to your server. This is crucial to prevent one user or a malicious bot from overwhelming your server with too many requests in a short time.
+
+2. **Why Use Rate Limiting in E-commerce?**
+   Imagine someone trying to flood your server with rapid requests to manipulate prices, check product availability, or perform other actions too quickly. Rate limiting safeguards against such scenarios, ensuring a fair and controlled flow of requests.
+
+3. **Implementing Rate Limiting in Laravel:**
+
+   - **Define a Rate Limiter:**
+     In Laravel, you can define a rate limiter in the `AppServiceProvider` or a service provider specific to your feature. Use the `RateLimiter` facade to set rules.
+
+   ```php
+   use Illuminate\Cache\RateLimiting\Limit;
+   use Illuminate\Support\Facades\RateLimiter;
+
+   // Inside boot method of a service provider
+   RateLimiter::for('checkout', function ($request) {
+       return Limit::perMinute(5); // Allow 5 requests per minute
+   });
+   ```
+
+   - **Apply Rate Limiter to a Route:**
+     Apply the rate limiter to a route by using the middleware.
+
+   ```php
+   Route::middleware(['throttle:checkout'])->group(function () {
+       // Your e-commerce routes go here
+   });
+   ```
+    This example limits the checkout-related routes to 5 requests per minute for each user. Adjust the rate limits based on your specific requirements and route usage within your e-commerce project.
+
+   This ensures that the checkout routes are subject to the rate limiter.
+
+4. **Testing Rate Limiting:**
+   To see it in action, try accessing your e-commerce routes more frequently than the defined limit. You should encounter a response indicating that you've exceeded the rate limit.
+
+5. **Adjusting and Customizing:**
+   You can tweak the rate limits based on your application's needs. Laravel allows you to set limits per minute, per hour, etc.
+
+   ```php
+   // Example: Allow 10 requests per hour
+   return Limit::perHour(10);
+   ```
+
+   You can customize error messages and response codes to inform users when they hit a rate limit.
+
+By implementing rate limiting, you're enhancing the security and stability of your Laravel e-commerce project, ensuring it operates smoothly even under high loads.
+
+#### **More Explanation about Rate Limit**
+---
+In Laravel, 'throttle' refers to a middleware that helps control the rate at which users can access certain routes. It's like a speed limit for requests, preventing users from making too many requests in a short time. This is important to ensure fair usage of your application and protect it from potential abuse or attacks.
+
+**Easy Explanation:**
+
+Imagine you're in a line to buy concert tickets, and the organizer wants to make sure everyone gets a chance. They set a rule: "Only one person can buy tickets every 2 minutes." If someone tries to buy tickets too quickly, they'll be asked to wait. In Laravel, 'throttle' does a similar job for your website's routes.
+
+**How It Works:**
+
+1. **Middleware Setup:**
+   Laravel provides the 'throttle' middleware that you can apply to specific routes.
+
+2. **Setting the Pace:**
+   You decide how many requests a user can make within a certain time frame. For example, "Allow 3 requests per minute."
+
+3. **Applying to Routes:**
+   You attach 'throttle' to your routes. If a user exceeds the allowed pace, Laravel slows them down, making them wait before accessing the route again.
+
+**Example Code:**
+
+```php
+// Inside your routes/web.php or route file
+
+Route::middleware(['throttle:3,1'])->group(function () {
+    // Your routes go here
+    Route::get('/buy-tickets', 'TicketController@buy');
+    // Add more routes as needed
+});
+```
+
+This example sets a rate limit of 3 requests per minute (3 in the first parameter) with a 1-minute delay (1 in the second parameter). It means a user can make 3 requests in a minute, but if they try to make a 4th request within that minute, they'll have to wait for the next minute.
+
+In simple terms, 'throttle' helps manage the flow of visitors to your routes, preventing anyone from overwhelming your server with too many requests too quickly.
+
 ### **Task Scheduling**
 ---
 
@@ -9301,6 +9331,258 @@ protected function schedule(Schedule $schedule)
 ```
 
 In this example, a custom closure is scheduled to run daily. You can replace the closure with any custom logic you need.
+
+### **Queue in Laravel Practically**
+---
+**What are Queues in Laravel:**
+
+In Laravel, Queues are like virtual assistants for your web application. Imagine you're running an online store, and when a customer places an order, there's a lot of behind-the-scenes work to do, like sending emails, updating inventory, and more. Queues help you handle these tasks without slowing down your application's response time.
+
+**Easy Explanation:**
+
+Think of Queues as a to-do list for your web app. When a customer places an order, instead of doing everything right away and making them wait, you add tasks to a list. Your app can then work on these tasks in the background, like a helpful assistant, while your customer happily moves on.
+
+**How Queues Work in Laravel:**
+
+1. **Adding Tasks to the Queue:**
+   When an event occurs (e.g., a new order), instead of doing all related tasks immediately, you add them to the queue.
+
+2. **Background Processing:**
+   Laravel's Queue system takes care of processing these tasks in the background. It's like your app having a separate team working on these tasks without affecting the user experience.
+
+3. **Completion Notification:**
+   Once a task is completed, the user can be notified (e.g., order confirmation email sent), ensuring a smooth experience without delays.
+
+**Applying Queues in an E-commerce Project:**
+
+Let's say a customer places an order in your online store. Instead of handling everything instantly, you can use queues to perform tasks like sending order confirmation emails and updating inventory in the background.
+
+**Example Code:**
+
+1. **Define a Job:**
+   Create a job class that represents a specific task, like sending an order confirmation email.
+
+   ```php
+   // Run this command to create a new job
+   php artisan make:job SendOrderConfirmation
+   ```
+
+2. **Job Logic:**
+   Define the logic for sending the order confirmation email in your job class.
+
+ Let's implement a simple example logic for sending an order confirmation email within the `handle` function of the `SendOrderConfirmation` job. In this example, I'll assume that your order details include `customer_name`, `order_number`, and `total_amount`.
+
+```php
+// Inside the SendOrderConfirmation.php job file
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use App\Mail\OrderConfirmationMail; // Assuming you have a Mailable class for order confirmation
+use Illuminate\Support\Facades\Mail;
+
+class SendOrderConfirmation implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $order;
+
+    /**
+     * Create a new job instance.
+     *
+     * @param  array  $order
+     * @return void
+     */
+    public function __construct($order)
+    {
+        $this->order = $order;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        // Logic to send order confirmation email
+
+        $customerName = $this->order['customer_name'];
+        $orderNumber = $this->order['order_number'];
+        $totalAmount = $this->order['total_amount'];
+        $email = $this->order['email'];
+
+        // Example: Send order confirmation email using a Mailable
+        Mail::to($email)
+            ->send(new OrderConfirmationMail($customerName, $orderNumber, $totalAmount));
+    }
+}
+```
+
+
+
+3. **Dispatch the Job:**
+   In your controller or wherever the order is processed, dispatch the job to the queue.
+
+Now, in the example above, I've assumed that your `OrderConfirmationMail` Mailable class accepts parameters for `customerName`, `orderNumber`, and `totalAmount`. Adjust the `OrderConfirmationMail` class accordingly:
+
+```php
+// Inside the OrderConfirmationMail.php Mailable file
+
+namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+
+class OrderConfirmationMail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public $customerName;
+    public $orderNumber;
+    public $totalAmount;
+
+    /**
+     * Create a new message instance.
+     *
+     * @param  string  $customerName
+     * @param  string  $orderNumber
+     * @param  float  $totalAmount
+     * @return void
+     */
+    public function __construct($customerName, $orderNumber, $totalAmount)
+    {
+        $this->customerName = $customerName;
+        $this->orderNumber = $orderNumber;
+        $this->totalAmount = $totalAmount;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        return $this->view('emails.order_confirmation')
+                    ->with([
+                        'customerName' => $this->customerName,
+                        'orderNumber' => $this->orderNumber,
+                        'totalAmount' => $this->totalAmount,
+                    ])
+                    ->subject('Order Confirmation');
+    }
+}
+```
+
+Ensure you have a corresponding Blade view file (`order_confirmation.blade.php`) inside the `resources/views/emails/` directory to customize the email content based on these parameters.
+
+This example demonstrates a basic structure for sending an order confirmation email with order details using Laravel's Mailables and Queues. You can further enhance and customize it based on your specific needs and email content.
+
+Now, create a Blade view file `order_confirmation.blade.php` inside the `resources/views/emails/` directory with the content for your order confirmation email. Here's a simple example:
+
+```blade
+<!-- Inside resources/views/emails/order_confirmation.blade.php -->
+
+<p>Dear {{ $order['customer_name'] }},</p>
+
+<p>Thank you for your order (Order ID: {{ $order['order_id'] }}).</p>
+
+<p>Order Details:</p>
+<ul>
+    @foreach($order['items'] as $item)
+        <li>{{ $item['name'] }} - {{ $item['quantity'] }} x ${{ $item['price'] }}</li>
+    @endforeach
+</ul>
+
+<p>Thank you for shopping with us!</p>
+```
+
+Adjust the placeholders and content based on your actual order details structure.
+
+Now, when you dispatch the `SendOrderConfirmation` job in your controller, it will send an order confirmation email using Laravel's queue system, providing a professional and customizable email experience for your e-commerce website.
+
+4. **Queue Worker:**
+   Run the queue worker to process jobs in the background.
+
+   ```bash
+   php artisan queue:work
+   ```
+
+Now, when a customer places an order, the order confirmation email task is added to the queue. The queue worker processes this task in the background, ensuring a seamless and responsive user experience in your e-commerce project.
+
+#### **More Clarification of Queue**
+---
+Absolutely, let's break it down in an even simpler way:
+
+**Imagine Your Online Store as a Busy Shop:**
+
+1. **Customer Places an Order:**
+   - A customer comes to your online store and places an order.
+   - Instead of making them wait while you do everything right away, you write down what needs to be done.
+
+2. **To-Do List (Queue) is Created:**
+   - You create a to-do list (queue) for tasks related to the order, like sending an email, updating inventory, etc.
+   - This list is like a helper (queue) that will take care of tasks in the background.
+
+3. **Background Helpers (Queue Workers) Get to Work:**
+   - You have virtual helpers (queue workers) who start working on the tasks in the background.
+   - They send emails, update inventory, and do other tasks without bothering the customer.
+
+4. **Customer Can Move On:**
+   - While the helpers are busy, your customer happily moves on with their day.
+   - They don't have to wait for everything to be done immediately.
+
+**Applying Queues in Your Online Store:**
+
+Let's make it real for your online store:
+
+1. **Task (Job) Creation:**
+   - When someone places an order, instead of doing everything on the spot, you create individual tasks (jobs) like sending order confirmation emails.
+
+2. **Job Logic:**
+   - You define what each task (job) should do. For example, the job for sending an order confirmation email contains the logic to create and send the email.
+
+3. **Adding to the Helper's List (Dispatching):**
+   - You tell your virtual helper (queue) about these tasks. For instance, "Hey, there's a job to send an order confirmation email."
+
+4. **Background Helpers (Queue Workers) Start Working:**
+   - Your virtual helpers (queue workers) pick up these tasks and start working on them quietly in the background.
+
+5. **Customer Gets Notified:**
+   - Once the task is done, your customer can be notified. For instance, they receive the order confirmation email.
+
+**Super Simple Code Example:**
+
+```php
+// Create a job (task)
+php artisan make:job SendOrderConfirmation
+
+// Inside SendOrderConfirmation.php
+public function handle()
+{
+    // Logic to send order confirmation email
+    // ...
+}
+
+// In your controller
+use App\Jobs\SendOrderConfirmation;
+
+public function placeOrder()
+{
+    // Order processing logic
+
+    // Add the job to the to-do list (dispatch)
+    SendOrderConfirmation::dispatch($order);
+}
+```
+
+By using queues in your online store, you make sure that things get done without keeping your customers waiting. It's like having invisible helpers taking care of tasks so that your customers can have a smooth shopping experience.
 
 
 ### **String**
@@ -11371,76 +11653,348 @@ public function up()
     //
 }
 ```
-### Running Migrations
+#### What is Migration?
+
+In Laravel, migration is the process of version controlling your database schema. It allows you to modify your database structure using PHP code rather than SQL. Laravel migrations use an incremental and deterministic approach, and they provide a simple way to create and modify database tables.
+
+#### Timestamps in Migrations
+
+Laravel migrations follow a timestamp-based naming convention to ensure the order of execution. The migration file names include a timestamp to indicate when the migration was created.
+
+#### **CLI Commands:**
 ---
-To run all of your outstanding migrations, execute the migrate Artisan command:
-then migrate the file by 
-```bash
-php artisan migrate
 
-# or migrating a specific table 
-php artisan migrate --path=/database/migrations/fileName.php
+#### 1. **Creating a Migration:**
+   To create a new migration file, use the `make:migration` Artisan command:
 
-# or for refreshing after updating the file
-php artisan migrate:refresh --path=/database/migrations/fileName.php
-```
-If you would like to see which migrations have run thus far, you may use the migrate:status Artisan command:
-```bash
-php artisan migrate:status
-```
-Note : this command describes how many files are already migrated and pending to be migrated.
+   ```bash
+   php artisan make:migration create_table_name
+   ```
 
-If you would like to see the SQL statements that will be executed by the migrations without actually running them, you may provide the --pretend flag to the migrate command:
+   Example:
 
-```bash
-#first : write the commad.
-php artisan make:migration create_test_table
+   ```bash
+   php artisan make:migration create_users_table
+   ```
 
-#second : write the command to see the sql.
-php artisan migrate --pretend
+#### 2. **Adding a Field:**
+   To add a new field to an existing table, use the `add` method in the `up` method of the migration:
 
-result of the command below
- # create table `test` (`id` bigint unsigned not null auto_increment primary key, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci'
-```
-Note : this will show the SQL command of table after the making migration file, but not after the migrate.
+   ```php
+   public function up()
+   {
+       Schema::table('table_name', function (Blueprint $table) {
+           $table->string('new_column');
+       });
+   }
+   ```
 
-#### Forcing Migrations To Run In Production
---- 
-Some migration operations are destructive, which means they may cause you to lose data. In order to protect you from running these commands against your production database, you will be prompted for confirmation before the commands are executed. To force the commands to run without a prompt, use the --force flag:
-```bash
-php artisan migrate --force
-```
-#### Rolling Back Migrations
+#### 3. **Dropping a Field:**
+   To drop an existing field from a table, use the `dropColumn` method:
+
+   ```php
+   public function up()
+   {
+       Schema::table('table_name', function (Blueprint $table) {
+           $table->dropColumn('column_to_drop');
+       });
+   }
+   ```
+
+#### 4. **Changing a Column:**
+   To change the definition of an existing column, use the `change` method:
+
+   ```php
+   public function up()
+   {
+       Schema::table('table_name', function (Blueprint $table) {
+           $table->string('column_to_change')->nullable()->change();
+       });
+   }
+   ```
+
+#### 5. **Modifying Column Datatype:**
+   To modify the datatype of an existing column, use the `modify` method:
+
+   ```php
+   public function up()
+   {
+       Schema::table('table_name', function (Blueprint $table) {
+           $table->bigInteger('column_to_modify')->change();
+       });
+   }
+
+
+  // More 
+
+       public function up(): void
+    {
+        Schema::table('properties', function (Blueprint $table) {
+            $table->string('amenities_id',20)->change();
+            $table->string('ptype_id',20)->change();
+        });
+    }
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('properties', function (Blueprint $table) {
+            $table->unsignedBigInteger('amenities_id')->change();
+            $table->integer('ptype_id')->unsigned()->change();
+        });
+    }
+
+   ```
+
+#### 6. **Raw MySQL Query:**
+   If you need to execute a raw MySQL query, you can use the `statement` method:
+
+   ```php
+   public function up()
+   {
+       DB::statement('ALTER TABLE table_name ADD new_column INT');
+   }
+   ```
+
+### Running Migrations:
+
+#### 1. **Migrate Up:**
+   To run all pending migrations, use the following command:
+
+   ```bash
+   php artisan migrate
+   ```
+
+#### 2. **Rollback:**
+   To rollback the last database migration, use the following command:
+
+   ```bash
+   php artisan migrate:rollback
+   ```
+
+#### 3. **Status:**
+   To view the status of migrations, including whether they are up or down, use the following command:
+
+   ```bash
+   php artisan migrate:status
+   ```
+
+#### 7. **Renaming a Column:**
+   To rename an existing column, use the `renameColumn` method:
+
+   ```php
+   public function up()
+   {
+       Schema::table('table_name', function (Blueprint $table) {
+           $table->renameColumn('old_column_name', 'new_column_name');
+       });
+   }
+   ```
+
+#### 8. **Adding Foreign Key:**
+   To add a foreign key constraint, use the `foreign` method:
+
+   ```php
+   public function up()
+   {
+       Schema::table('child_table', function (Blueprint $table) {
+           $table->foreign('parent_id')->references('id')->on('parent_table')->onDelete('cascade');
+       });
+   }
+   ```
+
+#### 9. **Dropping Foreign Key:**
+   To drop a foreign key constraint, use the `dropForeign` method:
+
+   ```php
+   public function up()
+   {
+       Schema::table('child_table', function (Blueprint $table) {
+           $table->dropForeign(['parent_id']);
+       });
+   }
+   ```
+
+#### 10. **Composite Index:**
+   To create a composite index, use the `index` method with an array of columns:
+
+   ```php
+   public function up()
+   {
+       Schema::table('table_name', function (Blueprint $table) {
+           $table->index(['column1', 'column2']);
+       });
+   }
+   ```
+
+#### 11. **Unique Constraint:**
+   To add a unique constraint to a column, use the `unique` method:
+
+   ```php
+   public function up()
+   {
+       Schema::table('table_name', function (Blueprint $table) {
+           $table->unique('column_name');
+       });
+   }
+   ```
+
+#### 12. **Dropping a Table:**
+   To drop an existing table, create a new migration file and use the `dropIfExists` method:
+
+   ```php
+   public function up()
+   {
+       Schema::dropIfExists('table_name');
+   }
+   ```
+
+#### 13. **Using Raw Queries for Table Creation:**
+   If you need to use a raw SQL query for table creation, you can use the `DB::statement` method:
+
+   ```php
+   public function up()
+   {
+       DB::statement('CREATE TABLE table_name (id INT, name VARCHAR(255))');
+   }
+   ```
+
+#### **Running Migrations:**
 ---
-To roll back the latest migration operation, you may use the rollback Artisan command. This command rolls back the last "batch" of migrations, which may include multiple migration files:
+
+#### 4. **Rollback Specific Batch:**
+   To rollback migrations in a specific batch, use the `--batch` option:
+
+   ```bash
+   php artisan migrate:rollback --batch=3
+   ```
+
+#### 5. **Rollback and Migrate Fresh:**
+   To rollback all migrations and run them again, use the following commands:
+
+   ```bash
+   php artisan migrate:refresh
+   ```
+
+#### 14. **Rollback the Last Batch:**
+To rollback the last batch of migrations, you can use the `--step` option:
+
 ```bash
-php artisan migrate:rollback
+php artisan migrate:rollback --step=1
 ```
 
-You may roll back a limited number of migrations by providing the step option to the rollback command. For example, the following command will roll back the last five migrations:
-```bash
-php artisan migrate:rollback --step=5
-```
-The migrate:reset command will roll back all of your application's migrations:
+This will rollback the last batch of migrations.
+
+#### 15. **Rollback All Batches:**
+To rollback all batches of migrations and revert the database to its initial state, you can use the `reset` command:
+
 ```bash
 php artisan migrate:reset
 ```
-##### Roll Back & Migrate Using A Single Command
----
-The migrate:refresh command will roll back all of your migrations and then execute the migrate command. This command effectively re-creates your entire database:
+
+#### 16. **Rollback and Migrate Specific Migration:**
+If you want to rollback and then migrate up to a specific migration, you can use the `--to` option:
+
+```bash
+php artisan migrate:rollback --to=20231118123456
+```
+
+Replace `20231118123456` with the timestamp of the migration you want to rollback to.
+
+#### 17. **Rollback and Migrate Fresh (Including Seeds):**
+To rollback all migrations, run them again, and re-run all seeders, you can use the `--seed` option with the `refresh` command:
+
+```bash
+php artisan migrate:refresh --seed
+```
+
+#### 18. **Reset Migrations and Seed Database:**
+To reset all migrations, drop all tables, and re-run all migrations and seeders, you can use the following command:
+
+```bash
+php artisan migrate:reset --seed
+```
+
+#### 19. **View Migration Status:**
+To view the status of migrations and check which ones have been run, you can use the `migrate:status` command:
+
+```bash
+php artisan migrate:status
+```
+
+#### 20. **Re-run the Last Migration:**
+If you need to re-run the last migration, you can use the `--path` option with the `migrate` command:
+
+```bash
+php artisan migrate --path=/database/migrations/20231118123456_create_example_table.php
+```
+
+Replace `20231118123456_create_example_table.php` with the filename of your last migration.
+
+#### 21. **Rollback and Migrate All Batches:**
+To rollback all batches and re-run all migrations, you can use the `refresh` command:
+
 ```bash
 php artisan migrate:refresh
- 
-# Refresh the database and run all database seeds...
-php artisan migrate:refresh --seed
-# the following command will roll back and re-migrate the last five migrations:
-php artisan migrate:refresh --step=5
-
-# The migrate:fresh command will drop all tables from the database and then execute the migrate command:
-php artisan migrate:fresh
- 
-php artisan migrate:fresh --seed
 ```
+#### 25. **Renaming a Table:**
+   To rename an existing table, use the `rename` method:
+
+   ```php
+   public function up()
+   {
+       Schema::rename('old_table_name', 'new_table_name');
+   }
+   ```
+
+#### 26. **Migrate in a Specific Environment:**
+   To run migrations in a specific environment (e.g., testing), use the `--env` option:
+
+   ```bash
+   php artisan migrate --env=testing
+   ```
+
+#### 27. **Create Table If Not Exists:**
+   To create a table only if it doesn't exist, use the `create` method with the `ifNotExists` option:
+
+   ```php
+   public function up()
+   {
+       Schema::create('table_name', function (Blueprint $table) {
+           $table->ifNotExists();
+           // ... other columns
+       });
+   }
+   ```
+#### 31. **Show Raw SQL Queries:**
+   To display the raw SQL queries without actually running the migrations, use the `--pretend` option:
+
+   ```bash
+   php artisan migrate --pretend
+   ```
+
+   This command will output the SQL statements that would be executed if the migrations were run without actually modifying the database.
+
+#### 32. **Show Raw SQL Queries with Seed:**
+   If you want to see the raw SQL queries for seeding as well, you can combine the `--pretend` option with the `--seed` option:
+
+   ```bash
+   php artisan migrate --pretend --seed
+   ```
+
+   This will show you the SQL queries for both migrations and seeders.
+
+#### 33. **Show Raw SQL Queries for a Specific Migration:**
+   If you want to see the raw SQL queries for a specific migration, you can use the `--pretend` option with the `--path` option:
+
+   ```bash
+   php artisan migrate --pretend --path=/database/migrations/20231118123456_create_example_table.php
+   ```
+
+   Replace `20231118123456_create_example_table.php` with the filename of your specific migration.
+
+
 ### Database : Tables
 ---
 To create a new database table, use the create method on the Schema facade. The create method accepts two arguments: the first is the name of the table, while the second is a closure which receives a "Blueprint" object that may be used to define the new table:
@@ -11487,6 +12041,8 @@ class CreateProductsTable extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
             $table->foreign(['user_id', 'post_id'])->references(['id', 'post_id'])->on('users_posts')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories');
+            $table->unsignedBigInteger('sub_sub_category_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('brand_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('brand_id')->constrained('brands', 'brand_id');
             $table->foreignId('supplier_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('category_id'); // Unsigned big integer for the foreign key

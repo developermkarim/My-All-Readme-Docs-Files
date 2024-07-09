@@ -5,10 +5,59 @@ Javascript is a synchronous , blocking, single threaded language.That just means
 To Wrap up, Javascript runs on single threaded.
 It runs code line by line and must finish executing a piece of code before moving onto the next.
 
+### **Single-threaded language VS Multi-threaded language**
+
+- **Single-threaded language:** Executes one task at a time in a sequence, completing one before moving on to the next. It follows a linear flow of execution.
+
+- **Multi-threaded language:** Can execute multiple tasks concurrently, where each task runs independently. Threads are smaller units of a process that can run simultaneously.
+
+Here's a simple example in JavaScript, which is typically a single-threaded language, and in Java, which supports multithreading:
+
+### JavaScript (Single-threaded)
+
+```javascript
+// Single-threaded example
+console.log("Task 1");
+
+// Simulating a time-consuming task
+setTimeout(function() {
+    console.log("Task 2");
+}, 2000);
+
+console.log("Task 3");
+```
+
+In this example, even though there's a time-consuming task (the `setTimeout` function), other tasks continue to execute sequentially.
+
+### Java (Multi-threaded)
+
+```java
+// Multi-threaded example
+public class MultiThreadExample extends Thread {
+    public void run() {
+        System.out.println("Task 1");
+    }
+
+    public static void main(String[] args) {
+        MultiThreadExample thread1 = new MultiThreadExample();
+        MultiThreadExample thread2 = new MultiThreadExample();
+
+        // Start both threads
+        thread1.start();
+        thread2.start();
+
+        System.out.println("Task 3");
+    }
+}
+```
+
+In this Java example, we create two threads (`thread1` and `thread2`) that can run concurrently. While the threads execute their tasks, the main program can continue its execution, resulting in potentially concurrent output.
+
 #### Synchronous JavaScript:
 ---
  As the name suggests synchronous means to be in a sequence, i.e. every statement of the code gets executed one by one. So, basically a statement has to wait for the earlier statement to get executed.
 Let us understand this with the help of an example.
+
 
  ## Statement vs Expression
  ---
@@ -33,7 +82,7 @@ add(1, 2);  # Resolves to 3
 isTrue     # Resovlves to right
 ```
 
-### JavaScript Values
+### **JavaScript Values**
 
 The JavaScript syntax defines two types of values:
 
@@ -52,7 +101,7 @@ var x = 10.50;
 document.getElementById("demo").innerHTML = 10.50 + x; # with carrying variable
 ```
 
-### Syntex
+### **Syntex**
 ---
 *. Identifiers are JavaScript names.
 A JavaScript name must begin with:
@@ -64,7 +113,8 @@ Or an underscore (_)
 *. All JavaScript identifiers are case sensitive.
 *. Hyphens are not allowed in JavaScript. They are reserved for subtractions.
 
-JavaScript and Camel Case:
+**JavaScript and Camel Case:**
+
 Underscore:
 first_name, last_name, master_card, inter_city.
 
@@ -75,7 +125,7 @@ Lower Camel Case:
 JavaScript programmers tend to use camel case that starts with a lowercase letter:
 firstName, lastName, masterCard, interCity.
 
-### Variables
+### **Variables**
 ---
 4 Ways to Declare a JavaScript Variable:
 Using var
@@ -83,192 +133,230 @@ Using let
 Using const
 Using nothing
 
-The general rules for constructing names for variables (unique identifiers) are:
+**The general rules for constructing names for variables (unique identifiers) are:**
 
-Names can contain letters, digits, underscores, and dollar signs.
-Names must begin with a letter.
-Names can also begin with $ and _ (but we will not use it in this tutorial).
-Names are case sensitive (y and Y are different variables).
-Reserved words (like JavaScript keywords) cannot be used as names.
+*Names* can contain letters, digits, underscores, and dollar signs.
+*Names* must begin with a letter.
+*Names* can also begin with $ and _ (but we will not use it in this tutorial).
+*Names* are case sensitive (y and Y are different variables).
+*Reserved words* (like JavaScript keywords) cannot be used as names.
 
-Declaring a JavaScript Variable
+**Declaring a JavaScript Variable:**
 
 ```bash
-let myname;
-let job = null;
-let location = undefined;
-let myage;
-myname = "dulal";
-or 
-let myname = "dulal";
-console.log(myage) # undefined becuase of not assigning value.
-console.log(location) # value is undefined becuase of assigning undefined value.;
+// var
+var name = "John";
+var name = "Doe"; // Redeclaration is allowed
+console.log(name); // Output: Doe
 
-console.log(myage) # value is null;
+if (true) {
+    var age = 30;
+}
+console.log(age); // Output: 30 (not block-scoped)
 
+// let
+let name = "John";
+// let name = "Doe"; // Error: Identifier 'name' has already been declared
 
-let myname = 'mkarim', myage = 10, myhome = 'Chittagong' # multi variables called in one statement.
+if (true) {
+    let age = 30;
+    // let age = 40; // Error: Identifier 'age' has already been declared
+}
+// console.log(age); // ReferenceError: age is not defined
 
-A declaration can span multiple lines:
-let person = "John Doe",
-carName = "Volvo",
-price = 200;
+// Recommendation
+let score = 100;
+score = 200; // Valid with let
+
+const pi = 3.14;
+// pi = 3.14159; // Error: Assignment to a constant variable
 ```
 
-#### Re-Declaring JavaScript Variables
+### **Scope / Difference among var , let or const**
 ---
-```bash
-let carName = "Volvo";
- let carName = 'green line';  # only var can be used while redeclaring variable, but not using 'var' is better.Let re-declaration is not valid 
+ **JavaScript Scope**
 
-document.getElementById("demo").innerHTML = carName; # no result is found
-```
+Scope in JavaScript refers to the accessibility or visibility of variables. Understanding the different types of scope is crucial for writing maintainable and error-free code. JavaScript has three main types of scope:
 
-### Scope / Difference among var , let or const
----
-Scope determines the accessibility (visibility) of variables.
-JavaScript has 3 types of scope:
+1. **Global Scope:** Variables declared outside any function or block have global scope. They are accessible throughout the entire codebase.
 
-- Block scope 
-- Function scope
-- Global scope
+   ```javascript
+   var globalVar = "I'm a global variable";
 
-**var**: The scope of a var variable is functional scope.
+   function exampleFunction() {
+     console.log(globalVar); // Output: I'm a global variable
+   }
 
-**let**: The scope of a let variable is block scope.
+   exampleFunction();
+   ```
 
-**const**: The scope of a const variable is block scope.
+   In this example, `globalVar` is accessible inside the `exampleFunction` because it's globally scoped.
 
-```bash 
-var num1 = 10;
+2. **Function/Local Scope:** Variables declared inside a function have local scope, meaning they are only accessible within that function.
 
-{
-  const num2 = 10;
-  let num3 = 25;
-  var num1 = 23;
+   ```javascript
+   function localScopeExample() {
+     var localVar = "I'm a local variable";
+     console.log(localVar);
+   }
+
+   localScopeExample(); // Output: I'm a local variable
+
+   // Uncommenting the line below would result in a ReferenceError
+   // console.log(localVar); // ReferenceError
+   ```
+
+   Here, `localVar` is accessible only inside the `localScopeExample` function.
+
+3. **Block Scope:** Introduced in ECMAScript 6 (ES6), variables declared with `let` and `const` have block scope. A block is any section of code wrapped in curly braces `{}`.
+
+   ```javascript
+   if (true) {
+     var blockVar = "I'm a block-scoped variable with var";
+     let blockLet = "I'm a block-scoped variable with let";
+   }
+
+   console.log(blockVar); // Output: I'm a block-scoped variable with var
+
+   // Uncommenting the line below would result in a ReferenceError
+   // console.log(blockLet);  // ReferenceError
+   ```
+
+   Here, `blockVar` is accessible outside the `if` block because `var` has function scope. However, `blockLet` is not accessible outside the `if` block due to its block scope.
+
+#### **Variables and Declaration**
+
+JavaScript has three ways to declare variables: `var`, `let`, and `const`. The choice of declaration affects variable behavior regarding reassignment and redeclaration.
+
+### `var`
+
+- `var` has functional scope, meaning it is scoped to the function where it's declared.
+- It can be updated and re-declared within its scope.
+
+   ```javascript
+   var exampleVar = "I'm a var";
+
+   if (true) {
+     var exampleVar = "I'm another var";
+   }
+
+   console.log(exampleVar); // Output: I'm another var
+   ```
+
+   In this example, the `exampleVar` within the `if` block updates the outer `exampleVar`.
+
+### `let`
+
+- `let` has block scope and allows for variable reassignment but not redeclaration.
+
+   ```javascript
+   let exampleLet = "I'm a let";
+
+   if (true) {
+     let exampleLet = "I'm another let";
+     console.log(exampleLet); // Output: I'm another let
+   }
+
+   console.log(exampleLet); // Output: I'm a let
+   ```
+
+   Here, the `exampleLet` inside the `if` block has block scope and doesn't affect the outer `exampleLet`.
+
+### `const`
+
+- `const` has block scope and cannot be updated or re-declared.
+
+   ```javascript
+   const exampleConst = "I'm a const";
+
+   if (true) {
+     // Uncommenting the line below would result in an error
+     // exampleConst = "I'm trying to change"; 
+     const exampleConst = "I'm another const";
+     console.log(exampleConst); // Output: I'm another const
+   }
+
+   console.log(exampleConst); // Output: I'm a const
+   ```
+
+   Attempting to reassign `exampleConst` or declare another `const` with the same name inside the block results in an error.
+
+#### **Important Considerations**
+
+#### `Function Scope`
+
+Variables declared using `var` are function-scoped. They are accessible throughout the function in which they are declared, regardless of block structure.
+
+```javascript
+function functionScopeExample() {
+  if (true) {
+    var insideIf = "I'm inside the if block";
+  }
+
+  console.log(insideIf); // Output: I'm inside the if block
+
 }
 
-let num3 = 45; 
-num3 or num2 # undefined
-console.log(num1) # 23;
-console.log(num3) # 45 and it will not return error;
-```
-var : It can be updated and re-declared into the scope.
-let : It can be updated but cannot be re-declared into the scope.
-const : It cannot be updated or re-declared into the scope.
-
-```bash 
-var num1 = 10;
-var num1 = 12;
-  const num2 = 10;
-  num2 = 15; # error
-  let num3 = 25;
-    num3 = 20; # let can't be used again
-```
-var : It can be declared without initialization.It can be accessed without initialization as its default value is “undefined”.
-let : It can be declared without initialization.It cannot be accessed without initialization otherwise it will give ‘referenceError’.
-const : It cannot be declared without initialization.It cannot be accessed without initialization, as it cannot be declared without initialization.
-
-```bash 
- console.log(num1) # undefined
- var num1 = 12; # declared
-
-console.log(num1) # ReferenceError
-let num2 = 12; #  declared
-
-console.log(num3) # ReferenceError
-const num3 = 12; #  declared
-const name; # can\'t used in const but used in var or let
+functionScopeExample();
 ```
 
-Important Differences
----
-var and let is used to redeclare but const is not for redeclare
-```bash
-var name = "mahmodul Karim";
-name = "dulal sheikh";
-let age = 23;
-age = 25;
-const location = 'Dhaka';
-location = "Chittagong" # it will execute error for redeclaring
-```
- var is declared inside the function. If the user tries to access it outside the function, it will display the error.
-```bash
-var b = 12;
-	function f() {
+Here, `insideIf` is accessible throughout the `functionScopeExample` function.
 
-		# It can be accessible any
-		# where within this function
-		var a = 10;
-    b = 25;
-		console.log(a,b)
-	}
-	f();
+#### **Hoisting**
 
-	# A cannot be accessible
-	# outside of function
-	console.log(a); # referenceError
-	console.log(b); # 25 # b is global scope
+JavaScript hoists variable declarations to the top of their scope. It means you can use a variable before it's declared, but the value will be `undefined`.
+
+```javascript
+console.log(hoistedVar); // Output: undefined
+var hoistedVar = "I'm hoisted!";
+
+console.log(notHoistedVar); // ReferenceError: notHoistedVar is not defined
+let notHoistedVar = "I'm not hoisted!";
+
 ```
-Using Value in Scope
----
-```bash
-# Initialize a global variable
-var species = "human";
- 
-function transform() {
-  # Initialize a local, function-scoped variable
-  var species = "werewolf";
-  console.log(species);
+
+While `var` is hoisted entirely, `let` and `const` are hoisted but not initialized.
+
+```javascript
+// Uncommenting the line below would result in a ReferenceError
+// console.log(notHoisted);  // ReferenceError
+let notHoisted = "I'm not hoisted!";
+```
+
+#### **Block Scope in Loops**
+
+Variables declared with `var` in a loop are not block-scoped, which can lead to unexpected behavior. 
+
+```javascript
+for (var i = 0; i < 3; i++) {
+  setTimeout(function () {
+    console.log(i);
+  }, 1000);
 }
 
-# Log the global and local variable
-console.log(species);
-transform();
-console.log(species);
-
-Output
-human
-werewolf
-human
+// Output after 1 second: 3 3 3
 ```
-To illustrate the difference between function- and block-scoped variables, we will assign a new variable in an if block using let.
+**Notes** In this case, `var` does not have block-level scope, and there's only one `i` variable shared across all iterations. When the `setTimeout` callback executes after 1 second, it captures the reference to the shared `i`. By the time it runs, the loop has completed, and `i` has the final value of `3`. Therefore, you see `3` printed three times.
 
-```bash
-var fullMoon = true;
+All three `console.log` statements output `3` because `i` has functional scope and is shared among all iterations of the loop.
 
-# Initialize a global variable
-let species = "human";
+To avoid this issue, use `let` in loops to create a block-scoped variable for each iteration.
 
-if (fullMoon) {
-  # Initialize a block-scoped variable
-  let species = "werewolf";
-  console.log(`It is a full moon. Lupin is currently a ${species}.`);
+```javascript
+for (let i = 0; i < 3; i++) {
+  setTimeout(function () {
+    console.log(i);
+  }, 1000);
 }
 
-console.log(`It is not a full moon. Lupin is currently a ${species}.`);
-Output
-It is a full moon. Lupin is currently a werewolf.
-It is not a full moon. Lupin is currently a human.
+// Output after 1 second: 0 1 2
 ```
-In this example, the species variable has one value globally (human), and another value locally (werewolf). If we were to use var, however, there would be a different result.
-```bash
-# Use var to initialize a variable
-var species = "human";
+**Notes** With `let`, each iteration of the loop gets its own block-scoped `i`. The `setTimeout` callback then captures the correct value of `i` for each iteration because `let` creates a new variable for each iteration, maintaining the value within the block scope. Hence, you get the expected output of `0 1 2`.
 
-if (fullMoon) {
-  # Attempt to create a new variable in a block
-  var species = "werewolf";
-  console.log(`It is a full moon. Lupin is currently a ${species}.`);
-}
+Here, each `console.log` statement outputs the correct value due to block-scoped `i`.
 
-console.log(`It is not a full moon. Lupin is currently a ${species}.`);
-Output
-It is a full moon. Lupin is currently a werewolf.
-It is not a full moon. Lupin is currently a werewolf.
-```
 
-# JSON
+### **JSON**
 ---
 JSON: JSON stands Javascript object notation.It is a text format for storing data and transporting.Data is interchanged between computers by it.It is self-describing techniqe.Data can be send to pure text on server from javascript object and send from javascript object in pure text.
 
